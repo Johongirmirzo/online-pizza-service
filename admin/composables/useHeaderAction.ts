@@ -1,8 +1,7 @@
 
 import { exportToPDF } from "#imports";
 import { pdfOptions } from "~/config/pdfOptions";
-import xlsx from 'xlsx/xlsx';
-// import { utils, writeFileXLSX } from "xlsx";
+import { utils, writeFileXLSX } from "xlsx";
 
 
 export const useHeaderAction = ()=>{
@@ -20,17 +19,17 @@ export const useHeaderAction = ()=>{
           }
           return arrApplicantItems;
         });
-        
-        const ws = xlsx.utils.aoa_to_sheet([worksheetHeader, ...worksheetBody]);
-        const CSV = xlsx.utils.sheet_to_csv(ws, {
+      
+        const ws = utils.aoa_to_sheet([worksheetHeader, ...worksheetBody]);
+        const CSV = utils.sheet_to_csv(ws, {
           RS: "\n",
         });
         csv.value = CSV;
     };
 
     const generateExcel = (applicantsPdfTable: HTMLElement | undefined, excelName: string, sheetName: string)=>{
-      xlsx.writeFileXLSX(
-          xlsx.utils.table_to_book(applicantsPdfTable),
+        writeFileXLSX(
+            utils.table_to_book(applicantsPdfTable),
             `${excelName}.xlsx`,
             {
               sheet: sheetName,
