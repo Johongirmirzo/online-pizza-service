@@ -34,7 +34,7 @@ app.use("/api/v1.0/review", models_1.reviewRouter);
 app.use("/api/v1.0/feedback", models_1.feedbackRouter);
 app.use("/api/v1.0/topping", models_1.toppingRouter);
 app.use("/api/v1.0/order", models_1.orderRouter);
-// setting socket-io connection
+// setting socket-io connection 2
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
