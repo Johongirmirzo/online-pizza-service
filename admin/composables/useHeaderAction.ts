@@ -1,11 +1,12 @@
 
 import { exportToPDF } from "#imports";
 import { pdfOptions } from "~/config/pdfOptions";
-import { utils, writeFileXLSX } from "xlsx";
+import xlsx from "xlsx";
 
 
 export const useHeaderAction = ()=>{
     const csv = ref();
+    const { utils, writeFileXLSX } = xlsx;
     const generateCSV = <T extends {}>(dataList: T[]) => {
         console.log("IT's working")
         const worksheetHeader = Object.keys(
