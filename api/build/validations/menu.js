@@ -14,7 +14,7 @@ const dip = (0, yup_1.object)({
         .required("Price is required"),
     weight: (0, yup_1.number)()
         .typeError("Please provide a number")
-        .moreThan(0, "Dip weight must be greater than 0")
+        .moreThan(-1, "Dip weight must be greater than 0")
         .lessThan(1000, "Dip weight must less than 1000")
         .required("Dip weight is required"),
     vegan: (0, yup_1.boolean)().
@@ -22,22 +22,22 @@ const dip = (0, yup_1.object)({
     categoryId: (0, yup_1.number)().required("Category id is required"),
     calorie: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Minimum calorie amount must be 0")
+        .moreThan(-1, "Minimum calorie amount must be 0")
         .lessThan(2000, "Calorie must be less than 2000")
         .required("Calories is required"),
     proteins: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Minimum proteins amount must be 0")
+        .moreThan(-1, "Minimum proteins amount must be 0")
         .lessThan(100, "Protein amount must be less than 100")
         .required("Proteins is required"),
     fats: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Minimum fats amount must be 0")
+        .moreThan(-1, "Minimum fats amount must be 0")
         .lessThan(100, "Fat amount must be less than 100")
         .required("Fats is required"),
     carbohydrates: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Minimum carbohydrates amount must be 0")
+        .moreThan(-1, "Minimum carbohydrates amount must be 0")
         .lessThan(100, "Carbohydrates amount must be less than 100")
         .required("Carbohydrates is required")
 });
@@ -52,25 +52,25 @@ const editDip = (0, yup_1.object)({
         .max(50000, "Maximum price is 50000"),
     weight: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Dip weight must be greater than 0")
+        .moreThan(-1, "Dip weight must be greater than 0")
         .lessThan(1000, "Dip weight must less than 1000"),
     vegan: (0, yup_1.boolean)(),
     categoryId: (0, yup_1.number)(),
     calorie: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Minimum calorie amount must be 0")
+        .moreThan(-1, "Minimum calorie amount must be 0")
         .lessThan(2000, "Calorie must be less than 2000"),
     proteins: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Minimum proteins amount must be 0")
+        .moreThan(-1, "Minimum proteins amount must be 0")
         .lessThan(100, "Protein amount must be less than 100"),
     fats: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Minimum fats amount must be 0")
+        .moreThan(-1, "Minimum fats amount must be 0")
         .lessThan(100, "Fat amount must be less than 100"),
     carbohydrates: (0, yup_1.number)()
         .typeError("Please provide a value")
-        .moreThan(0, "Minimum carbohydrates amount must be 0")
+        .moreThan(-1, "Minimum carbohydrates amount must be 0")
         .lessThan(100, "Carbohydrates amount must be less than 100")
 });
 exports.editDip = editDip;

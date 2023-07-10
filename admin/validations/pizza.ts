@@ -29,25 +29,25 @@ const pizzaSizeCreateData = object({
         calories: 
             number()
             .typeError("Please provide a number")
-            .moreThan(0, "Minimum calories amount must be 0")
+            .moreThan(-1, "Minimum calories amount must be 0")
             .lessThan(2000, "Calories must be less than 2000")
             .required("Menu item calories amount is required"),
         proteins: 
             number()
             .typeError("Please provide a number")
-            .moreThan(0, "Minimum proteins amount must be 0")
+            .moreThan(-1, "Minimum proteins amount must be 0")
             .lessThan(100, "Protein amount must be less than 100")
             .required("Menu item proteins amount is required"),
         fats: 
             number()
             .typeError("Please provide a number")
-            .moreThan(0, "Minimum fats amount must be 0")
+            .moreThan(-1, "Minimum fats amount must be 0")
             .lessThan(100, "Fat amount must be less than 100")
             .required("Menu item fats amount is required"),
         carbohydrates: 
             number()
             .typeError("Please provide a number")
-            .moreThan(0, "Minimum carbohydrates amount must be 0")
+            .moreThan(-1, "Minimum carbohydrates amount must be 0")
             .lessThan(100, "Carbohydrates amount must be less than 100")
             .required("Menu item carbohydrates amount is required"),
     }),
@@ -172,22 +172,22 @@ const pizzaSizeEditData = object({
         calories: 
             number()
             .typeError("Please provide a number")
-            .moreThan(0, "Minimum calories amount must be 0")
+            .moreThan(-1, "Minimum calories amount must be 0")
             .lessThan(2000, "Calories must be less than 2000"),
         proteins: 
             number()
             .typeError("Please provide a number")
-            .moreThan(0, "Minimum proteins amount must be 0")
+            .moreThan(-1, "Minimum proteins amount must be 0")
             .lessThan(100, "Protein amount must be less than 100"),
         fats: 
             number()
             .typeError("Please provide a number")
-            .moreThan(0, "Minimum fats amount must be 0")
+            .moreThan(-1, "Minimum fats amount must be 0")
             .lessThan(100, "Fat amount must be less than 100"),
         carbohydrates: 
             number()
             .typeError("Please provide a number")
-            .moreThan(0, "Minimum carbohydrates amount must be 0")
+            .moreThan(-1, "Minimum carbohydrates amount must be 0")
             .lessThan(100, "Carbohydrates amount must be less than 100"),
     }),
     slices: object({
