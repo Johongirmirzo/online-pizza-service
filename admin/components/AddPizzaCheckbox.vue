@@ -49,6 +49,9 @@ const { checked, handleChange } = useField(name, undefined, {
 });
 </script>
 <style scoped>
+.pizza-form__checkbox {
+  cursor: pointer;
+}
 .pizza-form__checkbox:after {
   width: 24px;
   height: 24px;
