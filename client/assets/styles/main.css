@@ -1,0 +1,55 @@
+@import 'vue3-toastify/dist/index.css';
+
+@import "./reset.css";
+
+*,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+:where(input, a, label, button, span) {
+    display: inline-block;
+    transition: all .3s ease-out;
+}
+:where(input, button){
+    outline: transparent;
+    transition: all .3s ease-out;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+a:focus {
+    outline: 2px solid #fc8019;
+    outline-offset: 4px;
+}
+li {
+    list-style: none;
+}
+button {
+    border: 0;
+    cursor: pointer;
+    background: transparent;
+}
+img {
+    max-width: 100%;
+}
+
+/* shadow */
+.btn-shadow {
+    box-shadow: 2px 4px 2px rgba(0, 0, 0, 0.2);
+    transition: all .3s ease-out;
+}
+.btn-shadow:hover {
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+}

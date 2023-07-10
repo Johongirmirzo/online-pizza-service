@@ -1,0 +1,1 @@
+export const handlePreventNonNumbers = (evt: any)=> ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault();
