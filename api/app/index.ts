@@ -51,7 +51,7 @@ app.use("/api/v1.0/order", orderRouter);
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
     cors: {
-        origin: "*",
+        origin: setAllowedOrigins,
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     }
 });
