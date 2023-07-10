@@ -13,7 +13,7 @@
           class="topping-form__input"
           id="name"
           name="name"
-          placeholder="Add topping phone..."
+          placeholder="Add topping price..."
         />
         <ErrorMessage name="name" class="topping-form__error-message" />
       </div>
@@ -28,7 +28,7 @@
             class="topping-form__input"
             id="light"
             name="light"
-            placeholder="Add topping phone..."
+            placeholder="Add topping price..."
           />
           <ErrorMessage name="light" class="topping-form__error-message" />
         </div>
@@ -41,7 +41,7 @@
             class="topping-form__input"
             id="standard"
             name="standard"
-            placeholder="Add topping phone..."
+            placeholder="Add topping price..."
           />
           <ErrorMessage name="standard" class="topping-form__error-message" />
         </div>
@@ -56,7 +56,7 @@
             class="topping-form__input"
             id="extra"
             name="extra"
-            placeholder="Add topping phone..."
+            placeholder="Add topping price..."
           />
           <ErrorMessage name="extra" class="topping-form__error-message" />
         </div>
