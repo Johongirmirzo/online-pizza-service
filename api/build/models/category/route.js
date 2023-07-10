@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const controller_1 = __importDefault(require("./controller"));
+const validations_1 = require("../../middleware/validations");
+const validations_2 = require("../../validations");
+const validateReqParamForId_1 = require("../../middleware/validateReqParamForId");
+const uploadImage_1 = require("../../middleware/uploadImage");
+const verifyUser_1 = require("../../middleware/verifyUser");
+const isAdmin_1 = require("../../middleware/isAdmin");
+const router = (0, express_1.Router)();
+router.get('/get-all-categories', controller_1.default.getAllCategories);
+router.get("/get-category/:id", validateReqParamForId_1.validateReqParamForId, validateReqParamForId_1.validateReqParamForId, controller_1.default.getCategory);
+router.post('/create-category', verifyUser_1.verifyUser, uploadImage_1.uploadImage.single("category-photo"), (0, validations_1.validateData)(validations_2.category), controller_1.default.createCategory);
+router.patch('/edit-category/:id', verifyUser_1.verifyUser, uploadImage_1.uploadImage.single("category-photo"), validateReqParamForId_1.validateReqParamForId, validateReqParamForId_1.validateReqParamForId, controller_1.default.editCategory);
+router.delete('/delete-category/:id', verifyUser_1.verifyUser, isAdmin_1.isUserAdmin, validateReqParamForId_1.validateReqParamForId, validateReqParamForId_1.validateReqParamForId, controller_1.default.deleteCategory);
+exports.default = router;
