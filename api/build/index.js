@@ -38,7 +38,7 @@ app.use("/api/v1.0/order", models_1.orderRouter);
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
-        origin: "*",
+        origin: setAllowedOrigins_1.setAllowedOrigins,
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     }
 });
