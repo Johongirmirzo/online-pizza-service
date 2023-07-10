@@ -37,23 +37,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma_1 = require("../../config/prisma");
 const cloudinary_1 = __importStar(require("../../config/cloudinary"));
 const MenuService = {
     getAllDips() {
         return __awaiter(this, void 0, void 0, function* () {
-            const hashedPassword = yield bcrypt_1.default.hash("qweqweqwe", 10);
-            yield prisma_1.prisma.user.create({
-                data: {
-                    name: "Jaxongir",
-                    phoneNumber: "998991112233",
-                    email: "jaxongir@gmail.com",
-                    password: hashedPassword,
-                    status: "ACTIVE",
-                    role: "ADMIN"
-                }
-            });
             return yield prisma_1.prisma.dip.findMany({ orderBy: [{ created: "desc" }] });
         });
     },
