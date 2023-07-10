@@ -218,7 +218,7 @@ const editMenuItemData = object({
     calories: 
         number()
         .typeError("Please provide a number")
-        .moreThan(0, "Minimum calories amount must be 0")
+        .moreThan(-1, "Minimum calories amount must be 0")
         .lessThan(2000, "Calories must be less than 2000"),
     proteins: 
         number()

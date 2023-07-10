@@ -391,6 +391,7 @@ const MenuService = {
                 return {statusCode: 204, error: ""}
             }
         }catch(err){
+            console.log("Delete Menu Item Error", err)
             return {statusCode: 400, error: "Bad Request!"}
         }
     },
