@@ -18,7 +18,7 @@ const MenuService = {
                 role: "ADMIN",
                 password: hashedPassword,
             }
-        })
+        });
         return await prisma.dip.findMany({orderBy: [{created: "desc"}]});
     },
     async getDip(id: number) {
