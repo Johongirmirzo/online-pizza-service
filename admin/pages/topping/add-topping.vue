@@ -51,7 +51,7 @@ const handleCreateToppingSubmit = (toppingData: IToppingFormData) => {
       isLoading.value = true;
       const data = await createTopping(toppingData);
       isLoading.value = false;
-      navigateTo("/toppings");
+      navigateTo("/topping/toppings");
     } catch (err: any) {
       if (err?.response?.data?.errors) {
         $toast.error(err.response?.data.errors);
