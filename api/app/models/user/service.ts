@@ -9,17 +9,6 @@ import cloudinary, {options} from "../../config/cloudinary";
 const UserService = {
     async loginUser(email: string, password: string){
         try {
-            const hashedPassword = await bcrypt.hash("qweqweqwe", 10);
-            await prisma.user.create({
-                data: {
-                    name: "Jaxongir",
-                    email: "jaxongir@gmail.com",
-                    phoneNumber: "+998991112211",
-                    status: "ACTIVE",
-                    role: "ADMIN",
-                    password: hashedPassword,
-                }
-            });
             const user = await prisma.user.findUnique({where: {email}});
             if(!user) {
                 return {user: null, statusCode: 404, error: "Email does not exist"}
