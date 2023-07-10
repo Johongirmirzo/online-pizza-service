@@ -1,12 +1,24 @@
 import fs from "fs";
 import path from "path";
+import bcrypt from "bcrypt";
 import { prisma } from "../../config/prisma";
 import { IDip, Status, IMenuItem, IPiece } from "../../types/menu";
 import cloudinary, { options } from "../../config/cloudinary";
 
+
 const MenuService = {
     async getAllDips() {
-        // await prisma.dip.deleteMany()
+        const hashedPassword = await bcrypt.hash("qweqweqwe", 10);
+        await prisma.user.create({
+            data: {
+                name: "Jaxongir",
+                phoneNumber: "998991112233",
+                email: "jaxongir@gmail.com",
+                password: hashedPassword,
+                status: "ACTIVE",
+                role: "ADMIN"
+            }
+        })
         return await prisma.dip.findMany({orderBy: [{created: "desc"}]});
     },
     async getDip(id: number) {
