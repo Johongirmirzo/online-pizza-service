@@ -47,7 +47,7 @@ app.use("/api/v1.0/feedback", feedbackRouter);
 app.use("/api/v1.0/topping", toppingRouter);
 app.use("/api/v1.0/order", orderRouter);
 
-// setting socket-io connection
+// setting socket-io connection 2
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
     cors: {
