@@ -24,4 +24,3 @@ exports.prisma = new client_1.PrismaClient();
 // prisma.$on('error', (e) => {
 //   console.log("Error:", e)
 // })
-console.log("Great");
