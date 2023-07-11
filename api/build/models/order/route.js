@@ -64,7 +64,6 @@ const orderHandler = (io, socket) => {
                 const currentItem = orderItem.itemType === "Dip" ? "dip" : orderItem.itemType === "Pizza" ? "pizza" : "menuItem";
                 yield updateItemType(orderItem.id, orderItem.amount, currentItem);
             }));
-            console.log("Order is being created!");
             const newOrder = yield prisma_1.prisma.order.create({
                 data: Object.assign({}, orderData)
             });
@@ -72,6 +71,7 @@ const orderHandler = (io, socket) => {
             io.emit("new-order", newOrder);
         }
         catch (err) {
+            console.log("Create order error ", err);
             socket.emit("create-order-error", "Something Went Wrong!");
         }
     }));

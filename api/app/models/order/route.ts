@@ -53,7 +53,7 @@ export const orderHandler = (io: any, socket: any)=>{
                 const currentItem = orderItem.itemType === "Dip" ? "dip" : orderItem.itemType === "Pizza" ? "pizza" : "menuItem"
                 await updateItemType(orderItem.id, orderItem.amount, currentItem)
             });
-            console.log("Order is being created!")
+            
             const newOrder = await prisma.order.create({
                 data: {
                     ...orderData
@@ -62,6 +62,7 @@ export const orderHandler = (io: any, socket: any)=>{
             console.log("New Order is created and sent to client", newOrder)
             io.emit("new-order", newOrder)
         }catch(err: any){
+            console.log("Create order error ", err)
             socket.emit("create-order-error", "Something Went Wrong!")
         }
     });
