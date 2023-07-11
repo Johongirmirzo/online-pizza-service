@@ -8,20 +8,6 @@ import cloudinary, { options } from "../../config/cloudinary";
 
 const MenuService = {
     async getAllDips() {
-        await prisma.menuItem.deleteMany()
-        // const isAdminExist = await prisma.user.findFirst({where: })
-        // const hashedPassword = await bcrypt.hash("qweqweqwe", 10);
-        // const user = await prisma.user.create({
-        //     data: {
-        //         name: "Jaxongir",
-        //         email: "jaxongir@gmail.com",
-        //         phoneNumber: "+998991112211",
-        //         status: "ACTIVE",
-        //         role: "ADMIN",
-        //         password: hashedPassword,
-        //     }
-        // });
-        // console.log("ADMIN USER", user)
         return await prisma.dip.findMany({orderBy: [{created: "desc"}]});
     },
     async getDip(id: number) {
@@ -169,7 +155,6 @@ const MenuService = {
 
 
     async getAllMenuItems() {
-        // await prisma.menuItem.deleteMany()
         return await prisma.menuItem.findMany({orderBy: [{created: "desc"}]});
     },
     async getMenuItem(menuItemId: number) {
