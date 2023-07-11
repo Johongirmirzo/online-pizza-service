@@ -67,6 +67,7 @@ const orderHandler = (io, socket) => {
             const newOrder = yield prisma_1.prisma.order.create({
                 data: Object.assign({}, orderData)
             });
+            console.log("New Order is created and sent to client", newOrder);
             io.emit("new-order", newOrder);
         }
         catch (err) {

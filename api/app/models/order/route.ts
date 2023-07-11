@@ -59,6 +59,7 @@ export const orderHandler = (io: any, socket: any)=>{
                     ...orderData
                 }
             })
+            console.log("New Order is created and sent to client", newOrder)
             io.emit("new-order", newOrder)
         }catch(err: any){
             socket.emit("create-order-error", "Something Went Wrong!")
