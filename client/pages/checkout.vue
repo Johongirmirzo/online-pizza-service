@@ -472,7 +472,7 @@ watchEffect(() => {
     if (!customerStore.customer.id) {
       navigateTo("/");
     }
-  }, 5000);
+  }, 2000);
 });
 </script>
 <style scoped>
