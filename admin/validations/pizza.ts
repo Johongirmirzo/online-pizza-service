@@ -88,17 +88,20 @@ const pizzaSizeCreateData = object({
             number()
             .typeError("Please provide a thinnest crust price")
             .min(0, "Minimum thinnest crust price must be 0")
-            .max(0, "Maximum thinnest crust price must be 0"),
+            .max(0, "Maximum thinnest crust price must be 0")
+            .required("Thinnest is required!"),
         duplexCrustMozarella: 
             number()
             .typeError("Please provide a thin crust price")
-            .min(5000, "Minimum thin crust price must be 5000")
-            .max(15000, "Maximum thin crust price must be 15000"),
+            .min(5000, "Minimum duplex crust mozarella price must be 5000")
+            .max(15000, "Maximum duplex crust mozarella price must be 15000")
+            .required("Duplex crust mozarella crust is required!"),
         duplexCrustCheddar: 
             number()
             .typeError("Please provide a thin crust price")
-            .min(5000, "Minimum thin crust price must be 5000")
-            .max(15000, "Maximum thin crust price must be 15000"),
+            .min(5000, "Minimum duplex crust cheddar price must be 5000")
+            .max(15000, "Maximum duplex crust cheddar price must be 15000")
+            .required("Duplex crust cheddar is required!"),
     }),
     edges: object({
         mozarellaEdge: 
@@ -117,12 +120,14 @@ const pizzaSizeCreateData = object({
             number()
             .typeError("Please provide a parmesan edge price")
             .min(5000, "Minimum parmesan edge price must be 5000")
-            .max(20000, "Maximum parmesan edge price must be 20000"),
+            .max(20000, "Maximum parmesan edge price must be 20000")
+            .required("Parmesan edge is required!"),
         garlicSaucageEdge: 
             number()
             .typeError("Please provide a garlic sausage edge price")
             .min(5000, "Minimum garlic sausage edge price must be 5000")
-            .max(20000, "Maximum garlic sausage edge price must be 20000"),
+            .max(20000, "Maximum garlic sausage edge price must be 20000")
+            .required("Garlic sausage edge is required!"),
     }),
     standardToppings: array(),
     extraToppings: array(),

@@ -508,7 +508,7 @@ const MenuService = {
                 return {newPizza: null, statusCode: 409, error: `Pizza with the given name: ${pizzaData.name} already exists!`}
             } else {
                 const parsedPizzaSizes = JSON.parse(pizzaData.pizzaSizes)
-                    .map((pizzaSize: any) => ({...pizzaSize, price: Number(pizzaSize.price) ? Number(pizzaSize.price) : "", weight: Number(pizzaSize.weight) ? Number(pizzaSize.weight) : ""}))
+                    .map((pizzaSize: any) => ({...pizzaSize, price: pizzaSize.price ? pizzaSize.price : "", weight: pizzaSize.weight ? pizzaSize.weight : ""}))
                 
                 if(isThereDuplicatePizzaSize(parsedPizzaSizes)){
                     const pizzaSize = isThereDuplicatePizzaSize(parsedPizzaSizes)
@@ -609,7 +609,7 @@ const MenuService = {
                     }
                 }
                 const parsedPizzaSizes = JSON.parse(pizzaData.pizzaSizes)
-                    .map((pizzaSize: any) => ({...pizzaSize, price: Number(pizzaSize.price) ? Number(pizzaSize.price) : "" , weight: Number(pizzaSize.weight) ? Number(pizzaSize.weight): ""}))
+                    .map((pizzaSize: any) => ({...pizzaSize, price: pizzaSize.price ? pizzaSize.price : "" , weight: pizzaSize.weight ? pizzaSize.weight: ""}))
 
                 if(isThereDuplicatePizzaSize(parsedPizzaSizes)){
                     const pizzaSize = isThereDuplicatePizzaSize(parsedPizzaSizes)
@@ -676,9 +676,7 @@ const MenuService = {
                         where: {id: pizzaSize.id},
                         data: {
                             ...pizzaSize,
-                            price: `${pizzaData.price}`,
-                            circumfarance: `${pizzaData.circumfarance}`,
-                            weight: `${pizzaData.weight}`
+                             
                         }
                     })
                 }
