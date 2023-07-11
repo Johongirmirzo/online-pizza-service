@@ -64,6 +64,7 @@ const orderHandler = (io, socket) => {
                 const currentItem = orderItem.itemType === "Dip" ? "dip" : orderItem.itemType === "Pizza" ? "pizza" : "menuItem";
                 yield updateItemType(orderItem.id, orderItem.amount, currentItem);
             }));
+            console.log("Order is being created!");
             const newOrder = yield prisma_1.prisma.order.create({
                 data: Object.assign({}, orderData)
             });

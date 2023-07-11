@@ -53,7 +53,7 @@ export const orderHandler = (io: any, socket: any)=>{
                 const currentItem = orderItem.itemType === "Dip" ? "dip" : orderItem.itemType === "Pizza" ? "pizza" : "menuItem"
                 await updateItemType(orderItem.id, orderItem.amount, currentItem)
             });
-            
+            console.log("Order is being created!")
             const newOrder = await prisma.order.create({
                 data: {
                     ...orderData
