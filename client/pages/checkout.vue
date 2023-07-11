@@ -444,7 +444,7 @@ const handleMakeOrderClick = () => {
       alert(err);
     });
 
-    console.log("Order Sent");
+    console.log("Order Sent with this data", order);
 
     socket.on("new-order", (order: any) => {
       cartStore.clearCart();
