@@ -490,6 +490,7 @@ const MenuService = {
     },
     getAllPizzas() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield prisma_1.prisma.pizza.deleteMany();
             return yield prisma_1.prisma.pizza.findMany({ include: { pizzaSizes: true }, orderBy: [{ created: "desc" }] });
         });
     },
@@ -539,7 +540,7 @@ const MenuService = {
                 }
                 else {
                     const parsedPizzaSizes = JSON.parse(pizzaData.pizzaSizes)
-                        .map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: Number(pizzaSize.price) ? Number(pizzaSize.price) : "", weight: Number(pizzaSize.weight) ? Number(pizzaSize.weight) : "" })));
+                        .map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: pizzaSize.price ? pizzaSize.price : "", weight: pizzaSize.weight ? pizzaSize.weight : "" })));
                     if (isThereDuplicatePizzaSize(parsedPizzaSizes)) {
                         const pizzaSize = isThereDuplicatePizzaSize(parsedPizzaSizes);
                         return { newPizza: null, statusCode: 400, error: `There can't be duplicate pizza sizes. Pizza size ${pizzaSize} is duplicated!` };
@@ -640,7 +641,7 @@ const MenuService = {
                         }
                     }
                     const parsedPizzaSizes = JSON.parse(pizzaData.pizzaSizes)
-                        .map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: Number(pizzaSize.price) ? Number(pizzaSize.price) : "", weight: Number(pizzaSize.weight) ? Number(pizzaSize.weight) : "" })));
+                        .map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: pizzaSize.price ? pizzaSize.price : "", weight: pizzaSize.weight ? pizzaSize.weight : "" })));
                     if (isThereDuplicatePizzaSize(parsedPizzaSizes)) {
                         const pizzaSize = isThereDuplicatePizzaSize(parsedPizzaSizes);
                         return { newPizza: null, statusCode: 400, error: `There can't be duplicate pizza sizes. Pizza size ${pizzaSize} is duplicated!` };

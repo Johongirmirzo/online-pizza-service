@@ -466,6 +466,7 @@ const MenuService = {
 
 
     async getAllPizzas(){
+        await prisma.pizza.deleteMany()
         return await prisma.pizza.findMany({include: {pizzaSizes: true}, orderBy: [{created: "desc"}]})
     },
     async getPizza(id: number){
