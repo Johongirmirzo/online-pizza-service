@@ -428,7 +428,9 @@ const handleMakeOrderClick = () => {
     orderNote: orderNote.value,
     orderItems: JSON.stringify(cartStore.cartItems),
     orderTotal: cartStore.calculateTotal(),
-    orderType: customerAddressStore.currentOrderType.toUpperCase(),
+    orderType: !customerAddressStore.currentOrderType
+      ? "PICKUP"
+      : customerAddressStore.currentOrderType.toUpperCase(),
     customerId: customerStore.customer.id,
     orderChosenTime: selectedOrderTime.value || defaultOrderTime.value,
     orderReceivingTime,
