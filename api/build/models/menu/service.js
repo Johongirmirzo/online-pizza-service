@@ -490,7 +490,6 @@ const MenuService = {
     },
     getAllPizzas() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield prisma_1.prisma.pizza.deleteMany();
             return yield prisma_1.prisma.pizza.findMany({ include: { pizzaSizes: true }, orderBy: [{ created: "desc" }] });
         });
     },
