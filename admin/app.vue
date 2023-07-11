@@ -1,5 +1,13 @@
 <template>
   <div>
+    <Head>
+      <Title>Pizzeria | Online Pizza Service </Title>
+      <Meta
+        name="description"
+        content="Online Pizza App where you find the best and the most affordable pizzas in Uzbekistan"
+      />
+      <Link rel="icon" type="image/png" :href="FaviconImage" />
+    </Head>
     <NuxtLayout :name="layout">
       <NuxtLoadingIndicator />
       <NuxtPage />
@@ -7,7 +15,9 @@
   </div>
 </template>
 <script setup lang="ts">
+import FaviconImage from "~/assets/images/R.png";
 const { data } = useAuth();
+
 const layout = ref("authenticated");
 
 if (data?.value?.user?.name) {

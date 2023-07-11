@@ -1,5 +1,13 @@
 <template>
   <div>
+    <Head>
+      <Title>Pizzeria | Online Pizza Restaurant </Title>
+      <Meta
+        name="description"
+        content="Online Pizza App where you find the best and the most affordable pizzas in Uzbekistan"
+      />
+      <Link rel="icon" type="image/png" :href="FaviconImage" />
+    </Head>
     <NuxtLayout :name="layout">
       <NuxtPage />
       <CallPizzeria />
@@ -9,6 +17,7 @@
 </template>
 <script setup lang="ts">
 import { socket } from "~/config/socketIo";
+import FaviconImage from "~/assets/images/R.png";
 import audioFile from "@/assets/audio/simple-notification-trial-152054.mp3";
 import { IOrder, OrderStatus } from "~/types/order";
 import { useCustomerStore } from "~/stores/useCustomerStore";
@@ -19,6 +28,8 @@ const audio = ref<HTMLElement>();
 const route = useRoute();
 const customerStore = useCustomerStore();
 const orderLayoutRouteNames = ["checkout", "track-order"];
+
+console.log(route.fullPath);
 
 watchEffect(() => {
   if (orderLayoutRouteNames.includes(route.name)) {
