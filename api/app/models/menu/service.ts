@@ -8,18 +8,18 @@ import cloudinary, { options } from "../../config/cloudinary";
 
 const MenuService = {
     async getAllDips() {
-        const hashedPassword = await bcrypt.hash("qweqweqwe", 10);
-        const user = await prisma.user.create({
-            data: {
-                name: "Jaxongir",
-                email: "jaxongir@gmail.com",
-                phoneNumber: "+998991112211",
-                status: "ACTIVE",
-                role: "ADMIN",
-                password: hashedPassword,
-            }
-        });
-        console.log("ADMIN USER", user)
+        // const hashedPassword = await bcrypt.hash("qweqweqwe", 10);
+        // const user = await prisma.user.create({
+        //     data: {
+        //         name: "Jaxongir",
+        //         email: "jaxongir@gmail.com",
+        //         phoneNumber: "+998991112211",
+        //         status: "ACTIVE",
+        //         role: "ADMIN",
+        //         password: hashedPassword,
+        //     }
+        // });
+        // console.log("ADMIN USER", user)
         return await prisma.dip.findMany({orderBy: [{created: "desc"}]});
     },
     async getDip(id: number) {
@@ -195,12 +195,27 @@ const MenuService = {
                 fs.rmSync(path.join(__dirname, `../../assets/images/${menuItemPhotos.large[0].filename}`))
             }
         }
+        const isThereDuplicateMenuItemSize = (parsedMenuItemSizes: any)=>{
+            for(let i = 0; i < parsedMenuItemSizes.length; i++) {
+                for(let j = i + 1; j < parsedMenuItemSizes.length; j++) {
+                    if(parsedMenuItemSizes[i].size === parsedMenuItemSizes[j].size) {
+                        return parsedMenuItemSizes[i].size
+                    }
+                }
+            }
+        }
+
         try {
             const menuItem = await prisma.menuItem.findFirst({ where: { name: data.name } });
             if (menuItem) {
                 removePhoto();
                 return { newMenuItem: null, statusCode: 409, error: `Current menu item ${menuItem.name} already in the menu!` }
             } else {
+                if(isThereDuplicateMenuItemSize(menuItemData.pieces)){
+                    const menuItemSize = isThereDuplicateMenuItemSize(menuItemData.pieces)
+                    return {newPizza: null, statusCode: 400, error: `There can't be duplicate menu item sizes. Menu item size ${menuItemSize} is duplicated!`}
+                }
+
                 let smallPhoto, mediumPhoto, largePhoto;
 
                 if (menuItemPhotos.small) {
@@ -270,6 +285,16 @@ const MenuService = {
                 fs.rmSync(path.join(__dirname, `../../assets/images/${menuItemPhotos.large[0].filename}`))
             }
         };
+        const isThereDuplicateMenuItemSize = (parsedMenuItemSizes: any)=>{
+            for(let i = 0; i < parsedMenuItemSizes.length; i++) {
+                for(let j = i + 1; j < parsedMenuItemSizes.length; j++) {
+                    if(parsedMenuItemSizes[i].size === parsedMenuItemSizes[j].size) {
+                        return parsedMenuItemSizes[i].size
+                    }
+                }
+            }
+        }
+
         try {
             const menuItemWithGivenData = await prisma.menuItem.findUnique({where: {name: data.name}})
             const menuItem = await prisma.menuItem.findUnique({where: {id: menuItemId}});
@@ -289,6 +314,11 @@ const MenuService = {
                         }
                 }
                 
+                if(isThereDuplicateMenuItemSize(menuItemData.pieces)){
+                    const menuItemSize = isThereDuplicateMenuItemSize(menuItemData.pieces)
+                    removePhoto();
+                    return {newPizza: null, statusCode: 400, error: `There can't be duplicate menu item sizes. Menu item size ${menuItemSize} is duplicated!`}
+                }
                 
                 let smallPhoto, mediumPhoto, largePhoto;
 
@@ -313,12 +343,47 @@ const MenuService = {
                     menuItemData.pieces[index].photo = cloudinaryPhoto?.secure_url;
                     menuItemData.pieces[index].photo_id = cloudinaryPhoto?.public_id;
                 }
-                if(menuItemData.pieces.length){
+
+                if((menuItemParsedPieces.length > menuItemData.pieces.length) && menuItemData.pieces.length > 0) {
+                    for(let i = 0; i < menuItemParsedPieces.length; i++){
+                        let isThereMatch = false;
+
+                       for(let j = 0; j < menuItemData.pieces.length; j++){
+                            if(menuItemParsedPieces[i].photo_id === menuItemData.pieces[j]?.photo_id){
+                                isThereMatch = true;
+                                break;   
+                            }
+                            switch (menuItemData.pieces[j].size.toLowerCase()) {
+                                case "small":
+                                    if (smallPhoto) {                                    
+                                        updateMenuItemPhoto(j, smallPhoto);
+                                    }
+                                    break;
+                                case "medium":
+                                    if (mediumPhoto) {
+                                        updateMenuItemPhoto(j, mediumPhoto);
+                                    }
+                                    break;
+                                case "large":
+                                    if (largePhoto) {
+                                        updateMenuItemPhoto(j, largePhoto);
+                                    }
+                                    break;
+                                }
+                       }
+                       if(!isThereMatch){
+                        await removeImgFromDirectory(i)
+                       }
+                       
+                    }
+                    modifiedPieces = menuItemData.pieces
+                } else if(menuItemData.pieces.length){
                     for (let i = 0; i < menuItemData?.pieces?.length; i++) {
                         switch (menuItemData.pieces[i].size.toLowerCase()) {
                         case "small":
                             if (smallPhoto) {
-                                if(menuItemParsedPieces.length){
+                                console.log(menuItemParsedPieces[i]?.size)
+                                if(menuItemParsedPieces[i]){
                                     await removeImgFromDirectory(i);
                                 }
                                 updateMenuItemPhoto(i, smallPhoto);
@@ -326,7 +391,8 @@ const MenuService = {
                             break;
                         case "medium":
                             if (mediumPhoto) {
-                                if(menuItemParsedPieces.length){
+                                console.log(menuItemParsedPieces[i]?.size)
+                                if(menuItemParsedPieces[i]){
                                     await removeImgFromDirectory(i);
                                 }
                                 updateMenuItemPhoto(i, mediumPhoto);
@@ -334,7 +400,8 @@ const MenuService = {
                             break;
                         case "large":
                             if (largePhoto) {
-                                if(menuItemParsedPieces.length){
+                                console.log(menuItemParsedPieces[i]?.size)
+                                if(menuItemParsedPieces[i]){
                                     await removeImgFromDirectory(i);                          
                                 }
                                 updateMenuItemPhoto(i, largePhoto);
@@ -394,6 +461,7 @@ const MenuService = {
                 return {statusCode: 404, error: "Menu item has not been found"}
             } else {
                 const pieces = JSON.parse(menuItem.pieces[0] as string);
+
                 for(const piece of pieces) {
                     const imageSplit = piece.photo.split("/") as [];
                     const imgPath = imageSplit[imageSplit.length - 1] as string;

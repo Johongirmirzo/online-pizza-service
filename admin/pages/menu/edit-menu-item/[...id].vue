@@ -11,6 +11,7 @@
     </SectionHeader>
     <PizzaLoader v-if="isLoadingMenuItem" />
     <MenuItemForm
+      v-if="initialValus.name"
       :handleFormSubmit="handleEditMenuItemSubmit"
       :validationSchema="editMenuItemData"
       :categories="categories"
@@ -56,35 +57,7 @@ const initialValus = ref({
   fats: null,
   proteins: null,
   carbohydrates: null,
-  pieces: [
-    {
-      id: uuid(),
-      size: "",
-      amount: "",
-      price: "",
-      weight: "",
-      photo: "",
-      photo_id: "",
-    },
-    {
-      id: uuid(),
-      size: "",
-      amount: "",
-      price: "",
-      weight: "",
-      photo: "",
-      photo_id: "",
-    },
-    {
-      id: uuid(),
-      size: "",
-      amount: "",
-      price: "",
-      weight: "",
-      photo: "",
-      photo_id: "",
-    },
-  ],
+  pieces: [],
 });
 
 const fetchAllCategories = async () => {
