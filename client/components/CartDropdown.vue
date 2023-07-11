@@ -190,7 +190,7 @@ const getPizzaCrust = (pizzaCrust: string) => {
 }
 .dropdown__box {
   position: relative;
-  width: 400px;
+  width: 350px;
   height: 350px;
   overflow-x: hidden;
   overflow-y: scroll;
