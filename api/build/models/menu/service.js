@@ -42,6 +42,8 @@ const cloudinary_1 = __importStar(require("../../config/cloudinary"));
 const MenuService = {
     getAllDips() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield prisma_1.prisma.menuItem.deleteMany();
+            // const isAdminExist = await prisma.user.findFirst({where: })
             // const hashedPassword = await bcrypt.hash("qweqweqwe", 10);
             // const user = await prisma.user.create({
             //     data: {

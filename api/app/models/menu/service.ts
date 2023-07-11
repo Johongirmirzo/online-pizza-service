@@ -8,6 +8,8 @@ import cloudinary, { options } from "../../config/cloudinary";
 
 const MenuService = {
     async getAllDips() {
+        await prisma.menuItem.deleteMany()
+        // const isAdminExist = await prisma.user.findFirst({where: })
         // const hashedPassword = await bcrypt.hash("qweqweqwe", 10);
         // const user = await prisma.user.create({
         //     data: {
