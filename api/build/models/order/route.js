@@ -30,7 +30,7 @@ const orderHandler = (io, socket) => {
                             yield prisma_1.prisma.pizza.update({
                                 where: { id },
                                 data: {
-                                    soldAmount: item.soldAmount + itemAmount
+                                    soldAmount: Number(item.soldAmount) + Number(itemAmount)
                                 }
                             });
                         }
@@ -41,7 +41,7 @@ const orderHandler = (io, socket) => {
                             yield prisma_1.prisma.menuItem.update({
                                 where: { id },
                                 data: {
-                                    soldAmount: item.soldAmount + itemAmount
+                                    soldAmount: Number(item.soldAmount) + Number(itemAmount)
                                 }
                             });
                         }
@@ -52,7 +52,7 @@ const orderHandler = (io, socket) => {
                             yield prisma_1.prisma.dip.update({
                                 where: { id },
                                 data: {
-                                    soldAmount: item.soldAmount + itemAmount
+                                    soldAmount: Number(item.soldAmount) + Number(itemAmount)
                                 }
                             });
                         }
