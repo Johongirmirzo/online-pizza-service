@@ -6,6 +6,7 @@ import OrderController from "./controller"
  
 export const orderHandler = (io: any, socket: any)=>{
     socket.on("create-order", async(orderData: IOrder)=>{
+        console.log("Server order received", orderData)
         try {
             const orderItems = JSON.parse(orderData.orderItems);
 

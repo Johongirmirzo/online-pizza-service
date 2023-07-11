@@ -19,6 +19,7 @@ const validateReqParamForId_1 = require("../../middleware/validateReqParamForId"
 const controller_1 = __importDefault(require("./controller"));
 const orderHandler = (io, socket) => {
     socket.on("create-order", (orderData) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("Server order received", orderData);
         try {
             const orderItems = JSON.parse(orderData.orderItems);
             const updateItemType = (id, itemAmount, itemType) => __awaiter(void 0, void 0, void 0, function* () {

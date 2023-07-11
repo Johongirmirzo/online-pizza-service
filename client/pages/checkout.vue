@@ -444,6 +444,8 @@ const handleMakeOrderClick = () => {
       alert(err);
     });
 
+    console.log("Order Sent");
+
     socket.on("new-order", (order: any) => {
       cartStore.clearCart();
       navigateTo(`/live-order/${order.id}`);
