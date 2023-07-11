@@ -37,24 +37,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma_1 = require("../../config/prisma");
 const cloudinary_1 = __importStar(require("../../config/cloudinary"));
 const MenuService = {
     getAllDips() {
         return __awaiter(this, void 0, void 0, function* () {
-            const hashedPassword = yield bcrypt_1.default.hash("qweqweqwe", 10);
-            const user = yield prisma_1.prisma.user.create({
-                data: {
-                    name: "Jaxongir",
-                    email: "jaxongir@gmail.com",
-                    phoneNumber: "+998991112211",
-                    status: "ACTIVE",
-                    role: "ADMIN",
-                    password: hashedPassword,
-                }
-            });
-            console.log("ADMIN USER", user);
+            // const hashedPassword = await bcrypt.hash("qweqweqwe", 10);
+            // const user = await prisma.user.create({
+            //     data: {
+            //         name: "Jaxongir",
+            //         email: "jaxongir@gmail.com",
+            //         phoneNumber: "+998991112211",
+            //         status: "ACTIVE",
+            //         role: "ADMIN",
+            //         password: hashedPassword,
+            //     }
+            // });
+            // console.log("ADMIN USER", user)
             return yield prisma_1.prisma.dip.findMany({ orderBy: [{ created: "desc" }] });
         });
     },
@@ -232,6 +231,15 @@ const MenuService = {
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${menuItemPhotos.large[0].filename}`));
                 }
             };
+            const isThereDuplicateMenuItemSize = (parsedMenuItemSizes) => {
+                for (let i = 0; i < parsedMenuItemSizes.length; i++) {
+                    for (let j = i + 1; j < parsedMenuItemSizes.length; j++) {
+                        if (parsedMenuItemSizes[i].size === parsedMenuItemSizes[j].size) {
+                            return parsedMenuItemSizes[i].size;
+                        }
+                    }
+                }
+            };
             try {
                 const menuItem = yield prisma_1.prisma.menuItem.findFirst({ where: { name: data.name } });
                 if (menuItem) {
@@ -239,6 +247,10 @@ const MenuService = {
                     return { newMenuItem: null, statusCode: 409, error: `Current menu item ${menuItem.name} already in the menu!` };
                 }
                 else {
+                    if (isThereDuplicateMenuItemSize(menuItemData.pieces)) {
+                        const menuItemSize = isThereDuplicateMenuItemSize(menuItemData.pieces);
+                        return { newPizza: null, statusCode: 400, error: `There can't be duplicate menu item sizes. Menu item size ${menuItemSize} is duplicated!` };
+                    }
                     let smallPhoto, mediumPhoto, largePhoto;
                     if (menuItemPhotos.small) {
                         smallPhoto = yield cloudinary_1.default.v2.uploader.upload(menuItemPhotos.small[0].path, cloudinary_1.options);
@@ -288,7 +300,7 @@ const MenuService = {
         });
     },
     editMenuItem(menuItemId, data, menuItemPhotos) {
-        var _a;
+        var _a, _b, _c, _d, _e;
         return __awaiter(this, void 0, void 0, function* () {
             const menuItemData = Object
                 .entries(data)
@@ -302,6 +314,15 @@ const MenuService = {
                 }
                 if (menuItemPhotos.large) {
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${menuItemPhotos.large[0].filename}`));
+                }
+            };
+            const isThereDuplicateMenuItemSize = (parsedMenuItemSizes) => {
+                for (let i = 0; i < parsedMenuItemSizes.length; i++) {
+                    for (let j = i + 1; j < parsedMenuItemSizes.length; j++) {
+                        if (parsedMenuItemSizes[i].size === parsedMenuItemSizes[j].size) {
+                            return parsedMenuItemSizes[i].size;
+                        }
+                    }
                 }
             };
             try {
@@ -320,6 +341,11 @@ const MenuService = {
                             removePhoto();
                             return { statusCode: 409, error: `Current menu item ${menuItemData.name} already in the menu!` };
                         }
+                    }
+                    if (isThereDuplicateMenuItemSize(menuItemData.pieces)) {
+                        const menuItemSize = isThereDuplicateMenuItemSize(menuItemData.pieces);
+                        removePhoto();
+                        return { newPizza: null, statusCode: 400, error: `There can't be duplicate menu item sizes. Menu item size ${menuItemSize} is duplicated!` };
                     }
                     let smallPhoto, mediumPhoto, largePhoto;
                     if (menuItemPhotos.small) {
@@ -342,12 +368,45 @@ const MenuService = {
                         menuItemData.pieces[index].photo = cloudinaryPhoto === null || cloudinaryPhoto === void 0 ? void 0 : cloudinaryPhoto.secure_url;
                         menuItemData.pieces[index].photo_id = cloudinaryPhoto === null || cloudinaryPhoto === void 0 ? void 0 : cloudinaryPhoto.public_id;
                     };
-                    if (menuItemData.pieces.length) {
-                        for (let i = 0; i < ((_a = menuItemData === null || menuItemData === void 0 ? void 0 : menuItemData.pieces) === null || _a === void 0 ? void 0 : _a.length); i++) {
+                    if ((menuItemParsedPieces.length > menuItemData.pieces.length) && menuItemData.pieces.length > 0) {
+                        for (let i = 0; i < menuItemParsedPieces.length; i++) {
+                            let isThereMatch = false;
+                            for (let j = 0; j < menuItemData.pieces.length; j++) {
+                                if (menuItemParsedPieces[i].photo_id === ((_a = menuItemData.pieces[j]) === null || _a === void 0 ? void 0 : _a.photo_id)) {
+                                    isThereMatch = true;
+                                    break;
+                                }
+                                switch (menuItemData.pieces[j].size.toLowerCase()) {
+                                    case "small":
+                                        if (smallPhoto) {
+                                            updateMenuItemPhoto(j, smallPhoto);
+                                        }
+                                        break;
+                                    case "medium":
+                                        if (mediumPhoto) {
+                                            updateMenuItemPhoto(j, mediumPhoto);
+                                        }
+                                        break;
+                                    case "large":
+                                        if (largePhoto) {
+                                            updateMenuItemPhoto(j, largePhoto);
+                                        }
+                                        break;
+                                }
+                            }
+                            if (!isThereMatch) {
+                                yield removeImgFromDirectory(i);
+                            }
+                        }
+                        modifiedPieces = menuItemData.pieces;
+                    }
+                    else if (menuItemData.pieces.length) {
+                        for (let i = 0; i < ((_b = menuItemData === null || menuItemData === void 0 ? void 0 : menuItemData.pieces) === null || _b === void 0 ? void 0 : _b.length); i++) {
                             switch (menuItemData.pieces[i].size.toLowerCase()) {
                                 case "small":
                                     if (smallPhoto) {
-                                        if (menuItemParsedPieces.length) {
+                                        console.log((_c = menuItemParsedPieces[i]) === null || _c === void 0 ? void 0 : _c.size);
+                                        if (menuItemParsedPieces[i]) {
                                             yield removeImgFromDirectory(i);
                                         }
                                         updateMenuItemPhoto(i, smallPhoto);
@@ -355,7 +414,8 @@ const MenuService = {
                                     break;
                                 case "medium":
                                     if (mediumPhoto) {
-                                        if (menuItemParsedPieces.length) {
+                                        console.log((_d = menuItemParsedPieces[i]) === null || _d === void 0 ? void 0 : _d.size);
+                                        if (menuItemParsedPieces[i]) {
                                             yield removeImgFromDirectory(i);
                                         }
                                         updateMenuItemPhoto(i, mediumPhoto);
@@ -363,7 +423,8 @@ const MenuService = {
                                     break;
                                 case "large":
                                     if (largePhoto) {
-                                        if (menuItemParsedPieces.length) {
+                                        console.log((_e = menuItemParsedPieces[i]) === null || _e === void 0 ? void 0 : _e.size);
+                                        if (menuItemParsedPieces[i]) {
                                             yield removeImgFromDirectory(i);
                                         }
                                         updateMenuItemPhoto(i, largePhoto);
