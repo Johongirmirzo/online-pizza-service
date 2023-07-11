@@ -85,6 +85,16 @@ const CustomerController = {
         const customerAddresses = await CustomerService.getAllCustomerAddresses(id);
         return res.json({data: customerAddresses})
     },
+    async createCustomerAddress(req: Request, res: Response){
+        const id = Number(req.params.id);
+        const {newAddress, statusCode, error} = await CustomerService.createCustomerAddress(id, req.body)
+        if(statusCode === 400){
+            return res.status(statusCode).json({errors: error})
+        } else {
+            return res.status(statusCode).json({data: newAddress})
+        }
+    },
+    
     async updateCustomerAddress(req: Request, res: Response){
         const addressId = Number(req.params.addressId);
         const customerId = Number(req.params.customerId);
@@ -94,18 +104,19 @@ const CustomerController = {
         } else {
             return res.status(statusCode).json({message: "Customer address is updated successfully!"})
         }
-        
     },
-    async createCustomerAddress(req: Request, res: Response){
-        const id = Number(req.params.id);
-        console.log(id, req.body)
-        const {newAddress, statusCode, error} = await CustomerService.createCustomerAddress(id, req.body)
-        if(statusCode === 400){
+
+    async setDefaultCustomerAddress(req: Request, res: Response){
+        const addressId = Number(req.params.addressId);
+        const customerId = Number(req.params.customerId);
+        const {statusCode, error} = await CustomerService.setDefaultCustomerAddress(addressId, customerId);
+        if(statusCode === 400 || statusCode === 404){
             return res.status(statusCode).json({errors: error})
         } else {
-            return res.status(statusCode).json({data: newAddress})
+            return res.status(statusCode).json({message: "Default customer address is set successfully!"})
         }
     },
+
     async deleteCustomerAddress(req: Request, res: Response){
         const id = Number(req.params.id);
         const {statusCode, error} = await CustomerService.deleteCustomerAddress(id)

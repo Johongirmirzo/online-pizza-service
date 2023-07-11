@@ -19,7 +19,7 @@ export const orderHandler = (io: any, socket: any)=>{
                             await prisma.pizza.update({
                                 where: {id},
                                 data: {
-                                    soldAmount: Number(item.soldAmount) + Number(itemAmount)
+                                    soldAmount: item.soldAmount + itemAmount
                                 }
                             })
                         }
@@ -30,7 +30,7 @@ export const orderHandler = (io: any, socket: any)=>{
                             await prisma.menuItem.update({
                                 where: {id},
                                 data: {
-                                    soldAmount: Number(item.soldAmount) + Number(itemAmount)
+                                    soldAmount: item.soldAmount + itemAmount
                                 }
                             })
                         }
@@ -41,7 +41,7 @@ export const orderHandler = (io: any, socket: any)=>{
                             await prisma.dip.update({
                                 where: {id},
                                 data: {
-                                    soldAmount: Number(item.soldAmount) + Number(itemAmount)
+                                    soldAmount: item.soldAmount + itemAmount
                                 }
                             })
                         }

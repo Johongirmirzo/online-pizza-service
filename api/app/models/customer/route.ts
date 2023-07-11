@@ -26,6 +26,7 @@ router.delete("/delete-customer/:id", verifyUser, isUserAdmin, validateReqParamF
 
 router.get("/get-all-customer-addresses/:id", validateReqParamForId, CustomerController.getAllCustomerAddresses);
 router.patch("/update-customer-address/:addressId/:customerId", validateData(editCustomerAddressFormData), CustomerController.updateCustomerAddress);
+router.patch("/set-default-customer-address/:addressId/:customerId", CustomerController.setDefaultCustomerAddress)
 router.post("/create-customer-address/:id", validateData(createCustomerAddressFormData), CustomerController.createCustomerAddress);
 router.delete("/delete-customer-address/:id", validateReqParamForId, CustomerController.deleteCustomerAddress);
 

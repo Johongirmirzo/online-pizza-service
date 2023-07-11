@@ -12,7 +12,7 @@ const ENDPOINTS = {
     UPDATE_CUSTOMER_ADDRESS: "/customer/update-customer-address",
     CREATE_CUSTOMER_ADDRESS: "/customer/create-customer-address",
     DELETE_CUSTOMER_ADDRESS: "/customer/delete-customer-address",
-
+    SET_DEFAULT_CUSTOMER_ADDRESS: "customer/set-default-customer-address",
     
     GET_ALL_CATEGORIES: "/category/get-all-categories",
     GET_CATEGORY: "/category/get-category",

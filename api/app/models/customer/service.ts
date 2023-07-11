@@ -126,7 +126,7 @@ const CustomerService = {
     },
 
     async getAllCustomerAddresses(customerId: number){
-        return await prisma.customerAdress.findFirst({where: {customerId}})
+        return await prisma.customerAdress.findMany({where: {customerId}})
     },
     async updateCustomerAddress(addressId: number, customerId: number, customerAddressData: ICustomerAddressFormData){
         try {
@@ -148,18 +148,42 @@ const CustomerService = {
     },
     async createCustomerAddress(customerId: number, customerAddressData: ICustomerAddressFormData){
         try {
-            const newAddress = await prisma.customerAdress.create({
-                data: {
-                    ...customerAddressData,
-                    customerId: customerId
-                }
-            })
-            return {newAddress, statusCode: 201, error: ""}
+            const customerAddresses = await prisma.customerAdress.findMany();
+            if(customerAddresses.length === 0){
+                const newAddress = await prisma.customerAdress.create({
+                    data: {
+                        ...customerAddressData,
+                        customerId: customerId,
+                        isDefault: true
+                    }
+                })
+                return {newAddress, statusCode: 201, error: ""}
+            } else {
+                const newAddress = await prisma.customerAdress.create({
+                    data: {
+                        ...customerAddressData,
+                        customerId: customerId
+                    }
+                })
+                return {newAddress, statusCode: 201, error: ""}
+            }
             
         }catch(err){
             console.log(err)
             return {newAddress: null, statusCode: 400, error: "Bad Request!"}
         } 
+    },
+    async setDefaultCustomerAddress(addressId: number, customerId: number){
+        try {
+            await prisma.customerAdress.updateMany({data: {isDefault: false}})
+            await prisma.customerAdress.update({
+                where: {id: addressId},
+                data: {isDefault: true}
+            })
+            return {statusCode: 200, error: ""}
+        }catch(err){
+            return {statusCode: 400, error: "Bad Request!"}
+        }
     },
     async deleteCustomerAddress(addressId: number){
         try {

@@ -21,6 +21,7 @@ router.patch("/change-customer-status/:id", verifyUser_1.verifyUser, isAdmin_1.i
 router.delete("/delete-customer/:id", verifyUser_1.verifyUser, isAdmin_1.isUserAdmin, validateReqParamForId_1.validateReqParamForId, controller_1.default.deleteCustomer);
 router.get("/get-all-customer-addresses/:id", validateReqParamForId_1.validateReqParamForId, controller_1.default.getAllCustomerAddresses);
 router.patch("/update-customer-address/:addressId/:customerId", (0, validations_1.validateData)(validations_2.editCustomerAddressFormData), controller_1.default.updateCustomerAddress);
+router.patch("/set-default-customer-address/:addressId/:customerId", controller_1.default.setDefaultCustomerAddress);
 router.post("/create-customer-address/:id", (0, validations_1.validateData)(validations_2.createCustomerAddressFormData), controller_1.default.createCustomerAddress);
 router.delete("/delete-customer-address/:id", validateReqParamForId_1.validateReqParamForId, controller_1.default.deleteCustomerAddress);
 exports.default = router;

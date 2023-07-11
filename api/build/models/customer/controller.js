@@ -114,6 +114,18 @@ const CustomerController = {
             return res.json({ data: customerAddresses });
         });
     },
+    createCustomerAddress(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const id = Number(req.params.id);
+            const { newAddress, statusCode, error } = yield service_1.default.createCustomerAddress(id, req.body);
+            if (statusCode === 400) {
+                return res.status(statusCode).json({ errors: error });
+            }
+            else {
+                return res.status(statusCode).json({ data: newAddress });
+            }
+        });
+    },
     updateCustomerAddress(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const addressId = Number(req.params.addressId);
@@ -127,16 +139,16 @@ const CustomerController = {
             }
         });
     },
-    createCustomerAddress(req, res) {
+    setDefaultCustomerAddress(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
-            console.log(id, req.body);
-            const { newAddress, statusCode, error } = yield service_1.default.createCustomerAddress(id, req.body);
-            if (statusCode === 400) {
+            const addressId = Number(req.params.addressId);
+            const customerId = Number(req.params.customerId);
+            const { statusCode, error } = yield service_1.default.setDefaultCustomerAddress(addressId, customerId);
+            if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ data: newAddress });
+                return res.status(statusCode).json({ message: "Default customer address is set successfully!" });
             }
         });
     },

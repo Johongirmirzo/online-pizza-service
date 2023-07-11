@@ -1,6 +1,12 @@
 <template>
   <section class="orders">
     <PizzaLoader v-if="isLoadingOrder" />
+    <DeliveryAddressModal
+      v-if="customerDeliveryAddress.id"
+      :isAddressModalOpen="isModalOpen"
+      :customerDeliveryAddress="customerDeliveryAddress"
+      :toggleModal="toggleModal"
+    />
     <div class="orders__table-box">
       <HeaderAction
         :routeTo="null"
@@ -53,6 +59,7 @@
             :paymentActiveRowId="paymentActiveRowId"
             :getPaymentActiveRowId="getPaymentActiveRowId"
             :togglePaymentStatusDropdown="togglePaymentStatusDropdown"
+            :getCurrentOrderMakerId="getCurrentOrderMakerId"
           />
         </tbody>
       </table>
@@ -63,6 +70,7 @@
 import { socket } from "~/config/socketIo";
 import { useLoading } from "~/composables/useLoading";
 import { getAllOrders } from "~/api/order";
+import { getAllCustomerAddresses, getCustomer } from "~/api/customer";
 import { IOrder, OrderStatus, PaymentStatus } from "~/types/order";
 const props = defineProps(["csvFileName", "filterBy"]);
 
@@ -71,12 +79,32 @@ const searchData = ref("");
 const { $toast } = useNuxtApp();
 const orderPdfTable = ref<HTMLElement | undefined>(undefined);
 const downloadCSVFilename = props.csvFileName;
+const customerDeliveryAddress = ref({});
 
 const handleUpdateSearchData = (val: string) => {
   searchData.value = val;
 };
 
+const getCurrentOrderMakerId = async (customerId: number) => {
+  try {
+    const customerResp = await getCustomer(customerId.toString());
+    const allCustomerAddressesResp = await getAllCustomerAddresses(customerId);
+    const currentCustomerAddress = allCustomerAddressesResp.data.data.filter(
+      (address) => address.isDefault
+    );
+
+    customerDeliveryAddress.value = {
+      ...currentCustomerAddress[0],
+      ...customerResp.data.data,
+    };
+    toggleModal();
+  } catch (err) {
+    console.log("Error ", err);
+  }
+};
+
 const { csv, generateCSV, generatePDF, generateExcel } = useHeaderAction();
+const { isModalOpen, toggleModal } = useModal();
 const {
   isStatusDropdownOpen,
   activeRowId,

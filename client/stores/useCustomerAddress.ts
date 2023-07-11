@@ -10,9 +10,7 @@ export const useCustomerAddress = defineStore("customer-address", ()=>{
         customerAddresses.value.push(address);
     }
     const updateCustomerAddress = (addressId: number, editedAddress: ICustomerAddress)=>{
-        console.log(addressId, editedAddress)
         customerAddresses.value = customerAddresses.value.map((customerAddress: ICustomerAddress)=> {
-            console.log(customerAddress.id, addressId)
             return customerAddress.id === addressId ? editedAddress : customerAddress
         })
     }

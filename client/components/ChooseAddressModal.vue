@@ -126,13 +126,17 @@ import { useCustomerStore } from "~/stores/useCustomerStore";
 import { useCustomerAddress } from "~/stores/useCustomerAddress";
 import { getUserOrderType, storeUserOrderType } from "~/utils/helperStorage";
 import { ICustomerAddress } from "~/types/customer-address";
-import { getAllAddresses } from "~/api/all-api-handlers";
+import {
+  getAllAddresses,
+  setDefaultCustomerAddress,
+} from "~/api/all-api-handlers";
 
 const props = defineProps([
   "isAddressModalOpen",
   "closeAddressModal",
   "openAddressModalForm",
   "getAddressId",
+  "resetEditAddressId",
 ]);
 
 const userOrderType = getUserOrderType();
@@ -158,7 +162,11 @@ const handleCloseModalClick = () => {
   }, 400);
 };
 
-const handleSetCurrentOrderTypeClick = (orderType: string) => {
+onMounted(async () => {
+  console.log(await getAllAddresses(customerStore.customer.id));
+});
+
+const handleSetCurrentOrderTypeClick = async (orderType: string) => {
   if (orderType === "Pickup") {
     customerAddressStore.setCurrentOrderType("Pickup");
     handleCloseModalClick();
@@ -167,17 +175,22 @@ const handleSetCurrentOrderTypeClick = (orderType: string) => {
     customerAddressStore.setCurrentActiveCustomerAddress(
       focussedAddressId.value
     );
+    await setDefaultCustomerAddress(
+      customerAddressStore.currentActiveCustomerAddress.id,
+      customerStore.customer.id
+    );
     handleCloseModalClick();
   }
 };
 
-const handleAddAddressClick = () => {
-  props.closeAddressModal();
-  props.openAddressModalForm();
-};
-
 const setFocusedAddressId = (id: number) => {
   focussedAddressId.value = id;
+};
+
+const handleAddAddressClick = () => {
+  setFocusedAddressId(-1);
+  props.closeAddressModal();
+  props.openAddressModalForm();
 };
 
 watchEffect(() => {
@@ -229,24 +242,9 @@ onMounted(async () => {
   position: relative;
   max-width: 560px;
   width: 95%;
-  height: 500px;
-  overflow-x: hidden;
-  overflow-y: scroll;
   padding: 50px 25px;
   border-radius: 20px;
   background: #fff;
-}
-.choose-address::-webkit-scrollbar {
-  height: 10px;
-  width: 5px;
-}
-.choose-address::-webkit-scrollbar-track {
-  margin-top: 150px;
-  margin-bottom: 50px;
-  background: transparent;
-}
-.choose-address::-webkit-scrollbar-thumb {
-  background: #999;
 }
 
 .choose-address.active {
@@ -360,6 +358,22 @@ onMounted(async () => {
 .choose-address__customer-address-btns-box.empty-addresses {
   justify-content: center;
 }
+.choose-address__customer-address-list {
+  height: 220px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.choose-address__customer-address-list::-webkit-scrollbar {
+  height: 10px;
+  width: 5px;
+}
+.choose-address__customer-address-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.choose-address__customer-address-list::-webkit-scrollbar-thumb {
+  background: #999;
+}
+
 .choose-address__customer-address-item {
   display: flex;
   justify-content: space-between;

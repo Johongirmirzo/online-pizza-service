@@ -155,7 +155,7 @@ const CustomerService = {
     },
     getAllCustomerAddresses(customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.customerAdress.findFirst({ where: { customerId } });
+            return yield prisma_1.prisma.customerAdress.findMany({ where: { customerId } });
         });
     },
     updateCustomerAddress(addressId, customerId, customerAddressData) {
@@ -182,14 +182,38 @@ const CustomerService = {
     createCustomerAddress(customerId, customerAddressData) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const newAddress = yield prisma_1.prisma.customerAdress.create({
-                    data: Object.assign(Object.assign({}, customerAddressData), { customerId: customerId })
-                });
-                return { newAddress, statusCode: 201, error: "" };
+                const customerAddresses = yield prisma_1.prisma.customerAdress.findMany();
+                if (customerAddresses.length === 0) {
+                    const newAddress = yield prisma_1.prisma.customerAdress.create({
+                        data: Object.assign(Object.assign({}, customerAddressData), { customerId: customerId, isDefault: true })
+                    });
+                    return { newAddress, statusCode: 201, error: "" };
+                }
+                else {
+                    const newAddress = yield prisma_1.prisma.customerAdress.create({
+                        data: Object.assign(Object.assign({}, customerAddressData), { customerId: customerId })
+                    });
+                    return { newAddress, statusCode: 201, error: "" };
+                }
             }
             catch (err) {
                 console.log(err);
                 return { newAddress: null, statusCode: 400, error: "Bad Request!" };
+            }
+        });
+    },
+    setDefaultCustomerAddress(addressId, customerId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield prisma_1.prisma.customerAdress.updateMany({ data: { isDefault: false } });
+                yield prisma_1.prisma.customerAdress.update({
+                    where: { id: addressId },
+                    data: { isDefault: true }
+                });
+                return { statusCode: 200, error: "" };
+            }
+            catch (err) {
+                return { statusCode: 400, error: "Bad Request!" };
             }
         });
     },

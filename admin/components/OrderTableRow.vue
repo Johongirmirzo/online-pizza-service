@@ -6,9 +6,22 @@
       </p>
     </td>
     <td class="orders-table__cell">
-      <p class="orders-table__text">
+      <button
+        class="orders-table__text orders-table__order-type-text"
+        :class="{
+          'orders-table__text--delivery': orderItem.orderType === 'DELIVERY',
+        }"
+        @click="
+          handleGetCustomerIdClick(orderItem.customerId, orderItem.orderType)
+        "
+      >
+        <Icon
+          v-if="orderItem.orderType === 'DELIVERY'"
+          class="orders-table__location-icon"
+          name="akar-icons:location"
+        />
         {{ orderItem.orderType }}
-      </p>
+      </button>
     </td>
     <td class="orders-table__cell">
       <p class="orders-table__text">
@@ -288,6 +301,7 @@ const props = defineProps([
   "paymentActiveRowId",
   "getPaymentActiveRowId",
   "togglePaymentStatusDropdown",
+  "getCurrentOrderMakerId",
 ]);
 
 const handleToggleStatusDropdown = (orderId: number) => {
@@ -306,6 +320,12 @@ const handleChangeOrderStatus = (orderId: number, status: string) => {
 const handleChangeOrderPaymentStatus = (orderId: number, status: string) => {
   props.togglePaymentStatus(orderId, status);
   props.togglePaymentStatusDropdown();
+};
+
+const handleGetCustomerIdClick = (customerId: number, orderType: string) => {
+  if (orderType == "DELIVERY") {
+    props.getCurrentOrderMakerId(customerId);
+  }
 };
 
 const closeStatusDropdown = () => {
@@ -342,6 +362,30 @@ window.addEventListener("click", closeStatusDropdown);
 .orders-table__text {
   font-size: 14px;
   color: #333;
+}
+
+.orders-table__text--delivery {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  margin-right: 8px;
+  transition: all 0.3s ease-out;
+  border-radius: 10px;
+  background: #fc8019;
+  color: #fff;
+  font-weight: 600;
+}
+.orders-table__text--delivery:hover {
+  background: #e97313;
+}
+
+.orders-table__location-icon {
+  margin-left: -10px;
+}
+.orders-table__client-address {
+  padding: 10px 12px;
+  border-radius: 5px;
 }
 .orders-table__btns-box {
   display: flex;

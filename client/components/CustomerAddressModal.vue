@@ -71,7 +71,6 @@ const isAddressModalFormClosed = ref(false);
 const customerAddressStore = useCustomerAddress();
 const customerStore = useCustomerStore();
 const { $toast } = useNuxtApp();
-const { data } = useAuth();
 const { isLoading, startLoading, stopLoading } = useLoading();
 
 const initialValues = ref({
@@ -84,6 +83,7 @@ const initialValues = ref({
 });
 
 watchEffect(() => {
+  console.log(props.editAddressId, 999);
   if (props.editAddressId > -1) {
     const address = customerAddressStore.customerAddresses.find(
       (customerAddress: ICustomerAddress) =>
@@ -104,6 +104,7 @@ const handleCloseModalClick = () => {
 
 const handleMoveBackClick = () => {
   handleCloseModalClick();
+  props.resetEditAddressId();
   props.closeAddressModalForm();
   props.openAddressModal();
 };
@@ -132,6 +133,17 @@ const handleAddNewAddressSubmit = async (address: ICustomerAddressFormData) => {
   }
 };
 
+const resetInitialValues = () => {
+  initialValues.value = {
+    streetName: "",
+    approach: "",
+    doorCode: "",
+    floor: "",
+    apartmentNumber: "",
+    comment: "",
+  };
+};
+
 const handleEditAddressSubmit = async (address: ICustomerAddressFormData) => {
   try {
     startLoading();
@@ -143,11 +155,14 @@ const handleEditAddressSubmit = async (address: ICustomerAddressFormData) => {
     customerAddressStore.updateCustomerAddress(props.editAddressId, address);
     props.resetEditAddressId();
     handleMoveBackClick();
+    resetInitialValues();
     stopLoading();
   } catch (err: any) {
     if (err?.response?.data?.errors) {
       $toast.error(err.response?.data?.errors);
     }
+    resetInitialValues();
+    props.resetEditAddressId();
     stopLoading();
   }
 };
@@ -158,7 +173,7 @@ const handleDeleteAddressClick = async (addressId: number) => {
     await deleteCustomerAddress(addressId);
     customerAddressStore.deleteCustomerAddress(addressId);
     props.resetEditAddressId();
-    initialValues.value = {};
+    resetInitialValues();
     handleMoveBackClick();
     stopLoading();
   } catch (err: any) {

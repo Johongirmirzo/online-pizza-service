@@ -3,7 +3,7 @@ import {getAllDips, getDip} from "./dip";
 import {getAllMenuItems, getMenuItem} from "./menuItem";
 import { getAllCategories, getCategory } from "./category";
 import { getCustomer, loginCustomer, registerCustomer, editCustomer } from "./customer";
-import { getAllAddresses, createaCustomerAddress, editCustomerAddress, deleteCustomerAddress } from "./customer-address"
+import { getAllAddresses, createaCustomerAddress, editCustomerAddress, setDefaultCustomerAddress, deleteCustomerAddress } from "./customer-address"
 import { getAllCustomerOrders, getOrder } from "./order";
 
 export {
@@ -21,6 +21,7 @@ export {
     getAllAddresses,
     createaCustomerAddress,
     editCustomerAddress,
+    setDefaultCustomerAddress,
     deleteCustomerAddress,
     getAllCustomerOrders, 
     getOrder,

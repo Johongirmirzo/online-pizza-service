@@ -15,6 +15,7 @@
       :closeAddressModal="closeAddressModal"
       :openAddressModalForm="openAddressModalForm"
       :getAddressId="getAddressId"
+      :resetEditAddressId="resetEditAddressId"
     />
     <CustomerAddressModal
       :isAddressModalFormOpen="isAddressModalFormOpen"

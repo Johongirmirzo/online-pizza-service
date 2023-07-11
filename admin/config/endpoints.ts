@@ -25,6 +25,7 @@ const ENDPOINTS = {
 
     GET_ALL_CUSTOMERS: "/customer/get-all-customers",
     GET_CUSTOMER: "/customer/get-customer",
+    GET_ALL_CUSTOMER_ADDRESSES: "/customer/get-all-customer-addresses",
     CHANGE_CUSTOMER_STATUS: "/customer/change-customer-status",
     DELETE_CUSTOMER: "/customer/delete-customer",
 
