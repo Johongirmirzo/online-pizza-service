@@ -675,7 +675,10 @@ const MenuService = {
                     await prisma.pizzaSize.update({
                         where: {id: pizzaSize.id},
                         data: {
-                            ...pizzaSize
+                            ...pizzaSize,
+                            price: `${pizzaData.price}`,
+                            circumfarance: `${pizzaData.circumfarance}`,
+                            weight: `${pizzaData.weight}`
                         }
                     })
                 }
