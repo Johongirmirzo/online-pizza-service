@@ -64,7 +64,10 @@
           </p>
           <div class="checkout__input-box checkout__delivery-type-box">
             <p
-              v-if="customerAddressStore.currentOrderType === 'Pickup'"
+              v-if="
+                customerAddressStore.currentOrderType === 'Pickup' ||
+                !customerAddressStore.currentOrderType
+              "
               class="checkout__address-text"
             >
               123 Margilon Street, Pizzeria
@@ -401,7 +404,16 @@ onMounted(() => {
   }
 });
 
+const hasCustomerChosenAddressType = () =>
+  customerAddressStore.currentActiveCustomerAddress.id;
+
 const handleMakeOrderClick = () => {
+  if (
+    !hasCustomerChosenAddressType() &&
+    customerAddressStore.currentOrderType === "Delivery"
+  ) {
+    return $toast.error("Please choose either pickup or delivery address!");
+  }
   if (isRestaurantClosed()) {
     printRestaurantClosedErrorMessage();
   }
