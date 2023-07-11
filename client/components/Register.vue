@@ -149,6 +149,9 @@ const handleregisterSubmit = async (customerFormData: IRegisterFormData) => {
     if (err?.response?.data?.errors) {
       $toast.error(err?.response?.data?.errors);
     }
+    if (err?.response?.data) {
+      $toast.error(err?.response?.data);
+    }
     stopLoading();
   }
 };

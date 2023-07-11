@@ -343,7 +343,7 @@
                     class="pizza-form__input"
                     :id="`crusts.duplexCrustMozarella_${idx}`"
                     :name="`pizzaSizes[${idx}].crusts.duplexCrustMozarella`"
-                    placeholder="Enter Slice Amount..."
+                    placeholder="Enter Slice Price..."
                     @keydown="handlePreventFormSubmission('number', $event)"
                   />
                   <ErrorMessage
@@ -362,7 +362,7 @@
                     class="pizza-form__input"
                     :id="`crusts.duplexCrustCheddar_${idx}`"
                     :name="`pizzaSizes[${idx}].crusts.duplexCrustCheddar`"
-                    placeholder="Enter Slice Amount..."
+                    placeholder="Enter Slice Price..."
                     @keydown="handlePreventFormSubmission('number', $event)"
                   />
                   <ErrorMessage

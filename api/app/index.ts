@@ -21,7 +21,7 @@ import {
 import {messageHandler} from "./models/message/route";
 import {reviewHandler} from "./models/review/route";
 import {feedbackHandler} from "./models/feedback/route";
-import {orderHandler} from "./models/order/route"
+import {orderHandler} from "./models/order/route";
 
 const app = express();
 

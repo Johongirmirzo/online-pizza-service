@@ -36,7 +36,7 @@
             </p>
             <footer class="menu-card__footer">
               <strong class="menu-card__price-text">
-                {{ menuItem.pieces[0]?.price }} sum
+                {{ menuItem.pieces[0]?.price }} uzs
               </strong>
             </footer>
           </div>
@@ -46,7 +46,7 @@
   </section>
 </template>
 <script setup lang="ts">
-import { useLoadings } from "~/composables/useLoading";
+import { useLoading } from "~/composables/useLoading";
 import { IMenuItem } from "~/types/menu";
 import { getMenuItem } from "~/api/menu";
 
@@ -107,7 +107,7 @@ watchEffect(async () => {
   max-width: 420px;
   width: 90%;
   margin: 0 auto;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   cursor: pointer;
 }
@@ -122,6 +122,7 @@ watchEffect(async () => {
 }
 .menu-card__text-box {
   padding: 20px;
+  background: #f4f4f4;
 }
 .menu-card__header {
   margin-bottom: 15px;
@@ -129,6 +130,7 @@ watchEffect(async () => {
 .menu-card__title {
   text-align: center;
   font-size: clamp(1.2rem, calc(1.5vw + 1rem), 1.5rem);
+  font-weight: 600;
 }
 .menu-card__description {
   text-align: center;

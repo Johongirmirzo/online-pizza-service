@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { isUserAdmin } from "../../middleware/isAdmin";
 import { verifyUser } from "../../middleware/verifyUser";
+import { limitApiRequestByHours, rateLimitMessages } from "../../middleware/rateLimiter";
 import { verifyCustomer } from "../../middleware/verifyCustomer";
 import { validateData } from "../../middleware/validations";
 import { validateReqParamForId } from "../../middleware/validateReqParamForId"
@@ -16,10 +17,11 @@ import CustomerController from "./controller";
 const router = Router();
 
 
+
 router.get("/get-all-customers", CustomerController.getAllCustomers);
 router.get("/get-customer/:id", validateReqParamForId, CustomerController.getCustomer);
 router.post("/login", validateData(loginCustomer), CustomerController.loginCustomer);
-router.post("/register", validateData(registerCustomer), CustomerController.registerCustomer);
+router.post("/register", validateData(registerCustomer),  limitApiRequestByHours(6, 1, rateLimitMessages.customerRegister(6)), CustomerController.registerCustomer);
 router.patch("/update-customer/:id", verifyCustomer, validateData(editCustomer), validateReqParamForId, CustomerController.updateCustomer)
 router.patch("/change-customer-status/:id", verifyUser, isUserAdmin, validateReqParamForId, CustomerController.changeCustomerStatus);
 router.delete("/delete-customer/:id", verifyUser, isUserAdmin, validateReqParamForId, CustomerController.deleteCustomer);

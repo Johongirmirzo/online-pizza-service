@@ -2,7 +2,7 @@ import { Router } from "express";
 import { UserController } from "./controller";
 import { validateData } from "../../middleware/validations";
 import { uploadImage } from "../../middleware/uploadImage";
-import { userLogin, user, editUser } from "../../validations";
+import { userLogin } from "../../validations";
 import { isAdminstrative } from "../../middleware/isAdminstrative";
 import { validateReqParamForId } from "../../middleware/validateReqParamForId"
 import { verifyUser } from "../../middleware/verifyUser";

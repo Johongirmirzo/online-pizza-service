@@ -32,6 +32,7 @@ export default NuxtAuthHandler({
             body: JSON.stringify(credentials)
           });
           const userData = await res.json();
+          
           console.log("User Data",userData);
           if(userData?.errors) {
             throw createError({statusCode: 400, statusMessage: userData.errors})

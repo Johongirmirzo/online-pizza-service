@@ -8,7 +8,7 @@ const isAllowedToAccess = (req, res, next) => {
             next();
             break;
         default:
-            res.status(403).json({ message: "You are not admin or sub admin! You can't access this resource" });
+            res.status(403).json({ errors: "You are not admin or sub admin! You can't access this resource" });
     }
 };
 exports.isAllowedToAccess = isAllowedToAccess;
