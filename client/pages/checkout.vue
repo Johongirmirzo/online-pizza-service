@@ -444,8 +444,8 @@ const handleMakeOrderClick = () => {
       alert(err);
     });
 
-    cartStore.clearCart();
     socket.on("new-order", (order: any) => {
+      cartStore.clearCart();
       navigateTo(`/live-order/${order.id}`);
     });
   }
