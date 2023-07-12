@@ -172,8 +172,8 @@ const handleCloseModalClick = () => {
 
 .delivery-address__close-btn {
   position: absolute;
-  top: 0;
-  right: -50px;
+  top: -50px;
+  right: 10px;
   font-size: 30px;
   color: #fff;
   transition: transform 0.3s ease-out;
@@ -218,5 +218,13 @@ const handleCloseModalClick = () => {
   margin-right: 0;
   font-weight: bold;
   color: #333;
+}
+
+@media (min-width: 768px) {
+  .delivery-address__close-btn {
+    position: absolute;
+    top: 0;
+    right: -45px;
+  }
 }
 </style>
