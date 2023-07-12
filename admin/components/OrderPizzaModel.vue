@@ -46,7 +46,7 @@
             {{ pizzaData.crustType.crustPrice }} uzs
           </p>
         </div>
-        {{ pizzaData.edgeType.edgeType }}
+
         <div class="modal__pizza-size-box">
           <h5 class="modal__pizza-size-title">Pizza Edge</h5>
           <p v-if="pizzaData.edgeType.edgeType" class="modal__pizza-size-text">
