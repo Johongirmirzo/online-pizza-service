@@ -11,7 +11,7 @@
       </p>
     </td>
     <td class="messages-table__cell">
-      <p class="messages-table__text">
+      <p class="messages-table__text messages-table__message-text">
         {{ review.message }}
       </p>
     </td>
@@ -125,6 +125,9 @@ window.addEventListener("click", closeStatusDropdown);
 .messages-table__status-cell {
   position: relative;
   font-size: 18px;
+}
+.messages-table__message-text {
+  word-wrap: break-word;
 }
 .messages-table__dropdown {
   position: absolute;
