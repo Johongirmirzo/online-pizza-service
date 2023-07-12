@@ -27,17 +27,6 @@ const layout = ref("default");
 const audio = ref<HTMLElement>();
 const route = useRoute();
 const customerStore = useCustomerStore();
-const orderLayoutRouteNames = ["checkout", "track-order"];
-
-console.log(route.fullPath);
-
-watchEffect(() => {
-  if (orderLayoutRouteNames.includes(route.name)) {
-    layout.value = "order";
-  } else {
-    layout.value = "default";
-  }
-});
 
 // Sidebar Toggle
 const isSidebarToggled = ref(false);

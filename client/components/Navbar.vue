@@ -35,7 +35,13 @@
       </ul>
     </nav>
     <div class="header__middle">
-      <NuxtLink class="header__website-logo" to="/">
+      <NuxtLink class="header__website-logo-box" to="/">
+        <img
+          class="header__website-logo"
+          clas
+          src="@/assets/images/R.png"
+          alt="website logo"
+        />
         <h1>Pizzeria</h1>
       </NuxtLink>
       <ul class="header__middle-list">
@@ -312,9 +318,14 @@ onMounted(() => {
 .header__middle {
   padding: 25px 0;
 }
-.header__website-logo {
+.header__website-logo-box {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 15px;
   font-size: clamp(1.7rem, calc(1.5vw + 1rem), 2.2rem);
+}
+.header__website-logo {
+  width: 100px;
 }
 .header__middle-list {
   display: flex;
