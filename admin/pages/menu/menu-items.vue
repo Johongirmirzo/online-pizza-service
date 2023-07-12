@@ -4,6 +4,13 @@
       <h1 class="menu-items__title">All Menu Items</h1>
     </header>
     <PizzaLoader v-if="isLoadingMenuItem" />
+    <DeleteItemModal
+      v-if="deleteItemId > -1"
+      :isModalOpen="isModalOpen"
+      :closeModal="toggleModal"
+      :handleDeleteClick="handleDeleteMenuItemClick"
+      deleteItem="Menu Item"
+    />
     <div class="menu-items__table-box">
       <HeaderAction
         :routeTo="routeTo"
@@ -42,12 +49,13 @@
               idx === menuItems.length - 1 || idx === menuItems.length - 2
             "
             :menuItem="menuItem"
-            :handleDeleteMenuItemClick="handleDeleteMenuItemClick"
             :toggleMenuItemStatus="toggleMenuItemStatus"
             :isStatusDropdownOpen="isStatusDropdownOpen"
             :activeRowId="activeRowId"
             :getActiveRowId="getActiveRowId"
             :toggleStatusDropdown="toggleStatusDropdown"
+            :getDeleteItemId="getDeleteItemId"
+            :handleDeleteMenuItemClick="handleDeleteMenuItemClick"
           />
         </tbody>
       </table>
@@ -64,6 +72,7 @@ import {
 import { IMenuItem, Status } from "~/types/menu";
 
 const { $toast } = useNuxtApp();
+const deleteItemId = ref(-1);
 const menuItems = ref<IMenuItem[]>([]);
 const isLoading = ref(false);
 const searchData = ref("");
@@ -82,6 +91,7 @@ const {
   getActiveRowId,
   toggleStatusDropdown,
 } = useStatusDropdown();
+const { isModalOpen, toggleModal } = useModal();
 
 const handleUpdateSearchData = (val: string) => {
   searchData.value = val;
@@ -131,8 +141,13 @@ const getFilteredMenuItems = (searchData: string) => {
   );
 };
 
-const handleDeleteMenuItemClick = async (id: number) => {
-  await deleteMenuItem(id);
+const getDeleteItemId = (menuItemId: number) => {
+  deleteItemId.value = menuItemId;
+  toggleModal();
+};
+
+const handleDeleteMenuItemClick = async () => {
+  await deleteMenuItem(deleteItemId.value);
   $toast.success("Menu item is deleted successfully!");
   fetchAllMenus();
 };

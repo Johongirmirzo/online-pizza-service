@@ -113,7 +113,7 @@
           <Icon class="dips-table__icon" name="lucide:edit" />
         </NuxtLink>
         <button
-          @click="handleDeleteDipClick(dip.id)"
+          @click="getDeleteItemId(dip.id)"
           title="Delete dips"
           class="dips-table__btn dips-table__delete-btn"
         >
@@ -131,9 +131,9 @@ const props = defineProps([
   "isStatusDropdownOpen",
   "activeRowId",
   "toggleStatusDropdown",
-  "handleDeleteDipClick",
   "getActiveRowId",
   "toggleDipStatus",
+  "getDeleteItemId",
 ]);
 
 const handleToggleStatusDropdown = (dipId: number) => {

@@ -129,7 +129,7 @@
         <button
           :class="{ inactive: isDeletingPizza }"
           title="Delete pizza Item"
-          @click="handleDeletePizzaClick(pizza.id)"
+          @click="getDeleteItemId(pizza.id)"
           class="pizza-table__btn pizza-table__delete-pizza-item-btn"
         >
           <Icon
@@ -147,13 +147,13 @@ import { DateTime } from "luxon";
 const props = defineProps([
   "pizza",
   "togglePizzaStatus",
-  "handleDeletePizzaClick",
   "isStatusDropdownOpen",
   "isLastRow",
   "isDeletingPizza",
   "activeRowId",
   "getActiveRowId",
   "toggleStatusDropdown",
+  "getDeleteItemId",
 ]);
 
 const handleToggleStatusDropdown = (dipId: number) => {

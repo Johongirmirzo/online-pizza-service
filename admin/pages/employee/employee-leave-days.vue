@@ -3,6 +3,13 @@
     <header class="employee-leave-days__header">
       <h1 class="employee-leave-days__title">All Employee Leave Days</h1>
     </header>
+    <DeleteItemModal
+      v-if="leaveDayId"
+      :isModalOpen="isModalOpen"
+      :closeModal="toggleModal"
+      :handleDeleteClick="handleDeleteEmployeeLeaveDayClick"
+      deleteItem="Employee Leave Day"
+    />
     <PizzaLoader v-if="isLoading" />
     <div class="employee-leave-days__table-box">
       <div class="employee-leave-days__action-header">
@@ -56,10 +63,8 @@
             v-for="leaveDay in leaveDays"
             :key="leaveDay.id"
             :leaveDay="leaveDay"
-            :handleDeleteEmployeeLeaveDayClick="
-              handleDeleteEmployeeLeaveDayClick
-            "
             :toggleEmployeeLeaveDayStatus="toggleEmployeeLeaveDayStatus"
+            :getDeleteItemId="getDeleteItemId"
           />
         </tbody>
       </table>
@@ -76,21 +81,12 @@ import {
 import { IEmployeeLeaveDay } from "~/types/employee";
 
 const { $toast } = useNuxtApp();
+const leaveDayId = ref("");
+const employeeId = ref(-1);
 const leaveDays = ref<IEmployeeLeaveDay[]>([]);
-const { isLoading, startLoading, stopLoading } = useLoading();
 
-const handleDeleteEmployeeLeaveDayClick = async (
-  leaveDayId: string,
-  employeeId: number
-) => {
-  try {
-    await deleteEmployeeLeaveDay(leaveDayId, employeeId);
-    $toast.success(`Employee leave day is deleted successfully!`);
-    fetchAllEmployeeLeaveDays();
-  } catch (err) {
-    console.log("Delete note error", err);
-  }
-};
+const { isLoading, startLoading, stopLoading } = useLoading();
+const { isModalOpen, toggleModal } = useModal();
 
 const toggleEmployeeLeaveDayStatus = async (
   leaveDayId: string,
@@ -155,6 +151,22 @@ const fetchAllEmployeeLeaveDays = async () => {
   }
 };
 fetchAllEmployeeLeaveDays();
+
+const getDeleteItemId = (lDayId: number, eId: number) => {
+  leaveDayId.value = lDayId.toString();
+  employeeId.value = eId;
+  toggleModal();
+};
+
+const handleDeleteEmployeeLeaveDayClick = async () => {
+  try {
+    await deleteEmployeeLeaveDay(leaveDayId.value, employeeId.value);
+    $toast.success(`Employee leave day is deleted successfully!`);
+    fetchAllEmployeeLeaveDays();
+  } catch (err) {
+    console.log("Delete employee leave day error error", err);
+  }
+};
 </script>
 <style scoped>
 .employee-leave-days__header {

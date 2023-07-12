@@ -116,7 +116,7 @@
         </NuxtLink>
         <button
           title="Delete Menu Item"
-          @click="handleDeleteMenuItemClick(menuItem.id)"
+          @click="getDeleteItemId(menuItem.id)"
           class="menu-items-table__btn menu-items-table__delete-menu-item-btn"
         >
           <Icon class="menu-items-table__table-icon" name="jam:trash" />
@@ -131,11 +131,11 @@ const props = defineProps([
   "isLastRow",
   "menuItem",
   "toggleMenuItemStatus",
-  "handleDeleteMenuItemClick",
   "isStatusDropdownOpen",
   "activeRowId",
   "getActiveRowId",
   "toggleStatusDropdown",
+  "getDeleteItemId",
 ]);
 
 const handleToggleStatusDropdown = (menuItemId: number) => {

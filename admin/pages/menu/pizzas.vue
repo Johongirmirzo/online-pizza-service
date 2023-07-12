@@ -4,6 +4,13 @@
       <h1 class="pizzas__title">All Pizzas</h1>
     </header>
     <PizzaLoader v-if="isLoading" />
+    <DeleteItemModal
+      v-if="deleteItemId > -1"
+      :isModalOpen="isModalOpen"
+      :closeModal="toggleModal"
+      :handleDeleteClick="handleDeletePizzaClick"
+      deleteItem="Pizza"
+    />
     <div class="pizzas__table-box">
       <HeaderAction
         :routeTo="routeTo"
@@ -42,12 +49,12 @@
             :pizza="pizza"
             :isLastRow="idx === pizzas.length - 1 || idx === pizzas.length - 2"
             :togglePizzaStatus="togglePizzaStatus"
-            :handleDeletePizzaClick="handleDeletePizzaClick"
             :isStatusDropdownOpen="isStatusDropdownOpen"
             :activeRowId="activeRowId"
             :getActiveRowId="getActiveRowId"
             :toggleStatusDropdown="toggleStatusDropdown"
             :isDeletingPizza="isDeletingPizza"
+            :getDeleteItemId="getDeleteItemId"
           />
         </tbody>
       </table>
@@ -60,6 +67,7 @@ import { IPizza, Status } from "~/types/pizza";
 import { deletePizza, getAllPizzas, changePizzaStatus } from "~/api/pizza";
 
 const pizzas = ref<IPizza[]>([]);
+const deleteItemId = ref(-1);
 const isDeletingPizza = ref(false);
 const searchData = ref("");
 const pizzasPdfTable = ref<HTMLElement | undefined>(undefined);
@@ -75,6 +83,7 @@ const {
   toggleStatusDropdown,
 } = useStatusDropdown();
 const { isLoading, startLoading, stopLoading } = useLoading();
+const { isModalOpen, toggleModal } = useModal();
 
 const fetchAllPizzas = async () => {
   try {
@@ -89,6 +98,19 @@ const fetchAllPizzas = async () => {
   }
 };
 fetchAllPizzas();
+
+const getDeleteItemId = (toppingId: number) => {
+  deleteItemId.value = toppingId;
+  toggleModal();
+};
+
+const handleDeletePizzaClick = async () => {
+  isDeletingPizza.value = true;
+  await deletePizza(deleteItemId.value);
+  $toast.success("Pizza is deleted successfully!");
+  fetchAllPizzas();
+  isDeletingPizza.value = false;
+};
 
 const handleUpdateSearchData = (val: string) => {
   searchData.value = val;
@@ -123,19 +145,6 @@ const getFilteredPIzzas = (searchData: string) => {
       ? true
       : pizza.name.toLowerCase().includes(searchData.toLowerCase())
   );
-};
-
-const handleDeletePizzaClick = async (id: number) => {
-  try {
-    isDeletingPizza.value = true;
-    await deletePizza(id);
-    fetchAllPizzas();
-    $toast.success("Pizza is deleted successfully!");
-    isDeletingPizza.value = false;
-  } catch (err) {
-    isDeletingPizza.value = true;
-    console.log("Delete pizza error: ", err);
-  }
 };
 </script>
 <style scoped>

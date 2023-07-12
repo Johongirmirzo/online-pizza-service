@@ -102,7 +102,7 @@
           <div class="live-order__input-control">
             <label for="subject" class="live-order__label">Subject</label>
             <select
-              v-model="reviewInput.subject"
+              v-model="reviewInput.reviewSubject"
               class="live-order__input"
               id="subject"
             >
@@ -169,7 +169,7 @@ const date = new Date();
 const hour = date.getHours();
 const ratingHoverId = ref(0);
 const minutes = date.getMinutes();
-const reviewInput = ref({ stars: 0, message: "", subject: "" });
+const reviewInput = ref({ stars: 0, message: "", reviewSubject: "" });
 
 const { $toast } = useNuxtApp();
 
@@ -206,7 +206,6 @@ watchEffect(async () => {
     }, 2000);
   }
 
-  order.value = orderResponse.data.data;
   socket.on(
     "new-order-status",
     (orderData: { orderId: number; status: OrderStatus }) => {
@@ -226,7 +225,7 @@ watchEffect(() => {
     reviewErrorMessage.value = "";
   }
 
-  if (reviewInput.value.subject.length) {
+  if (reviewInput.value.reviewSubject.length) {
     reviewSubjectErrorMessage.value = "";
   }
 
@@ -274,7 +273,9 @@ watchEffect(() => {
   if (isOrderDue()) {
     return;
   }
-  if (order.value?.id) {
+  console.log(route.params.id);
+  console.log(order.value);
+  if (order?.value?.id) {
     let setTimeMinutes;
     let setTimeHour;
     const orderSetTime = order.value.orderChosenTime;
@@ -291,6 +292,7 @@ watchEffect(() => {
     if (substSeconds > 0) {
       intervalId = setInterval(() => {
         substSeconds -= 1;
+        console.log(intervalId);
         const hour = Math.floor(substSeconds / 3600);
         const minutes = Math.floor(substSeconds / 60) % 60;
         const seconds = substSeconds % 60;
@@ -306,14 +308,14 @@ watchEffect(() => {
 const handleSubmitReviewClick = () => {
   if (!reviewInput.value.message.length) {
     reviewErrorMessage.value = "Review can't be empty";
-  } else if (!reviewInput.value.subject.length) {
+  } else if (!reviewInput.value.reviewSubject.length) {
     reviewSubjectErrorMessage.value = "Subject must be selected";
   } else if (reviewInput.value.stars < 1) {
     reviewStarsErrorMessage.value = "Rating must be selected";
   } else {
     const reviewData = {
       ...reviewInput.value,
-      reviewSubject: reviewInput.value.subject,
+      reviewSubject: reviewInput.value.reviewSubject,
       customerId: customerStore.customer.id,
     };
     socket.emit("create-review", reviewData);

@@ -4,6 +4,13 @@
       <h1 class="messages__title">All messages</h1>
     </header>
     <PizzaLoader v-if="isLoading" />
+    <DeleteItemModal
+      v-if="deleteItemId > -1"
+      :isModalOpen="isModalOpen"
+      :closeModal="toggleModal"
+      :handleDeleteClick="handleDeleteMessageClick"
+      deleteItem="Message"
+    />
     <div class="messages__table-box">
       <HeaderAction
         :routeTo="null"
@@ -11,7 +18,7 @@
         :csv="csv"
         :dataType="'messages'"
         :downloadCSVFilename="downloadCSVFilename"
-        :fetchAllData="fetchAllmessages"
+        :fetchAllData="fetchAllMessages"
         :handleDownloadCSVClick="handleDownloadCSVClick"
         :handleDownloadExcelClick="handleDownloadExcelClick"
         :handleDownloadPdfClick="handleDownloadPdfClick"
@@ -81,7 +88,7 @@
                 <button
                   v-if="data.role === 'ADMIN'"
                   title="Delete message"
-                  @click="handleDeleteMessageClick(message.id)"
+                  @click="getDeleteItemId(message.id)"
                   class="messages-table__btn messages-table__delete-message-btn"
                 >
                   <Icon class="messages__table-icon" name="jam:trash" />
@@ -112,6 +119,7 @@ import { getAllMessages, deleteMessage } from "~/api/message";
 import { IMessage } from "~/types/message";
 
 const messages = ref<IMessage[]>([]);
+const deleteItemId = ref(-1);
 const isLoading = ref(false);
 const searchData = ref("");
 const { $toast } = useNuxtApp();
@@ -124,6 +132,7 @@ const {
   startLoading,
   stopLoading,
 } = useLoading();
+const { isModalOpen, toggleModal } = useModal();
 
 const handleUpdateSearchData = (val: string) => {
   searchData.value = val;
@@ -145,7 +154,7 @@ const handleDownloadPdfClick = () => {
   generatePDF("messages-table", messagesPdfTable.value);
 };
 
-const fetchAllmessages = async () => {
+const fetchAllMessages = async () => {
   startLoading();
   messages.value = [];
   isLoading.value = true;
@@ -154,7 +163,7 @@ const fetchAllmessages = async () => {
   isLoading.value = false;
   stopLoading();
 };
-fetchAllmessages();
+fetchAllMessages();
 
 const getFilteredMessages = (searchData: string) => {
   return messages.value.filter((message: IMessage) =>
@@ -166,10 +175,15 @@ const getFilteredMessages = (searchData: string) => {
   );
 };
 
-const handleDeleteMessageClick = async (id: number) => {
-  await deleteMessage(id);
+const getDeleteItemId = (toppingId: number) => {
+  deleteItemId.value = toppingId;
+  toggleModal();
+};
+
+const handleDeleteMessageClick = async () => {
+  await deleteMessage(deleteItemId.value);
   $toast.success("Message is deleted successfully!");
-  fetchAllmessages();
+  fetchAllMessages();
 };
 </script>
 <style scoped>

@@ -4,6 +4,13 @@
       <h1 class="toppings__title">All Toppings</h1>
     </header>
     <PizzaLoader v-if="isLoading" />
+    <DeleteItemModal
+      v-if="deleteItemId > -1"
+      :isModalOpen="isModalOpen"
+      :closeModal="toggleModal"
+      :handleDeleteClick="handleDeleteToppingClick"
+      deleteItem="Topping"
+    />
     <div class="toppings__table-box">
       <HeaderAction
         :routeTo="routeTo"
@@ -97,7 +104,7 @@
                 </NuxtLink>
                 <button
                   title="Delete topping"
-                  @click="handleDeleteToppingClick(topping.id)"
+                  @click="getDeleteItemId(topping.id)"
                   class="toppings-table__btn toppings-table__delete-topping-btn"
                 >
                   <Icon
@@ -120,6 +127,7 @@ import { deleteTopping, getAllToppings, createTopping } from "~/api/topping";
 import { ITopping } from "~/types/topping";
 
 const { $toast } = useNuxtApp();
+const deleteItemId = ref(-1);
 const searchData = ref("");
 const toppingsPdfTable = ref<HTMLElement>();
 const toppings = ref<ITopping[]>([]);
@@ -127,6 +135,55 @@ const routeTo = "/topping/add-topping";
 const downloadCSVFilename = "all-toppings.csv";
 
 const { isLoading, startLoading, stopLoading } = useLoading();
+const { isModalOpen, toggleModal } = useModal();
+const { csv, generateCSV, generatePDF, generateExcel } = useHeaderAction();
+
+const fetchAllToppings = async () => {
+  try {
+    startLoading();
+    toppings.value = [];
+    const toppingsResponse = await getAllToppings();
+    toppings.value = toppingsResponse.data.data;
+    stopLoading();
+  } catch (err) {
+    stopLoading();
+    console.log("Fetch topping error:", err);
+  }
+};
+fetchAllToppings();
+
+const handleUpdateSearchData = (val: string) => {
+  searchData.value = val;
+};
+
+const getDeleteItemId = (toppingId: number) => {
+  deleteItemId.value = toppingId;
+  toggleModal();
+};
+
+const handleDeleteToppingClick = async () => {
+  await deleteTopping(deleteItemId.value);
+  $toast.success("Topping is deleted successfully!");
+  fetchAllToppings();
+};
+
+const handleDownloadCSVClick = () => {
+  generateCSV<ITopping>(toppings.value);
+};
+
+const handleDownloadExcelClick = () => {
+  generateExcel(toppingsPdfTable.value, "toppings", "toppings");
+};
+const handleDownloadPdfClick = () => {
+  generatePDF("toppings-table", toppingsPdfTable.value);
+};
+const getFilteredToppings = (searchData: string) => {
+  return toppings.value.filter((topping: ITopping) =>
+    !searchData.length
+      ? true
+      : topping.name.toLowerCase().includes(searchData.toLowerCase())
+  );
+};
 
 // watchEffect(async () => {
 //   const toppings = [
@@ -1755,50 +1812,6 @@ const { isLoading, startLoading, stopLoading } = useLoading();
 //     await createTopping(topping);
 //   }
 // });
-
-const fetchAllToppings = async () => {
-  try {
-    startLoading();
-    toppings.value = [];
-    const toppingsResponse = await getAllToppings();
-    toppings.value = toppingsResponse.data.data;
-    stopLoading();
-  } catch (err) {
-    stopLoading();
-    console.log("Fetch topping error:", err);
-  }
-};
-fetchAllToppings();
-
-const handleUpdateSearchData = (val: string) => {
-  searchData.value = val;
-};
-
-const { csv, generateCSV, generatePDF, generateExcel } = useHeaderAction();
-
-const handleDownloadCSVClick = () => {
-  generateCSV<ITopping>(toppings.value);
-};
-
-const handleDownloadExcelClick = () => {
-  generateExcel(toppingsPdfTable.value, "toppings", "toppings");
-};
-const handleDownloadPdfClick = () => {
-  generatePDF("toppings-table", toppingsPdfTable.value);
-};
-const getFilteredToppings = (searchData: string) => {
-  return toppings.value.filter((topping: ITopping) =>
-    !searchData.length
-      ? true
-      : topping.name.toLowerCase().includes(searchData.toLowerCase())
-  );
-};
-
-const handleDeleteToppingClick = async (id: number) => {
-  await deleteTopping(id);
-  $toast.success("Topping is deleted successfully!");
-  fetchAllToppings();
-};
 </script>
 <style scoped>
 .toppings__header {

@@ -4,6 +4,13 @@
       <h1 class="employee-notes__title">All Employee Notes</h1>
     </header>
     <PizzaLoader v-if="isLoading" />
+    <DeleteItemModal
+      v-if="noteId"
+      :isModalOpen="isModalOpen"
+      :closeModal="toggleModal"
+      :handleDeleteClick="handleDeleteEmployeeNoteClick"
+      deleteItem="Employee Note"
+    />
     <div class="employee-notes__table-box">
       <div class="employee-notes__action-header">
         <NuxtLink
@@ -60,7 +67,10 @@
             </td>
 
             <td class="employee-notes__table-cell">
-              {{ DateTime.fromISO(note.date).toFormat("dd/MM/yyyy") }}
+              <span v-if="note.date">{{
+                DateTime.fromISO(note.date).toFormat("dd/MM/yyyy")
+              }}</span>
+              <span v-else> No Note Created </span>
             </td>
             <td class="employee-notes__table-cell">
               <div v-if="note.noteId" class="employee-notes__table-btns-box">
@@ -75,9 +85,7 @@
                   />
                 </NuxtLink>
                 <button
-                  @click="
-                    handleDeleteEmployeeNoteClick(note.noteId, note.employeeId)
-                  "
+                  @click="getDeleteItemId(note.noteId, note.employeeId)"
                   title="Delete Note"
                   class="employee-notes__table-btn employee-notes__table-delete-note-btn"
                 >
@@ -98,21 +106,12 @@ import { getAllEmployeeNotes, deleteEmployeeNote } from "~/api/employee";
 import { INote } from "~/types/employee";
 
 const { $toast } = useNuxtApp();
+const noteId = ref("");
+const employeeId = ref(-1);
 const notes = ref<INote[]>([]);
-const { isLoading, startLoading, stopLoading } = useLoading();
 
-const handleDeleteEmployeeNoteClick = async (
-  noteId: string,
-  employeeId: number
-) => {
-  try {
-    await deleteEmployeeNote(noteId, employeeId);
-    $toast.success(`Employee note is deleted successfully!`);
-    fetchAllNotes();
-  } catch (err) {
-    console.log("Delete note error", err);
-  }
-};
+const { isLoading, startLoading, stopLoading } = useLoading();
+const { isModalOpen, toggleModal } = useModal();
 
 const truncateStr = (text: string, truncateAmount = 50) => {
   return `${text.slice(0, truncateAmount)}...`;
@@ -157,6 +156,22 @@ const fetchAllNotes = async () => {
   }
 };
 fetchAllNotes();
+
+const getDeleteItemId = (nId: number, eId: number) => {
+  noteId.value = nId.toString();
+  employeeId.value = eId;
+  toggleModal();
+};
+
+const handleDeleteEmployeeNoteClick = async () => {
+  try {
+    await deleteEmployeeNote(noteId.value, employeeId.value);
+    $toast.success(`Employee note is deleted successfully!`);
+    fetchAllNotes();
+  } catch (err) {
+    console.log("Delete note error", err);
+  }
+};
 </script>
 <style scoped>
 .employee-notes__header {

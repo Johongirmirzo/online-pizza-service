@@ -5,6 +5,13 @@
     </header>
   </section>
   <PizzaLoader v-if="isLoadingDip" />
+  <DeleteItemModal
+    v-if="deleteItemId > -1"
+    :isModalOpen="isModalOpen"
+    :closeModal="toggleModal"
+    :handleDeleteClick="handleDeleteDipClick"
+    deleteItem="Dip"
+  />
   <div class="dips__table-box">
     <HeaderAction
       :routeTo="routeTo"
@@ -44,11 +51,11 @@
           :dip="dip"
           :isLastRow="idx === dips.length - 1 || idx === dips.length - 2"
           :activeRowId="activeRowId"
-          :handleDeleteDipClick="handleDeleteDipClick"
           :toggleDipStatus="toggleDipStatus"
           :toggleStatusDropdown="toggleStatusDropdown"
           :getActiveRowId="getActiveRowId"
           :isStatusDropdownOpen="isStatusDropdownOpen"
+          :getDeleteItemId="getDeleteItemId"
         />
       </tbody>
     </table>
@@ -60,6 +67,7 @@ import { getAllDips, deleteDip, changeDipStatus } from "~/api/menu";
 import { IDip } from "~/types/menu";
 
 const dips = ref<IDip[]>([]);
+const deleteItemId = ref(-1);
 const isLoading = ref(false);
 const searchData = ref("");
 const dipsPdfTable = ref<HTMLElement | undefined>(undefined);
@@ -69,17 +77,17 @@ const { $toast } = useNuxtApp();
 
 const { csv, generateCSV, generatePDF, generateExcel } = useHeaderAction();
 const { isLoading: isLoadingDip, startLoading, stopLoading } = useLoading();
-
-const handleUpdateSearchData = (val: string) => {
-  searchData.value = val;
-};
-
+const { isModalOpen, toggleModal } = useModal();
 const {
   isStatusDropdownOpen,
   activeRowId,
   getActiveRowId,
   toggleStatusDropdown,
 } = useStatusDropdown();
+
+const handleUpdateSearchData = (val: string) => {
+  searchData.value = val;
+};
 
 const handleDownloadCSVClick = () => {
   generateCSV<IDip>(dips.value);
@@ -116,18 +124,23 @@ const fetchAllDips = async () => {
 };
 fetchAllDips();
 
+const getDeleteItemId = (toppingId: number) => {
+  deleteItemId.value = toppingId;
+  toggleModal();
+};
+
+const handleDeleteDipClick = async () => {
+  await deleteDip(deleteItemId.value);
+  $toast.success("Dip is deleted successfully!");
+  fetchAllDips();
+};
+
 const getFilteredDips = (searchData: string) => {
   return dips.value.filter((dip: IDip) =>
     !searchData.length
       ? true
       : dip.type.toLowerCase().includes(searchData.toLowerCase())
   );
-};
-
-const handleDeleteDipClick = async (id: number) => {
-  await deleteDip(id);
-  $toast.success("Dip is deleted successfully!");
-  fetchAllDips();
 };
 </script>
 <style scoped>

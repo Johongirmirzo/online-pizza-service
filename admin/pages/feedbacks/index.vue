@@ -4,6 +4,13 @@
       <h1 class="feedbacks__title">All Feedbacks</h1>
     </header>
     <PizzaLoader v-if="isLoadingFeedbacks" />
+    <DeleteItemModal
+      v-if="deleteItemId > -1"
+      :isModalOpen="isModalOpen"
+      :closeModal="toggleModal"
+      :handleDeleteClick="handleDeleteCustomerFeedbackClick"
+      deleteItem="Feedback"
+    />
     <div class="feedbacks__table-box">
       <HeaderAction
         :routeTo="null"
@@ -87,7 +94,7 @@
               <div class="feedbacks-table__btns-box">
                 <button
                   title="Delete feedback"
-                  @click="handleDeletefeedbackClick(feedback.id)"
+                  @click="getDeleteItemId(feedback.id)"
                   class="feedbacks-table__btn feedbacks-table__delete-feedback-btn"
                 >
                   <Icon
@@ -116,6 +123,7 @@ import {
 import { IFeedback } from "~/types/feedback";
 
 const feedbacks = ref<IFeedback[]>([]);
+const deleteItemId = ref(-1);
 const isLoading = ref(false);
 const searchData = ref("");
 const { $toast } = useNuxtApp();
@@ -127,12 +135,12 @@ const {
   startLoading,
   stopLoading,
 } = useLoading();
+const { csv, generateCSV, generatePDF, generateExcel } = useHeaderAction();
+const { isModalOpen, toggleModal } = useModal();
 
 const handleUpdateSearchData = (val: string) => {
   searchData.value = val;
 };
-
-const { csv, generateCSV, generatePDF, generateExcel } = useHeaderAction();
 
 const handleDownloadCSVClick = () => {
   generateCSV<IFeedback>(feedbacks.value);
@@ -164,15 +172,13 @@ const getFilteredFeedbacks = (searchData: string) => {
   );
 };
 
-const handleChangeFeedbackStatus = async (status: string) => {
-  try {
-  } catch (err) {
-    console.log(err);
-  }
+const getDeleteItemId = (feedbackId: number) => {
+  deleteItemId.value = feedbackId;
+  toggleModal();
 };
 
-const handleDeletefeedbackClick = async (id: number) => {
-  await deleteFeedback(id);
+const handleDeleteCustomerFeedbackClick = async () => {
+  await deleteFeedback(deleteItemId.value);
   $toast.success("Feedback is deleted successfully!");
   fetchAllFeedbacks();
 };

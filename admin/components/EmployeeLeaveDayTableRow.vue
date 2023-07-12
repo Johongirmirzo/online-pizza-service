@@ -128,12 +128,7 @@
           <Icon class="employee-leave-days___table-icon" name="lucide:edit" />
         </NuxtLink>
         <button
-          @click="
-            handleDeleteEmployeeLeaveDayClick(
-              leaveDay.leaveDayId,
-              leaveDay.employeeId
-            )
-          "
+          @click="getDeleteItemId(leaveDay.leaveDayId, leaveDay.employeeId)"
           title="Delete Leave Day"
           class="employee-leave-days__table-btn employee-leave-days__table-delete-leave-day-btn"
         >
@@ -148,7 +143,7 @@ import { DateTime } from "luxon";
 const props = defineProps([
   "leaveDay",
   "toggleEmployeeLeaveDayStatus",
-  "handleDeleteEmployeeLeaveDayClick",
+  "getDeleteItemId",
 ]);
 
 const isStatusDropdownOpen = ref(false);

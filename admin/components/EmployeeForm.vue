@@ -564,6 +564,7 @@ const handlePreventFormSubmission = (inputType: string, evt: any) => {
   margin-bottom: 25px;
 }
 .employee-form__error-message {
+  position: absolute;
   font-size: 14px;
   color: rgb(247, 63, 63);
   font-weight: 600;
