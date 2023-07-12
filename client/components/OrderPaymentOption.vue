@@ -161,7 +161,6 @@ defineProps([
 }
 
 .payment-option__change-checkbox {
-  display: block;
   transform: scale(1.5);
   margin-right: 20px;
 }
