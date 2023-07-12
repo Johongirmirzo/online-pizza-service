@@ -206,6 +206,7 @@ watchEffect(async () => {
     }, 2000);
   }
 
+  order.value = orderResponse.data.data;
   socket.on(
     "new-order-status",
     (orderData: { orderId: number; status: OrderStatus }) => {
