@@ -109,8 +109,8 @@ defineProps([
   width: 18px;
   height: 18px;
   border-radius: 18px;
-  top: 0;
-  left: 0;
+  top: -1px;
+  left: -1px;
   position: relative;
   background-color: #e9e9e9;
   content: "";
@@ -123,8 +123,8 @@ defineProps([
   width: 18px;
   height: 18px;
   border-radius: 18px;
-  top: 0;
-  left: 0;
+  top: -1px;
+  left: -1px;
   position: relative;
   background-color: #ffa500;
   content: "";
