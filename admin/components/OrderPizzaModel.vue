@@ -98,8 +98,10 @@
           <header class="modal__standard-toppings-header">
             <h5 class="modal__standard-topppings-title">Extra Toppings</h5>
           </header>
-
-          <ul class="modal__standard-toppings-list">
+          <ul
+            v-if="pizzaData.extraToppings.length"
+            class="modal__standard-toppings-list"
+          >
             <li
               v-for="topping in pizzaData.extraToppings"
               :key="topping.id"
@@ -129,6 +131,9 @@
               </p>
             </li>
           </ul>
+          <p v-else class="modal__pizza-size-text">
+            No extra toppings have been selected!
+          </p>
         </div>
       </div>
     </div>
