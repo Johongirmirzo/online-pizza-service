@@ -604,12 +604,12 @@ socket.on("new-order", (order: IOrder) => {
 
 .dropdown-list--notification-mobile,
 .dropdown-list--message-mobile {
-  left: -90px;
+  right: 0;
 }
 
 .dropdown-list--notification-mobile,
 .dropdown-list--message-mobile::after {
-  left: 92px;
+  right: 0;
 }
 
 .dropdown-list--profile.active {

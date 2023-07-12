@@ -72,4 +72,8 @@ const handleTrackOrderClick = () => {
   background: #fc8019;
   color: #fff;
 }
+.track-order__btn:focus {
+  outline: 2px solid #fc8019;
+  outline-offset: 2px;
+}
 </style>

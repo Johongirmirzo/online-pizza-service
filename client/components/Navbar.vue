@@ -114,8 +114,6 @@
           class="header__middle-item header__middle-item--cart-box"
           @mouseenter="handleMouseMove"
           @mouseleave="handleMouseMove"
-          @mousemove="handleMouseMove"
-          @mouseover="handleMouseMove"
         >
           <NuxtLink
             to="/cart"
@@ -162,10 +160,8 @@
         <li
           v-if="isNavFixed && !isMobileVersion"
           class="header__middle-item header__middle-item--cart-box header__middle-item--bottom-cart"
-          @mouseenter="handleMouseMove"
           @mouseleave="handleMouseMove"
-          @mousemove="handleMouseMove"
-          @mouseover="handleMouseMove"
+          @mouseenter="handleMouseMove"
         >
           <NuxtLink
             to="/cart"
@@ -319,7 +315,7 @@ onMounted(() => {
   padding: 25px 0;
 }
 .header__website-logo-box {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   margin-bottom: 15px;
   font-size: clamp(1.7rem, calc(1.5vw + 1rem), 2.2rem);
