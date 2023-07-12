@@ -53,18 +53,22 @@ const editToppingData = object({
         .max(25, "Maximum topping name length must be 25"),
     light:
         number()
+        .typeError("Please provide a value")
         .min(0, "Minimum light topping price is 0")
         .max(100000, "Maximum light topping price is 100000"),
     standard:
         number()
+        .typeError("Please provide a value")
         .min(0, "Minimum standard topping price is 0")
         .max(100000, "Maximum standard topping price is 100000"),
     double:
         number()
+        .typeError("Please provide a value")
         .min(0, "Minimum double topping price is 0")
         .max(100000, "Maximum double double price is 100000"),
     extra:
         number()
+        .typeError("Please provide a value")
         .min(0, "Minimum extra topping price is 0")    
         .max(100000, "Maximum extra topping price is 100000"),
 })

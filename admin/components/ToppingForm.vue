@@ -164,11 +164,10 @@ defineProps([
 }
 .topping-form__control {
   position: relative;
-  margin-bottom: 15px;
 }
 .topping-form__row,
 .topping-form__name-box {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 .topping-form__row > * {
   flex: 1;
@@ -239,7 +238,7 @@ defineProps([
     gap: 25px;
   }
   .topping-form__control {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
   }
   .topping-form__btn {
     padding: 15px 25px;
