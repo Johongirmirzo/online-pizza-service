@@ -1,5 +1,5 @@
-const BASE_URL = `${process.env.SERVER_URL || "http://localhost:8800"}/api/v1.0`;
-// const BASE_URL="https://online-pizza-delivery-api.onrender.com/api/v1.0";
+// const BASE_URL = `${process.env.SERVER_URL || "http://localhost:8800"}/api/v1.0`;
+const BASE_URL="https://online-pizza-delivery-api.onrender.com/api/v1.0";
 
 
 const ENDPOINTS = {
