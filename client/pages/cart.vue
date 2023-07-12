@@ -220,8 +220,12 @@ const getPizzaCrust = (pizzaCrust: string) => {
   transform: translateX(3000px);
   opacity: 0;
 }
+.cart-list__img-box {
+  align-self: flex-start;
+}
 .cart-list__img {
-  width: 250px;
+  width: 120px;
+  margin: auto;
 }
 .cart-list__item {
   display: flex;
@@ -232,6 +236,7 @@ const getPizzaCrust = (pizzaCrust: string) => {
 }
 .cart-list__left {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
 }
@@ -248,7 +253,7 @@ const getPizzaCrust = (pizzaCrust: string) => {
   font-weight: 600;
 }
 .cart-list__description {
-  margin-bottom: 50px;
+  margin-bottom: 25px;
   color: #666;
 }
 
@@ -361,5 +366,27 @@ const getPizzaCrust = (pizzaCrust: string) => {
   font-weight: 600;
   text-align: center;
   color: red;
+}
+@media (min-width: 560px) {
+  .cart-list__img {
+    width: 150px;
+  }
+  .cart-list__left {
+    flex-direction: row;
+  }
+  .cart-list__description {
+    margin-bottom: 35px;
+  }
+}
+@media (min-width: 780px) {
+  .cart-list__img-box {
+    align-self: unset;
+  }
+  .cart-list__img {
+    width: 250px;
+  }
+  .cart-list__description {
+    margin-bottom: 50px;
+  }
 }
 </style>

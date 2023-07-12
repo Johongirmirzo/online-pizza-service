@@ -612,6 +612,10 @@ socket.on("new-order", (order: IOrder) => {
   right: 0;
 }
 
+.dropdown-list--message-mobile {
+  right: -50px;
+}
+
 .dropdown-list--profile.active {
   top: 100px;
 }

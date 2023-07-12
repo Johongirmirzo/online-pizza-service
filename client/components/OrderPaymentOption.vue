@@ -106,11 +106,11 @@ defineProps([
 }
 
 .payment-option__input[type="radio"]:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  top: -2px;
-  left: -1px;
+  width: 18px;
+  height: 18px;
+  border-radius: 18px;
+  top: -3px;
+  left: -2px;
   position: relative;
   background-color: #e9e9e9;
   content: "";
@@ -120,11 +120,11 @@ defineProps([
 }
 
 .payment-option__input[type="radio"]:checked:after {
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  top: -2px;
-  left: -1px;
+  width: 18px;
+  height: 18px;
+  border-radius: 18px;
+  top: -3px;
+  left: -2px;
   position: relative;
   background-color: #ffa500;
   content: "";
@@ -166,10 +166,10 @@ defineProps([
 }
 
 .payment-option__change-checkbox:after {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   border-radius: 2px;
-  top: -2px;
+  top: -3px;
   left: -2px;
   position: relative;
   background-color: #fc8019;
