@@ -9,6 +9,12 @@
         <Icon name="material-symbols:order-approve" />
       </template>
     </SectionHeader>
+    <OrderPizzaModel
+      v-if="isModelOpen"
+      :pizzaData="pizza"
+      :isModelOpen="isModelOpen"
+      :closeModal="closeModal"
+    />
 
     <ul class="order-list">
       <li
@@ -16,6 +22,7 @@
         :key="orderItem.id"
         class="order-list__item"
         :class="{ remove: removedItemId === orderItem.itemId }"
+        @click="handleOpenPizzaModel(orderItem.itemType, orderItem)"
       >
         <figure class="order-list__img-box">
           <img
@@ -57,6 +64,24 @@ const title = "Order Items";
 
 const order = ref({} as IOrder);
 const route = useRoute();
+
+const isModelOpen = ref(false);
+const pizza = ref({});
+
+const openModal = () => {
+  isModelOpen.value = true;
+  console.log(isModelOpen.value);
+};
+const closeModal = () => {
+  isModelOpen.value = false;
+};
+
+const handleOpenPizzaModel = (orderItemType: string, pizzaData: any) => {
+  if (orderItemType === "Pizza") {
+    openModal();
+    pizza.value = pizzaData;
+  }
+};
 
 watchEffect(async () => {
   const orderResp = await getOrder(Number(route.params.id));

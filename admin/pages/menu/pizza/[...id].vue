@@ -64,8 +64,8 @@ const redirectText = "Go Back To Pizzas";
 const title = ref("");
 
 const { params } = useRoute();
-const isModelOpen = ref(false);
 const pizza = ref({} as IPizza);
+const isModelOpen = ref(false);
 
 const openModal = () => {
   isModelOpen.value = true;
