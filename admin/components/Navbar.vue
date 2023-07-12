@@ -392,8 +392,7 @@ const handleClearAllOrdersClick = () => {
 const handleSignOutClick = async () => {
   removeTokenFromLocalStorage();
   userStore.logoutUser();
-  await signOut({ redirect: false });
-  location.href = "/";
+  await signOut();
 };
 
 const handleRemoveMessageClick = (messageId: number) => {
