@@ -32,7 +32,10 @@
             />
             <ErrorMessage name="password" class="login-form__error-message" />
           </div>
-          <button class="login-form__btn">Login</button>
+          <button class="login-form__btn" :disabled="isLoading">
+            <span v-if="isLoading">Loggin in...</span>
+            <span v-else>Login</span>
+          </button>
         </Form>
       </div>
     </div>
@@ -52,6 +55,8 @@ import { useUserStore } from "~/stores/user";
 import { userLogin } from "~/validations";
 import { storeTokenToLocalStorage } from "~/utils/tokenStorage";
 
+const isLoading = ref(false);
+
 definePageMeta({
   auth: {
     unauthenticatedOnly: true,
@@ -65,6 +70,7 @@ const { signIn, data } = useAuth();
 const { $toast } = useNuxtApp();
 
 const handleLoginUserSubmit = async (values) => {
+  isLoading.value = true;
   const { url, error } = await signIn("credentials", {
     redirect: false,
     email: values.email,
@@ -72,6 +78,7 @@ const handleLoginUserSubmit = async (values) => {
   });
   if (error) {
     $toast.error(error);
+    isLoading.value = false;
   } else {
     const userData = {
       id: data.value.userId,
@@ -85,6 +92,8 @@ const handleLoginUserSubmit = async (values) => {
       refreshToken: data.value.refreshToken,
     });
     userStore.loginUser(userData);
+    isLoading.value = false;
+
     location.href = "/";
   }
 };
@@ -144,6 +153,10 @@ const handleLoginUserSubmit = async (values) => {
   color: #fff;
   font-size: 16px;
   transition: background 0.3s ease-out;
+}
+.login-form__btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 .login-form__btn:hover {
   background: hsl(27, 97%, 50%);
