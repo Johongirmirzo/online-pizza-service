@@ -267,7 +267,7 @@ const togglePaymentStatus = async (orderId: number, status: PaymentStatus) => {
   color: #fff;
 }
 .orders-table {
-  width: 300%;
+  width: 320%;
   table-layout: fixed;
   font-size: 15px;
 }
