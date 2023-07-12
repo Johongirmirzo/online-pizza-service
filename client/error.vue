@@ -19,25 +19,28 @@
     </div>
   </section>
 </template>
-  <script setup lang="ts">
+<script setup lang="ts">
 </script>
-  <style scoped>
+<style scoped>
 .not-found {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #fc8019;
+  padding: 0 15px;
 }
 .not-found__img-box {
   display: flex;
   align-items: center;
+  gap: 5px;
+  height: 150px;
 }
 .not-found__img {
-  width: 250px;
+  width: 120px;
 }
 .not-found__number {
-  font-size: 350px;
+  font-size: 140px;
   color: hsl(0, 0%, 92%);
   line-height: 0;
 }
@@ -54,5 +57,38 @@
 }
 .not-found__link:hover {
   background: hsl(27, 97%, 60%);
+}
+@media (min-width: 560px) {
+  .not-found__img-box {
+    height: 190px;
+  }
+  .not-found__img {
+    width: 160px;
+  }
+  .not-found__number {
+    font-size: 190px;
+  }
+}
+@media (min-width: 768px) {
+  .not-found__img-box {
+    height: 220px;
+  }
+  .not-found__img {
+    width: 190px;
+  }
+  .not-found__number {
+    font-size: 220px;
+  }
+}
+@media (min-width: 992px) {
+  .not-found__img-box {
+    height: 350px;
+  }
+  .not-found__img {
+    width: 300px;
+  }
+  .not-found__number {
+    font-size: 350px;
+  }
 }
 </style>
