@@ -1,5 +1,4 @@
 <template>
-  {{ isModelOpen }}
   <div v-if="isModelOpen && pizzaData.name" class="modal-wrapper">
     <ToppingModal
       :isToppingModelOpen="isToppingModelOpen"
