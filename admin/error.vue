@@ -11,6 +11,9 @@
         <span class="not-found__number">4</span>
       </div>
       <div class="not-found__btn-box">
+        <p class="not-found__description">
+          Oooppsss! Page that you are looking for does not exist!
+        </p>
         <NuxtLink class="not-found__link" to="/">
           <Icon class="not-found__icon" name="ant-design:home-outlined" />
           Go Back</NuxtLink
@@ -32,6 +35,7 @@
 }
 .not-found__img-box {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 5px;
   height: 150px;
@@ -45,8 +49,14 @@
   line-height: 0;
 }
 .not-found__btn-box {
-  margin-top: 50px;
+  margin-top: 5px;
   text-align: center;
+}
+.not-found__description {
+  margin-bottom: 15px;
+  font-size: clamp(14px, calc(1vw + 10px), 20px);
+  font-weight: 600;
+  color: #fff;
 }
 .not-found__link {
   padding: 10px 0;
