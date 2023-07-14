@@ -392,7 +392,8 @@ const handleClearAllOrdersClick = () => {
 const handleSignOutClick = async () => {
   removeTokenFromLocalStorage();
   userStore.logoutUser();
-  await signOut();
+  await signOut({ redirect: false });
+  location.href = "https://online-pizza-delivery-admin.netlify.app/login";
 };
 
 const handleRemoveMessageClick = (messageId: number) => {

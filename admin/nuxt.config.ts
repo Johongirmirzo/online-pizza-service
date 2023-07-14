@@ -5,11 +5,6 @@ export default defineNuxtConfig({
     piniaPersistedstate: {       
       storage: 'localStorage'
     },
-    build: {
-      env: {
-        AUTH_ORIGIN: 'https://online-pizza-delivery-admin.netlify.app/'
-      }
-    },
     auth: {
       // The module is enabled. Change this to disable the module
       isEnabled: true,
