@@ -49,10 +49,10 @@ watchEffect(() => {
       };
       const hours = [
         "9:00-12:00",
-        "12:01-15:00",
-        "15:01-18:00",
-        "18:01-21:00",
-        "21:01-24:45",
+        "12:00-15:00",
+        "15:00-18:00",
+        "18:00-21:00",
+        "21:00-24:45",
       ];
       const totalOrderForHour = [];
       const totalForHour = [];
@@ -86,7 +86,7 @@ watchEffect(() => {
           if (
             orderHour >= fromHour &&
             orderMinute >= fromMinute &&
-            orderHour <= toHour
+            orderHour < toHour
           ) {
             orderHours[hours[i]].push(filteredOrder);
           }
