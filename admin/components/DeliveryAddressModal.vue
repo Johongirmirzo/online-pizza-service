@@ -97,6 +97,7 @@ const props = defineProps([
   "isAddressModalOpen",
   "toggleModal",
   "customerDeliveryAddress",
+  "isLoading",
 ]);
 
 const isAddressModalClosed = ref(false);

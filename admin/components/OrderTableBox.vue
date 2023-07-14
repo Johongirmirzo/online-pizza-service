@@ -60,6 +60,7 @@
             :getPaymentActiveRowId="getPaymentActiveRowId"
             :togglePaymentStatusDropdown="togglePaymentStatusDropdown"
             :getCurrentOrderMakerId="getCurrentOrderMakerId"
+            :isLoading="isLoading"
           />
         </tbody>
       </table>
@@ -76,6 +77,7 @@ const props = defineProps(["csvFileName", "filterBy"]);
 
 const orders = ref<IUser[]>([]);
 const searchData = ref("");
+const isLoading = ref(false);
 const { $toast } = useNuxtApp();
 const orderPdfTable = ref<HTMLElement | undefined>(undefined);
 const downloadCSVFilename = props.csvFileName;
@@ -87,6 +89,7 @@ const handleUpdateSearchData = (val: string) => {
 
 const getCurrentOrderMakerId = async (customerId: number) => {
   try {
+    isLoading.value = true;
     const customerResp = await getCustomer(customerId.toString());
     const allCustomerAddressesResp = await getAllCustomerAddresses(customerId);
     const currentCustomerAddress = allCustomerAddressesResp.data.data.filter(
@@ -97,8 +100,10 @@ const getCurrentOrderMakerId = async (customerId: number) => {
       ...currentCustomerAddress[0],
       ...customerResp.data.data,
     };
+    isLoading.value = false;
     toggleModal();
   } catch (err) {
+    isLoading.value = false;
     console.log("Error ", err);
   }
 };

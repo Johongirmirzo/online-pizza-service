@@ -302,6 +302,7 @@ const props = defineProps([
   "getPaymentActiveRowId",
   "togglePaymentStatusDropdown",
   "getCurrentOrderMakerId",
+  "isLoading",
 ]);
 
 const handleToggleStatusDropdown = (orderId: number) => {
