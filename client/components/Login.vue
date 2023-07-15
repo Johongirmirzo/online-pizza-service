@@ -163,6 +163,7 @@ const handleLoginSubmit = async (customerData: ILoginCustomerFormData) => {
       stopLoading();
       await syncCustomerAddressWithDatabase(customerData.id);
       handleCloseModalClick();
+      location.href = "/";
       $toast.success("You've logged in successfully!");
     }
   }
