@@ -182,7 +182,7 @@ const CustomerService = {
     createCustomerAddress(customerId, customerAddressData) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const customerAddresses = yield prisma_1.prisma.customerAdress.findMany();
+                const customerAddresses = yield prisma_1.prisma.customerAdress.findMany({ where: { customerId } });
                 if (customerAddresses.length === 0) {
                     const newAddress = yield prisma_1.prisma.customerAdress.create({
                         data: Object.assign(Object.assign({}, customerAddressData), { customerId: customerId, isDefault: true })
@@ -205,7 +205,7 @@ const CustomerService = {
     setDefaultCustomerAddress(addressId, customerId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield prisma_1.prisma.customerAdress.updateMany({ data: { isDefault: false } });
+                yield prisma_1.prisma.customerAdress.updateMany({ where: { customerId }, data: { isDefault: false } });
                 yield prisma_1.prisma.customerAdress.update({
                     where: { id: addressId },
                     data: { isDefault: true }

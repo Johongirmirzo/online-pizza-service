@@ -176,6 +176,7 @@ const handleSetCurrentOrderTypeClick = async (orderType: string) => {
     customerAddressStore.setCurrentActiveCustomerAddress(
       focussedAddressId.value
     );
+    console.log(typeof focussedAddressId.value);
     await setDefaultCustomerAddress(
       customerAddressStore.currentActiveCustomerAddress.id,
       customerStore.customer.id

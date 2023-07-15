@@ -22,6 +22,8 @@ export const useCustomerAddress = defineStore("customer-address", ()=>{
         }
     }
     const setCurrentActiveCustomerAddress = (addressId: number)=>{
+        console.log("Acrivv", addressId, 999)
+        customerAddresses.value = customerAddresses.value.map((customerAddress: ICustomerAddress)=> customerAddress.id === addressId ? {...customerAddress, isDefault: true} : {...customerAddress, isDefault: false})
         currentActiveCustomerAddress.value = customerAddresses.value.find((customerAddress: ICustomerAddress)=> customerAddress.id === addressId)!
     }
     const setCurrentOrderType = (orderType: string)=>{
