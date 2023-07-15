@@ -205,6 +205,9 @@ watchEffect(async () => {
       navigateTo("/orders");
     }, 2000);
   }
+  if (!customerStore.customer.id) {
+    navigateTo("/");
+  }
 
   order.value = orderResponse.data.data;
   socket.on(
