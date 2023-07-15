@@ -126,7 +126,7 @@ const syncCustomerAddressWithDatabase = async (customerId: number) => {
     if (
       allCustomerAddressesRes.data.data.length <=
         customerAddressStore.customerAddresses.length &&
-      !allCustomerAddressesRes.data.data.length
+       
     ) {
       for (const previousCustomerAddress of allCustomerAddressesRes.data.data) {
         await deleteCustomerAddress(previousCustomerAddress.id);
