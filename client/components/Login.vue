@@ -84,13 +84,20 @@ import { handlePreventNonNumbers } from "~/utils/handlePreventNonNumbers";
 import { ILoginCustomerFormData } from "~/types/customer";
 import { loginCustomer as loginCustomerSchema } from "~/validations";
 import { storeTokenToLocalStorage } from "~/utils/tokenStorage";
+import {
+  getAllAddresses,
+  createaCustomerAddress,
+  deleteCustomerAddress,
+} from "~/api/all-api-handlers";
 import { useCustomerStore } from "~/stores/useCustomerStore";
+import { useCustomerAddress } from "~/stores/useCustomerAddress";
 import { Form, Field, ErrorMessage } from "vee-validate";
 
 const props = defineProps(["isModalOpen", "closeModal", "openRegisterModal"]);
 
 const isModalClosed = ref(false);
 const customerStore = useCustomerStore();
+const customerAddressStore = useCustomerAddress();
 const { $toast } = useNuxtApp();
 const { data, signIn } = useAuth();
 const { isLoading, startLoading, stopLoading } = useLoading();
@@ -113,7 +120,35 @@ const handleOpenRegisterModalClick = () => {
   props.openRegisterModal();
 };
 
+const syncCustomerAddressWithDatabase = async (customerId: number) => {
+  try {
+    const allCustomerAddressesRes = await getAllAddresses(customerId);
+    console.log(allCustomerAddressesRes);
+    if (
+      allCustomerAddressesRes.data.data.length <
+      customerAddressStore.customerAddresses.length
+    ) {
+      for (const previousCustomerAddress of allCustomerAddressesRes.data.data) {
+        await deleteCustomerAddress(previousCustomerAddress.id);
+      }
+      for (const customerAddress of customerAddressStore.customerAddresses) {
+        await createaCustomerAddress(customerId, customerAddress);
+      }
+    } else if (
+      allCustomerAddressesRes.data.data.length >
+      customerAddressStore.customerAddresses.length
+    ) {
+      for (const previousCustomerAddress of allCustomerAddressesRes.data.data) {
+        await deleteCustomerAddress(previousCustomerAddress.id);
+      }
+    }
+  } catch (err) {
+    console.log("err", err);
+  }
+};
+
 const handleLoginSubmit = async (customerData: ILoginCustomerFormData) => {
+  startLoading();
   const { url, error } = await signIn("credentials", {
     redirect: false,
     email: customerData.email,
@@ -122,6 +157,7 @@ const handleLoginSubmit = async (customerData: ILoginCustomerFormData) => {
   });
   if (error) {
     $toast.error(error);
+    stopLoading();
   } else {
     if (data.value) {
       const customerData = {
@@ -136,7 +172,9 @@ const handleLoginSubmit = async (customerData: ILoginCustomerFormData) => {
         refreshToken: data.value.refreshToken,
       });
       customerStore.loginCustomer(customerData);
-      handleCloseModalClick();
+      stopLoading();
+      await syncCustomerAddressWithDatabase(customerData.id);
+      // handleCloseModalClick();
       $toast.success("You've logged in successfully!");
     }
   }

@@ -362,6 +362,12 @@ const {
   openModal: openTimeModal,
 } = useModal();
 
+watchEffect(() => {
+  if (!Object.keys(customerStore.customer).length) {
+    navigateTo("/");
+  }
+});
+
 const getAddressId = (id: number) => {
   editAddressId.value = id;
   openAddressModalForm();

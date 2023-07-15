@@ -83,7 +83,6 @@ const initialValues = ref({
 });
 
 watchEffect(() => {
-  console.log(props.editAddressId, 999);
   if (props.editAddressId > -1) {
     const address = customerAddressStore.customerAddresses.find(
       (customerAddress: ICustomerAddress) =>

@@ -163,7 +163,8 @@ const handleCloseModalClick = () => {
 };
 
 onMounted(async () => {
-  console.log(await getAllAddresses(customerStore.customer.id));
+  console.log(await getAllAddresses(customerStore.customer.id), 99999);
+  console.log(customerAddressStore.customerAddresses.length);
 });
 
 const handleSetCurrentOrderTypeClick = async (orderType: string) => {
@@ -221,8 +222,9 @@ onMounted(async () => {
     const customerAddressesResp = await getAllAddresses(
       customerStore.customer.id
     );
+
     customerAddresses.value = customerAddressesResp.data.data;
-    console.log(customerAddressesResp.data.data);
+    console.log(customerAddressesResp.data.data, 1);
   } catch (err) {
     console.log(err);
   }
