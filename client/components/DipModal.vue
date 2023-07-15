@@ -15,6 +15,7 @@
           class="modal__img"
         />
       </figure>
+
       <div class="modal__text-box">
         <div class="modal__top-text">
           <header class="modal__header">
@@ -44,23 +45,25 @@
                   <li class="nutritional-value__item">
                     <p class="nutritional-value__text">Calories</p>
                     <p class="nutritional-value__text">
-                      {{ menuData.calories }} ccal
+                      {{ menuData.nutritionalValue.calorie }} ccal
                     </p>
                   </li>
                   <li class="nutritional-value__item">
                     <p class="nutritional-value__text">Fats</p>
-                    <p class="nutritional-value__text">{{ menuData.fats }} g</p>
+                    <p class="nutritional-value__text">
+                      {{ menuData.nutritionalValue.fats }} g
+                    </p>
                   </li>
                   <li class="nutritional-value__item">
                     <p class="nutritional-value__text">Proteins</p>
                     <p class="nutritional-value__text">
-                      {{ menuData.proteins }} g
+                      {{ menuData.nutritionalValue.proteins }} g
                     </p>
                   </li>
                   <li class="nutritional-value__item">
                     <p class="nutritional-value__text">Carbohydrates</p>
                     <p class="nutritional-value__text">
-                      {{ menuData.carbohydrates }} g
+                      {{ menuData.nutritionalValue.carbohydrates }} g
                     </p>
                   </li>
                   <li
