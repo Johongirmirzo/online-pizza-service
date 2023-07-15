@@ -183,10 +183,18 @@ const CustomerService = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const customerAddresses = yield prisma_1.prisma.customerAdress.findMany();
-                const newAddress = yield prisma_1.prisma.customerAdress.create({
-                    data: Object.assign(Object.assign({}, customerAddressData), { customerId: customerId, isDefault: customerAddresses.length === 0 ? true : false })
-                });
-                return { newAddress, statusCode: 201, error: "" };
+                if (customerAddresses.length === 0) {
+                    const newAddress = yield prisma_1.prisma.customerAdress.create({
+                        data: Object.assign(Object.assign({}, customerAddressData), { customerId: customerId, isDefault: true })
+                    });
+                    return { newAddress, statusCode: 201, error: "" };
+                }
+                else {
+                    const newAddress = yield prisma_1.prisma.customerAdress.create({
+                        data: Object.assign(Object.assign({}, customerAddressData), { customerId: customerId })
+                    });
+                    return { newAddress, statusCode: 201, error: "" };
+                }
             }
             catch (err) {
                 console.log(err);
