@@ -95,6 +95,8 @@ const getCurrentOrderMakerId = async (customerId: number) => {
     const currentCustomerAddress = allCustomerAddressesResp.data.data.filter(
       (address) => address.isDefault
     );
+    console.log(allCustomerAddressesResp.data.data);
+    console.log(customerResp.data.data);
 
     customerDeliveryAddress.value = {
       ...currentCustomerAddress[0],
