@@ -123,10 +123,10 @@ const handleOpenRegisterModalClick = () => {
 const syncCustomerAddressWithDatabase = async (customerId: number) => {
   try {
     const allCustomerAddressesRes = await getAllAddresses(customerId);
-    console.log(allCustomerAddressesRes);
     if (
-      allCustomerAddressesRes.data.data.length <
-      customerAddressStore.customerAddresses.length
+      allCustomerAddressesRes.data.data.length <=
+        customerAddressStore.customerAddresses.length &&
+      !allCustomerAddressesRes.data.data.length
     ) {
       for (const previousCustomerAddress of allCustomerAddressesRes.data.data) {
         await deleteCustomerAddress(previousCustomerAddress.id);
@@ -174,7 +174,7 @@ const handleLoginSubmit = async (customerData: ILoginCustomerFormData) => {
       customerStore.loginCustomer(customerData);
       stopLoading();
       await syncCustomerAddressWithDatabase(customerData.id);
-      // handleCloseModalClick();
+      handleCloseModalClick();
       $toast.success("You've logged in successfully!");
     }
   }

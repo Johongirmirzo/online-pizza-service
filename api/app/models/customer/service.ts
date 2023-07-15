@@ -149,7 +149,7 @@ const CustomerService = {
     async createCustomerAddress(customerId: number, customerAddressData: ICustomerAddressFormData){
         try {
             const customerAddresses = await prisma.customerAdress.findMany();
-            if(customerAddresses.length === 0){
+            if(customerAddresses.length === 0 ){
                 const newAddress = await prisma.customerAdress.create({
                     data: {
                         ...customerAddressData,
@@ -162,7 +162,8 @@ const CustomerService = {
                 const newAddress = await prisma.customerAdress.create({
                     data: {
                         ...customerAddressData,
-                        customerId: customerId
+                        customerId: customerId,
+                        isDefault: customerAddresses.length === 1 ? true: false
                     }
                 })
                 return {newAddress, statusCode: 201, error: ""}
