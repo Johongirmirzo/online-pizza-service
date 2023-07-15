@@ -324,9 +324,7 @@ const handleChangeOrderPaymentStatus = (orderId: number, status: string) => {
 };
 
 const handleGetCustomerIdClick = (customerId: number, orderType: string) => {
-  if (orderType == "DELIVERY") {
-    props.getCurrentOrderMakerId(customerId);
-  }
+  props.getCurrentOrderMakerId(customerId);
 };
 
 const closeStatusDropdown = () => {
