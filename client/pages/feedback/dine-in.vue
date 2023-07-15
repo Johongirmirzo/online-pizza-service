@@ -253,11 +253,7 @@ const handleGiveDineInFeedbackSubmit = (dineInFeedback: IFeedback) => {
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
-.dine-in-form__row {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-}
+
 .dine-in-form__row > * {
   flex: 1;
 }
@@ -291,7 +287,6 @@ const handleGiveDineInFeedbackSubmit = (dineInFeedback: IFeedback) => {
 }
 
 .dine-in-form__error-message {
-  position: absolute;
   font-size: 14px;
   color: rgb(247, 63, 63);
   font-weight: 600;
@@ -372,5 +367,16 @@ const handleGiveDineInFeedbackSubmit = (dineInFeedback: IFeedback) => {
   display: inline-block;
   visibility: visible;
   border: 2px solid white;
+}
+
+@media (min-width: 768px) {
+  .dine-in-form__row {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+  }
+  .dine-in-form__error-message {
+    position: absolute;
+  }
 }
 </style>
