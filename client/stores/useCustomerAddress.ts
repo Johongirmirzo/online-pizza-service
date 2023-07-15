@@ -27,5 +27,10 @@ export const useCustomerAddress = defineStore("customer-address", ()=>{
     const setCurrentOrderType = (orderType: string)=>{
         currentOrderType.value = orderType
     }
-    return {customerAddresses, currentActiveCustomerAddress, currentOrderType, addCustomerAddress, updateCustomerAddress, deleteCustomerAddress, setCurrentActiveCustomerAddress, setCurrentOrderType}
+    const resetCustomerAddress = ()=>{
+        customerAddresses.value = [];
+        currentActiveCustomerAddress.value = {};
+        currentOrderType.value = "Pickup"
+    }
+    return {customerAddresses, currentActiveCustomerAddress, currentOrderType, addCustomerAddress, updateCustomerAddress, deleteCustomerAddress, setCurrentActiveCustomerAddress, setCurrentOrderType, resetCustomerAddress}
 }, {persist: true})

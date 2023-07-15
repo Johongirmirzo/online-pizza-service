@@ -123,22 +123,11 @@ const handleOpenRegisterModalClick = () => {
 const syncCustomerAddressWithDatabase = async (customerId: number) => {
   try {
     const allCustomerAddressesRes = await getAllAddresses(customerId);
-    if (
-      allCustomerAddressesRes.data.data.length <=
-      customerAddressStore.customerAddresses.length
-    ) {
-      for (const previousCustomerAddress of allCustomerAddressesRes.data.data) {
-        await deleteCustomerAddress(previousCustomerAddress.id);
-      }
-      for (const customerAddress of customerAddressStore.customerAddresses) {
-        await createaCustomerAddress(customerId, customerAddress);
-      }
-    } else if (
-      allCustomerAddressesRes.data.data.length >
-      customerAddressStore.customerAddresses.length
-    ) {
-      for (const previousCustomerAddress of allCustomerAddressesRes.data.data) {
-        await deleteCustomerAddress(previousCustomerAddress.id);
+    customerAddressStore.resetCustomerAddress();
+    for (const customerAddress of allCustomerAddressesRes.data.data) {
+      customerAddressStore.addCustomerAddress(customerAddress);
+      if (customerAddress.isDefault) {
+        customerAddressStore.setCurrentActiveCustomerAddress(customerAddress);
       }
     }
   } catch (err) {
