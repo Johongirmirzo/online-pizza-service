@@ -149,26 +149,15 @@ const CustomerService = {
     async createCustomerAddress(customerId: number, customerAddressData: ICustomerAddressFormData){
         try {
             const customerAddresses = await prisma.customerAdress.findMany();
-            if(customerAddresses.length === 0 ){
-                const newAddress = await prisma.customerAdress.create({
-                    data: {
-                        ...customerAddressData,
-                        customerId: customerId,
-                        isDefault: true
-                    }
-                })
-                return {newAddress, statusCode: 201, error: ""}
-            } else {
-                const newAddress = await prisma.customerAdress.create({
-                    data: {
-                        ...customerAddressData,
-                        customerId: customerId,
-                        isDefault: customerAddresses.length === 1 ? true: false
-                    }
-                })
-                return {newAddress, statusCode: 201, error: ""}
-            }
-            
+             
+            const newAddress = await prisma.customerAdress.create({
+                data: {
+                    ...customerAddressData,
+                    customerId: customerId,
+                    isDefault: customerAddresses.length === 0 ? true: false
+                }
+            })
+            return {newAddress, statusCode: 201, error: ""}
         }catch(err){
             console.log(err)
             return {newAddress: null, statusCode: 400, error: "Bad Request!"}
