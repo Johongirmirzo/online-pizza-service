@@ -10,15 +10,25 @@
         class="orders-table__text orders-table__order-type-text"
         :class="{
           'orders-table__text--delivery': orderItem.orderType === 'DELIVERY',
+          'orders-table__text--pickup': orderItem.orderType === 'PICKUP',
         }"
         @click="
-          handleGetCustomerIdClick(orderItem.customerId, orderItem.orderType)
+          handleGetCustomerIdClick(
+            orderItem.customerId,
+            orderItem.orderType,
+            orderItem.id
+          )
         "
       >
         <Icon
           v-if="orderItem.orderType === 'DELIVERY'"
           class="orders-table__location-icon"
           name="akar-icons:location"
+        />
+        <Icon
+          v-else
+          name="fe:kitchen-cooker"
+          class="orders-table__location-icon"
         />
         {{ orderItem.orderType }}
       </button>
@@ -323,8 +333,12 @@ const handleChangeOrderPaymentStatus = (orderId: number, status: string) => {
   props.togglePaymentStatusDropdown();
 };
 
-const handleGetCustomerIdClick = (customerId: number, orderType: string) => {
-  props.getCurrentOrderMakerId(customerId);
+const handleGetCustomerIdClick = (
+  customerId: number,
+  orderType: string,
+  orderId: number
+) => {
+  props.getCurrentOrderMakerId(customerId, orderType, orderId);
 };
 
 const closeStatusDropdown = () => {
@@ -363,6 +377,7 @@ window.addEventListener("click", closeStatusDropdown);
   color: #333;
 }
 
+.orders-table__text--pickup,
 .orders-table__text--delivery {
   display: flex;
   align-items: center;
@@ -371,12 +386,20 @@ window.addEventListener("click", closeStatusDropdown);
   margin-right: 8px;
   transition: all 0.3s ease-out;
   border-radius: 10px;
-  background: #fc8019;
   color: #fff;
   font-weight: 600;
 }
+.orders-table__text--delivery {
+  background: #fc8019;
+}
 .orders-table__text--delivery:hover {
   background: #e97313;
+}
+.orders-table__text--pickup {
+  background: rgb(33, 188, 33);
+}
+.orders-table__text--pickup:hover {
+  background: rgb(44, 199, 44);
 }
 
 .orders-table__location-icon {

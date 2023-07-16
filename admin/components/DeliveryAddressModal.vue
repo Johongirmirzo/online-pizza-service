@@ -12,82 +12,128 @@
       </button>
 
       <header class="delivery-address__header">
-        <h2 class="delivery-address__title">Delivery Address</h2>
+        <h2 class="delivery-address__title">
+          <span v-if="customerDeliveryAddress.orderType === 'DELIVERY'"
+            >Delivery Address</span
+          >
+          <span v-else>Pickup</span>
+        </h2>
       </header>
       <div class="delivery-address__body">
-        <p class="delivery-address__text">
-          <span class="delivery-address__bold">
-            <Icon class="delivery-address__icon" name="uil:user" />
-            Customer Name</span
-          >
-          {{ customerDeliveryAddress.name }}
-        </p>
-        <p class="delivery-address__text">
-          <span class="delivery-address__bold">
-            <Icon class="delivery-address__icon" name="solar:phone-linear" />
-            Customer Phone</span
-          >
-          <a :href="`tel:${customerDeliveryAddress.phone}`"
-            >+{{ customerDeliveryAddress.phone }}</a
-          >
-        </p>
-        <p class="delivery-address__text">
-          <span class="delivery-address__bold">
-            <Icon
-              class="delivery-address__icon"
-              name="solar:streets-map-point-outline"
-            />
-            Street Name</span
-          >
-          {{ customerDeliveryAddress.streetName }}
-        </p>
-        <p class="delivery-address__text">
-          <span class="delivery-address__bold">
-            <Icon
-              class="delivery-address__icon"
-              name="solar:point-on-map-broken"
-            />
-            Approach</span
-          >
-          {{ customerDeliveryAddress.approach }}
-        </p>
-        <p class="delivery-address__text">
-          <span class="delivery-address__bold">
-            <Icon class="delivery-address__icon" name="octicon:location-16" />
-            Floor</span
-          >
-          {{ customerDeliveryAddress.floor }}
-        </p>
-        <p class="delivery-address__text">
-          <span class="delivery-address__bold">
-            <Icon
-              class="delivery-address__icon"
-              name="teenyicons:password-outline"
-            />
-            Door Code</span
-          >
-          {{ customerDeliveryAddress.doorCode }}
-        </p>
-        <p class="delivery-address__text">
-          <span class="delivery-address__bold">
-            <Icon
-              class="delivery-address__icon"
-              name="ant-design:number-outlined"
-            />
-            Apartment Number</span
-          >
-          {{ customerDeliveryAddress.apartmentNumber }}
-        </p>
-        <p class="delivery-address__text">
-          <span class="delivery-address__bold">
-            <Icon
-              class="delivery-address__icon"
-              name="majesticons:comment-line"
-            />
-            Comment</span
-          >
-          {{ customerDeliveryAddress.comment }}
-        </p>
+        <div>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon class="delivery-address__icon" name="uil:user" />
+              Customer Name</span
+            >
+            {{ customerDeliveryAddress.name }}
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon class="delivery-address__icon" name="solar:phone-linear" />
+              Customer Phone</span
+            >
+            <a :href="`tel:${customerDeliveryAddress.phone}`"
+              >+{{ customerDeliveryAddress.phone }}</a
+            >
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon class="delivery-address__icon" name="grommet-icons:money" />
+              Change Amount</span
+            >
+            <span v-if="customerDeliveryAddress.change">
+              {{ customerDeliveryAddress.change }}
+            </span>
+            <span v-else>No change required</span>
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon class="delivery-address__icon" name="grommet-icons:money" />
+              Order Total</span
+            >
+            {{ customerDeliveryAddress.orderTotal }} uzs
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon class="delivery-address__icon" name="ph:note" />
+              Order Note</span
+            >
+            <span v-if="customerDeliveryAddress.orderNote">
+              {{ customerDeliveryAddress.orderNote }}
+            </span>
+            <span v-else> Customer hasn't written any note </span>
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon
+                class="delivery-address__icon"
+                name="icon-park-outline:time"
+              />
+              Order Chosen Time</span
+            >
+            {{ customerDeliveryAddress.orderChosenTime }}
+          </p>
+        </div>
+        <div v-if="customerDeliveryAddress.orderType === 'DELIVERY'">
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon
+                class="delivery-address__icon"
+                name="solar:streets-map-point-outline"
+              />
+              Street Name</span
+            >
+            {{ customerDeliveryAddress.streetName }}
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon
+                class="delivery-address__icon"
+                name="solar:point-on-map-broken"
+              />
+              Approach</span
+            >
+            {{ customerDeliveryAddress.approach }}
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon class="delivery-address__icon" name="octicon:location-16" />
+              Floor</span
+            >
+            {{ customerDeliveryAddress.floor }}
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon
+                class="delivery-address__icon"
+                name="teenyicons:password-outline"
+              />
+              Door Code</span
+            >
+            {{ customerDeliveryAddress.doorCode }}
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon
+                class="delivery-address__icon"
+                name="ant-design:number-outlined"
+              />
+              Apartment Number</span
+            >
+            {{ customerDeliveryAddress.apartmentNumber }}
+          </p>
+          <p class="delivery-address__text">
+            <span class="delivery-address__bold">
+              <Icon
+                class="delivery-address__icon"
+                name="majesticons:comment-line"
+              />
+              Comment</span
+            >
+            {{ customerDeliveryAddress.comment }}
+          </p>
+        </div>
       </div>
     </section>
   </div>

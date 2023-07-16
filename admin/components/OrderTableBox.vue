@@ -65,12 +65,15 @@
         </tbody>
       </table>
     </div>
+    <div v-if="isLoading" class="orders__loader">
+      <p class="orders__loader-text">Fetching Data...</p>
+    </div>
   </section>
 </template>
   <script setup lang="ts">
 import { socket } from "~/config/socketIo";
 import { useLoading } from "~/composables/useLoading";
-import { getAllOrders } from "~/api/order";
+import { getAllOrders, getOrder } from "~/api/order";
 import { getAllCustomerAddresses, getCustomer } from "~/api/customer";
 import { IOrder, OrderStatus, PaymentStatus } from "~/types/order";
 const props = defineProps(["csvFileName", "filterBy"]);
@@ -87,20 +90,25 @@ const handleUpdateSearchData = (val: string) => {
   searchData.value = val;
 };
 
-const getCurrentOrderMakerId = async (customerId: number) => {
+const getCurrentOrderMakerId = async (
+  customerId: number,
+  orderType: string,
+  orderId: number
+) => {
   try {
     isLoading.value = true;
     const customerResp = await getCustomer(customerId.toString());
     const allCustomerAddressesResp = await getAllCustomerAddresses(customerId);
+    const orderResp = await getOrder(orderId);
     const currentCustomerAddress = allCustomerAddressesResp.data.data.filter(
       (address) => address.isDefault
     );
-    console.log(allCustomerAddressesResp.data.data);
-    console.log(customerResp.data.data);
 
     customerDeliveryAddress.value = {
       ...currentCustomerAddress[0],
       ...customerResp.data.data,
+      ...orderResp.data.data,
+      orderType,
     };
     isLoading.value = false;
     toggleModal();
@@ -312,6 +320,19 @@ const togglePaymentStatus = async (orderId: number, status: PaymentStatus) => {
 }
 .orders-table__view-icon {
   color: rgb(59, 59, 237);
+}
+.orders__loader {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9;
+}
+.orders__loader-text {
+  font-size: clamp(2rem, calc(3vw + 1.5rem), 3rem);
+  color: #fff;
 }
 
 @media (min-width: 992px) {
