@@ -129,7 +129,7 @@ const {
   getActiveRowId: getPaymentActiveRowId,
   toggleStatusDropdown: togglePaymentStatusDropdown,
 } = useStatusDropdown();
-const { isLoading: isLoadingOrder || isLoading, startLoading, stopLoading } = useLoading();
+const { isLoading: isLoadingOrder, startLoading, stopLoading } = useLoading();
 
 const handleDownloadCSVClick = () => {
   generateCSV<IOrder>(orders.value);
