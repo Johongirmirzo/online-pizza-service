@@ -1,6 +1,6 @@
 <template>
   <section class="orders">
-    <PizzaLoader v-if="isLoadingOrder" />
+    <PizzaLoader v-if="isLoadingOrder || isLoading" />
     <DeliveryAddressModal
       v-if="customerDeliveryAddress.id"
       :isAddressModalOpen="isModalOpen"
@@ -64,9 +64,6 @@
           />
         </tbody>
       </table>
-    </div>
-    <div v-if="isLoading" class="orders__loader">
-      <p class="orders__loader-text">Fetching Data...</p>
     </div>
   </section>
 </template>
@@ -132,7 +129,7 @@ const {
   getActiveRowId: getPaymentActiveRowId,
   toggleStatusDropdown: togglePaymentStatusDropdown,
 } = useStatusDropdown();
-const { isLoading: isLoadingOrder, startLoading, stopLoading } = useLoading();
+const { isLoading: isLoadingOrder || isLoading, startLoading, stopLoading } = useLoading();
 
 const handleDownloadCSVClick = () => {
   generateCSV<IOrder>(orders.value);
