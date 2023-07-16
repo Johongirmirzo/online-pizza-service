@@ -43,7 +43,7 @@
               Change Amount</span
             >
             <span v-if="customerDeliveryAddress.change">
-              {{ customerDeliveryAddress.change }}
+              {{ customerDeliveryAddress.change }} uzs
             </span>
             <span v-else>No change required</span>
           </p>
