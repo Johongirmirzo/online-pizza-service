@@ -20,7 +20,7 @@
             </button>
           </li>
           <li
-            v-for="(orderTime, idx) of pickupTimes.length
+            v-for="(orderTime, idx) of orderType === 'Pickup'
               ? pickupTimes
               : deliveryTimes"
             :key="idx"
