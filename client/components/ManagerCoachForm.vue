@@ -1024,4 +1024,15 @@ defineProps(["isLoading", "validationSchema", "title", "handleFormSubmit"]);
   background: #e7e7e7;
   color: #333;
 }
+
+@media (min-width: 768px) {
+  .manager-form__label {
+    font-size: 15px;
+  }
+
+  .manager-form__file-input,
+  .manager-form__input {
+    padding: 15px 5px;
+  }
+}
 </style>

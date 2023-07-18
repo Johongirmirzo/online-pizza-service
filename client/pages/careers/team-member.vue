@@ -1057,5 +1057,12 @@ const handleApplyForTeamMemberRoleSubmit = async (teamMemberData: any) => {
   .team-member-form__experience-box {
     overflow: unset;
   }
+  .team-member-form__label {
+    font-size: 15px;
+  }
+  .team-member-form__file-input,
+  .team-member-form__input {
+    padding: 15px 5px;
+  }
 }
 </style>

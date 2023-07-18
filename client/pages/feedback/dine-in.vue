@@ -378,5 +378,11 @@ const handleGiveDineInFeedbackSubmit = (dineInFeedback: IFeedback) => {
   .dine-in-form__error-message {
     position: absolute;
   }
+  .dine-in-form__label {
+    font-size: 15px;
+  }
+  .dine-in-form__input {
+    padding: 15px 5px;
+  }
 }
 </style>

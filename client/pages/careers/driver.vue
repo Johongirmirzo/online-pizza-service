@@ -1022,4 +1022,15 @@ const handleApplyForDriverRoleSubmit = async (driverData: any) => {
   background: #e7e7e7;
   color: #333;
 }
+
+@media (min-width: 768px) {
+  .driver-form__label {
+    font-size: 15px;
+  }
+
+  .driver-form__file-input,
+  .driver-form__input {
+    padding: 15px 5px;
+  }
+}
 </style>

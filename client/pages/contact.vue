@@ -233,5 +233,11 @@ const handleSendMessageSubmit = (messageData: IMessage, { resetForm }) => {
     align-items: center;
     gap: 25px;
   }
+  .contact-form__label {
+    font-size: 15px;
+  }
+  .contact-form__input {
+    padding: 15px 5px;
+  }
 }
 </style>
