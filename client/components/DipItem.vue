@@ -8,11 +8,11 @@
         <div class="dip-card__body">
           <header class="dip-card__header">
             <h3 class="dip-card__title">
-              {{ dip.type }}
+              {{ truncateText(dip.type, 18) }}
             </h3>
           </header>
           <footer class="dip-card__footer">
-            <strong class="dip-card__price"> {{ dip.price }}uzs </strong>
+            <strong class="dip-card__price"> {{ dip.price }} uzs </strong>
             <div class="dip-card__btn-box">
               <button
                 class="dip-card__add-item-btn"

@@ -10,7 +10,7 @@
     <div class="menu-card__text-box">
       <header class="menu-card__header">
         <h2 class="menu-card__title">
-          {{ truncateText(menuItem.name || menuItem.type, 20) }}
+          {{ truncateText(menuItem.name || menuItem.type, 18) }}
         </h2>
       </header>
       <p class="menu-card__description">

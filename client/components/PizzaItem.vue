@@ -11,7 +11,7 @@
     <div class="pizza-card__body">
       <header class="pizza-card__header">
         <h3 class="pizza-card__title">
-          {{ pizza.name }}
+          {{ truncateText(pizza.name, 18) }}
         </h3>
       </header>
       <p class="pizza-card__topping-text">
