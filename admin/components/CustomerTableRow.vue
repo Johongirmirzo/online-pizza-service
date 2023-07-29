@@ -90,17 +90,6 @@
         </li>
       </ul>
     </td>
-    <td v-if="userRole === 'ADMIN'" class="customers-table__cell">
-      <div class="customers-table__btns-box">
-        <button
-          title="Delete customer"
-          @click.stop="getCustomer(customer)"
-          class="customers-table__btn customers-table__delete-customer-btn"
-        >
-          <Icon class="customers__table-icon" size="20" name="jam:trash" />
-        </button>
-      </div>
-    </td>
   </tr>
 </template>
 <script setup lang="ts">

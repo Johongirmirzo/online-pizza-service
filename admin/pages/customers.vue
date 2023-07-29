@@ -46,13 +46,6 @@
             >
               Status
             </th>
-            <th
-              v-if="data?.role === 'ADMIN'"
-              scope="col"
-              class="customers-table__head"
-            >
-              Actions
-            </th>
           </tr>
         </thead>
         <tbody v-if="customers.length">
