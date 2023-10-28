@@ -3,7 +3,7 @@ import { IReview, ReviewStatus } from "../../types/review";
 
 const ReviewService = {
     async getAllReviews(){
-        return await prisma.review.findMany({orderBy: [{date: "desc"}]});
+        return await prisma.review.findMany();
     },
     async getReview(customerId: number){
         await prisma.review.findFirst({where: {customerId}})

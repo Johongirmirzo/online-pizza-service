@@ -14,7 +14,7 @@ const review_1 = require("../../types/review");
 const ReviewService = {
     getAllReviews() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.review.findMany({ orderBy: [{ date: "desc" }] });
+            return yield prisma_1.prisma.review.findMany();
         });
     },
     getReview(customerId) {
