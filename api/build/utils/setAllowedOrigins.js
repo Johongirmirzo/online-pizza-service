@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setAllowedOrigins = void 0;
-const allowedDomains = [process.env.CLIENT_URL || "http://localhost:3000", process.env.ADMIN_URL || "http://localhost:3001"];
+const allowedDomains = [process.env.CLIENT_URL || "https://online-pizza-delivery.netlify.app", process.env.ADMIN_URL || "https://online-pizza-delivery-admin.netlify.app/"];
 const setAllowedOrigins = (origin, callback) => {
     if (!origin)
         return callback(null, true);

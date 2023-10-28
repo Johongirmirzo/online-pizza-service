@@ -1,4 +1,4 @@
-const allowedDomains = [process.env.CLIENT_URL || "http://localhost:3000", process.env.ADMIN_URL || "http://localhost:3001"]
+const allowedDomains = [process.env.CLIENT_URL || "https://online-pizza-delivery.netlify.app", process.env.ADMIN_URL || "https://online-pizza-delivery-admin.netlify.app/"]
 export const setAllowedOrigins = (origin: any, callback: any) =>{
     if (!origin) return callback(null, true);
 
