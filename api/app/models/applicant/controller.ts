@@ -35,11 +35,9 @@ const ApplicantController = {
     if (statusCode === 404) {
       return res.status(statusCode).json({ errors: error })
     }
-    return res
-      .status(statusCode)
-      .json({
-        message: `Application status is changed to ${status} successfully!`,
-      })
+    return res.status(statusCode).json({
+      message: `Application status is changed to ${status} successfully!`,
+    })
   },
   async deleteApplicant(req: Request, res: Response) {
     const id = req.params.id

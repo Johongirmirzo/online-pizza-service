@@ -11,7 +11,6 @@ const UserController = {
         userEmail,
         password
       )
-      console.log('Email', userEmail, password)
       if (statusCode === 400 || statusCode === 404) {
         return res.status(statusCode).json({ errors: error })
       } else {
@@ -74,7 +73,6 @@ const UserController = {
   },
   async editUser(req: Request, res: Response) {
     const id = req.params.id
-    console.log({ id })
     const { user, statusCode, error } = await UserService.editUser(
       id,
       req.body,

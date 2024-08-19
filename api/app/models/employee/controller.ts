@@ -194,7 +194,6 @@ const EmployeeController = {
   },
   async editEmployeeLeaveDay(req: Request, res: Response) {
     const { leaveDayId, employeeId } = req.params
-    console.log({ leaveDayId, employeeId })
     const { statusCode, error } = await EmployeeService.editEmployeeLeaveDay(
       leaveDayId,
       employeeId,
@@ -210,7 +209,6 @@ const EmployeeController = {
   },
   async deleteEmployeeLeaveDay(req: Request, res: Response) {
     const { leaveDayId, employeeId } = req.params
-    console.log({ leaveDayId, employeeId })
     const { statusCode, error } = await EmployeeService.deleteEmployeeLeaveDay(
       leaveDayId,
       employeeId

@@ -10,6 +10,7 @@ const UserService = {
   async loginUser(email: string, password: string) {
     try {
       const user = await prisma.user.findUnique({ where: { email } })
+
       if (!user) {
         return { user: null, statusCode: 404, error: 'Email does not exist' }
       } else {
@@ -24,10 +25,12 @@ const UserService = {
         }
       }
     } catch (err: any) {
+      console.log('Error ', err)
       return { user: null, statusCode: 400, error: 'Bad Request' }
     }
   },
   async getAllUsers() {
+    console.log('Users', await prisma.user.findMany())
     return (
       await prisma.user.findMany({ orderBy: [{ created: 'desc' }] })
     ).filter((user) => Role[user.role] != Role.ADMIN)

@@ -8,11 +8,7 @@ const CategoryController = {
   },
   async getCategory(req: Request, res: Response) {
     const id = req.params.id
-    if (isNaN(Number(id))) {
-      return res
-        .status(400)
-        .json({ errors: 'Invalid id, please provide only integers!' })
-    }
+
     const category = await CategoryService.getCategory(id)
     if (!category) {
       return res
