@@ -9,6 +9,7 @@
         <Icon name="bx:food-menu" />
       </template>
     </SectionHeader>
+    <PizzaLoader v-if="!isDataFetched" />
     <PizzaForm
       v-if="isDataFetched"
       :categories="categories"
@@ -22,41 +23,41 @@
   </section>
 </template>
 <script setup lang="ts">
-import { v4 as uuid } from "uuid";
-import { ICategory } from "~/types/category";
-import { ITopping } from "~/types/topping";
-import { IPizzaFormData } from "~/types/pizza";
-import { hasPhotoFileError } from "~/utils/hasPhotoFileError";
-import { getAllCategories } from "~/api/category";
-import { getAllToppings } from "~/api/topping";
-import { createPizza } from "~/api/pizza";
-import { createPizzaData } from "~/validations";
+import { v4 as uuid } from 'uuid'
+import { ICategory } from '~/types/category'
+import { ITopping } from '~/types/topping'
+import { IPizzaFormData } from '~/types/pizza'
+import { hasPhotoFileError } from '~/utils/hasPhotoFileError'
+import { getAllCategories } from '~/api/category'
+import { getAllToppings } from '~/api/topping'
+import { createPizza } from '~/api/pizza'
+import { createPizzaData } from '~/validations'
 
-const isCreatingPizza = true;
+const isCreatingPizza = true
 
-const categories = ref<ICategory[]>([]);
-const toppings = ref<ITopping[]>([]);
-const isLoading = ref(false);
-const isDataFetched = ref(false);
-const { $toast } = useNuxtApp();
+const categories = ref<ICategory[]>([])
+const toppings = ref<ITopping[]>([])
+const isLoading = ref(false)
+const isDataFetched = ref(false)
+const { $toast } = useNuxtApp()
 
 const initialValues = ref({
-  name: "",
-  spiceLevel: "",
+  name: '',
+  spiceLevel: '',
   categoryId: null,
   vegan: null,
   pizzaSizes: [
     {
-      size: "",
+      size: '',
       price: null,
-      photo: "",
-      circumfarance: "",
+      photo: '',
+      circumfarance: '',
       weight: null,
       nutritionalValue: {
-        calories: "",
-        fats: "",
-        proteins: "",
-        carbohydrates: "",
+        calories: '',
+        fats: '',
+        proteins: '',
+        carbohydrates: '',
       },
       slices: {
         regularCut: null,
@@ -80,16 +81,16 @@ const initialValues = ref({
       extraToppings: [],
     },
     {
-      size: "",
+      size: '',
       price: null,
-      photo: "",
-      circumfarance: "",
+      photo: '',
+      circumfarance: '',
       weight: null,
       nutritionalValue: {
-        calories: "",
-        fats: "",
-        proteins: "",
-        carbohydrates: "",
+        calories: '',
+        fats: '',
+        proteins: '',
+        carbohydrates: '',
       },
       slices: {
         regularCut: null,
@@ -113,16 +114,16 @@ const initialValues = ref({
       extraToppings: [],
     },
     {
-      size: "",
+      size: '',
       price: null,
-      photo: "",
-      circumfarance: "",
+      photo: '',
+      circumfarance: '',
       weight: null,
       nutritionalValue: {
-        calories: "",
-        fats: "",
-        proteins: "",
-        carbohydrates: "",
+        calories: '',
+        fats: '',
+        proteins: '',
+        carbohydrates: '',
       },
       slices: {
         regularCut: null,
@@ -146,89 +147,88 @@ const initialValues = ref({
       extraToppings: [],
     },
   ],
-});
+})
 
 const fetchAllCategories = async () => {
   try {
-    const categoriesResponse = await getAllCategories();
-    categories.value = categoriesResponse.data.data;
+    const categoriesResponse = await getAllCategories()
+    categories.value = categoriesResponse.data.data
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
-};
-fetchAllCategories();
+}
+fetchAllCategories()
 
 const fetchAllToppings = async () => {
   try {
-    const toppingsResponse = await getAllToppings();
-    toppings.value = toppingsResponse.data.data;
-    isDataFetched.value = true;
+    const toppingsResponse = await getAllToppings()
+    console.log('Toppings', toppingsResponse.data.data)
+    toppings.value = toppingsResponse.data.data
+    isDataFetched.value = true
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
-};
-fetchAllToppings();
+}
+fetchAllToppings()
 
-const redirectLink = "/menu/pizzas";
-const redirectText = "Go Back To Pizzas";
-const title = "Add a New Pizza";
+const redirectLink = '/menu/pizzas'
+const redirectText = 'Go Back To Pizzas'
+const title = 'Add a New Pizza'
 
 const handleCreatePizzaSubmit = (pizzaData: IPizzaFormData) => {
-  const formData = new FormData();
-  const errors = [];
-  let error: string;
+  const formData = new FormData()
+  const errors = []
+  let error: string
   for (const pizzaSize of pizzaData.pizzaSizes) {
     switch (pizzaSize.size) {
-      case "SMALL":
-        error = hasPhotoFileError(pizzaSize.photo);
+      case 'SMALL':
+        error = hasPhotoFileError(pizzaSize.photo)
         if (error) {
-          errors.push(error);
+          errors.push(error)
         } else {
-          formData.append("small", pizzaSize.photo);
+          formData.append('small', pizzaSize.photo)
         }
-        break;
-      case "MEDIUM":
-        error = hasPhotoFileError(pizzaSize.photo);
+        break
+      case 'MEDIUM':
+        error = hasPhotoFileError(pizzaSize.photo)
         if (error) {
-          errors.push(error);
+          errors.push(error)
         } else {
-          formData.append("medium", pizzaSize.photo);
+          formData.append('medium', pizzaSize.photo)
         }
-        break;
-      case "LARGE":
-        error = hasPhotoFileError(pizzaSize.photo);
+        break
+      case 'LARGE':
+        error = hasPhotoFileError(pizzaSize.photo)
         if (error) {
-          errors.push(error);
+          errors.push(error)
         } else {
-          formData.append("large", pizzaSize.photo);
+          formData.append('large', pizzaSize.photo)
         }
-        break;
+        break
     }
   }
 
   if (errors.length) {
-    errors.forEach((err) => $toast.error(err));
+    errors.forEach((err) => $toast.error(err))
   }
-  formData.append("name", pizzaData.name);
-  formData.append("categoryId", pizzaData.categoryId);
-  formData.append("vegan", pizzaData.vegan);
-  formData.append("spiceLevel", pizzaData.spiceLevel);
-  formData.append("pizzaSizes", JSON.stringify(pizzaData.pizzaSizes));
-
-  (async () => {
+  formData.append('name', pizzaData.name)
+  formData.append('categoryId', pizzaData.categoryId)
+  formData.append('vegan', pizzaData.vegan)
+  formData.append('spiceLevel', pizzaData.spiceLevel)
+  formData.append('pizzaSizes', JSON.stringify(pizzaData.pizzaSizes))
+  ;(async () => {
     try {
-      isLoading.value = true;
-      await createPizza(formData);
-      navigateTo("/menu/pizzas");
-      isLoading.value = false;
+      isLoading.value = true
+      await createPizza(formData)
+      navigateTo('/menu/pizzas')
+      isLoading.value = false
     } catch (err: any) {
       if (err?.response?.data?.errors) {
-        $toast.error(err?.response?.data?.errors);
-        isLoading.value = false;
+        $toast.error(err?.response?.data?.errors)
+        isLoading.value = false
       }
     }
-  })();
-};
+  })()
+}
 </script>
-<style scoped>
-</style>
+<style scoped></style>

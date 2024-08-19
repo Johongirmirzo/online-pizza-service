@@ -170,14 +170,14 @@
               <div class="pizza-form__row">
                 <div class="pizza-form__control">
                   <label :for="`circumfarance_${idx}`" class="pizza-form__label"
-                    >Cirfumfarance</label
+                    >Circumfrance</label
                   >
                   <Field
                     type="number"
                     class="pizza-form__input"
                     :id="`circumfarance_${idx}`"
                     :name="`pizzaSizes[${idx}].circumfarance`"
-                    placeholder="Enter Pizza Cirfumfarance..."
+                    placeholder="Enter Pizza Circumfrance..."
                     @keydown="handlePreventFormSubmission('number', $event)"
                   />
                   <ErrorMessage
@@ -460,13 +460,11 @@
               <div class="pizza-form__title-box">
                 <h3 class="pizza-form__title">Pizza Standard Toppings</h3>
               </div>
-
-              <div v-if="pizza.value.size" class="pizza-form__checkbox-row">
+              <div v-if="pizza.size" class="pizza-form__checkbox-row">
                 <div
                   v-for="topping in toppings.filter(
                     (t) =>
-                      t.type === 'STANDARD' &&
-                      t.forPizzaSize === pizza.value.size
+                      t.type === 'STANDARD' && t.forPizzaSize === pizza.size
                   )"
                   :key="topping.id"
                   class="pizza-form__checkbox-box"
@@ -683,42 +681,42 @@
     </Form>
   </div>
 </template>
-  <script setup lang="ts">
-import { Form, Field, ErrorMessage, FieldArray } from "vee-validate";
-import { v4 as uuid } from "uuid";
-import { handlePreventNonNumbers } from "~/utils/handlePreventNumbers";
+<script setup lang="ts">
+import { Form, Field, ErrorMessage, FieldArray } from 'vee-validate'
+import { v4 as uuid } from 'uuid'
+import { handlePreventNonNumbers } from '~/utils/handlePreventNumbers'
 const props = defineProps([
-  "handleFormSubmit",
-  "validationSchema",
-  "isLoading",
-  "isCreatingPizza",
-  "initialValues",
-  "categories",
-  "toppings",
-]);
+  'handleFormSubmit',
+  'validationSchema',
+  'isLoading',
+  'isCreatingPizza',
+  'initialValues',
+  'categories',
+  'toppings',
+])
 
 const handleEnableCorrectInput = (evt: any) =>
-  ["-", "e", "E"].includes(evt.key) && evt.preventDefault();
+  ['-', 'e', 'E'].includes(evt.key) && evt.preventDefault()
 
 const handlePreventFormSubmission = (inputType: string, evt: any) => {
-  if (inputType === "number") {
-    return handlePreventNonNumbers(evt);
+  if (inputType === 'number') {
+    return handlePreventNonNumbers(evt)
   }
-  if (evt.key === "Enter") {
-    evt.preventDefault();
+  if (evt.key === 'Enter') {
+    evt.preventDefault()
   }
-};
+}
 
 const filterToppingsByPizzaSize = (
   pizzaSize: string,
-  toppingType = "STANDARD"
+  toppingType = 'STANDARD'
 ) => {
   return props.toppings.filter(
     (topp: any) => topp.type === toppingType && topp.forPizzaSize === pizzaSize
-  );
-};
+  )
+}
 </script>
-  <style scoped>
+<style scoped>
 .pizza__form-box {
   padding: 20px;
   border-radius: 10px;
@@ -753,14 +751,14 @@ const filterToppingsByPizzaSize = (
   left: -2px;
   position: relative;
   background-color: #fc8019;
-  content: "";
+  content: '';
   display: inline-block;
   visibility: visible;
   border: 3px solid #fc8019;
   z-index: 999;
 }
 .pizza-form__checkbox:checked:after {
-  content: "✔";
+  content: '✔';
   color: #fff;
   display: flex;
   align-items: center;
@@ -823,7 +821,7 @@ const filterToppingsByPizzaSize = (
   left: -2px;
   position: relative;
   background-color: #d1d3d1;
-  content: "";
+  content: '';
   display: inline-block;
   visibility: visible;
   border: 2px solid white;
@@ -836,7 +834,7 @@ const filterToppingsByPizzaSize = (
   left: -2px;
   position: relative;
   background-color: #ffa500;
-  content: "";
+  content: '';
   display: inline-block;
   visibility: visible;
   border: 2px solid white;

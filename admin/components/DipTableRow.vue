@@ -2,7 +2,7 @@
   <tr class="dips-table__cell-row">
     <td class="dips-table__cell">
       <p class="dips-table__text">
-        {{ dip.id }}
+        {{ dip.id?.slice(-10) }}
       </p>
     </td>
     <td class="dips-table__cell">
@@ -100,7 +100,7 @@
     </td>
     <td class="dips-table__cell">
       <p class="dips-table__text">
-        {{ DateTime.fromISO(dip.created).toFormat("dd/MM/yyyy") }}
+        {{ DateTime.fromISO(dip.created).toFormat('dd/MM/yyyy') }}
       </p>
     </td>
     <td class="dips-table__cell">
@@ -124,34 +124,34 @@
   </tr>
 </template>
 <script setup lang="ts">
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon'
 const props = defineProps([
-  "dip",
-  "isLastRow",
-  "isStatusDropdownOpen",
-  "activeRowId",
-  "toggleStatusDropdown",
-  "getActiveRowId",
-  "toggleDipStatus",
-  "getDeleteItemId",
-]);
+  'dip',
+  'isLastRow',
+  'isStatusDropdownOpen',
+  'activeRowId',
+  'toggleStatusDropdown',
+  'getActiveRowId',
+  'toggleDipStatus',
+  'getDeleteItemId',
+])
 
 const handleToggleStatusDropdown = (dipId: number) => {
-  props.getActiveRowId(dipId);
-  props.toggleStatusDropdown();
-};
+  props.getActiveRowId(dipId)
+  props.toggleStatusDropdown()
+}
 
 const handleChangedipstatus = (dipId: number, status: string) => {
-  props.toggleDipStatus(dipId, status);
-  props.toggleStatusDropdown();
-};
+  props.toggleDipStatus(dipId, status)
+  props.toggleStatusDropdown()
+}
 
 const closeStatusDropdown = () => {
   if (props.isStatusDropdownOpen) {
-    props.toggleStatusDropdown();
+    props.toggleStatusDropdown()
   }
-};
-window.addEventListener("click", closeStatusDropdown);
+}
+window.addEventListener('click', closeStatusDropdown)
 </script>
 <style scoped>
 .dips-table__cell {

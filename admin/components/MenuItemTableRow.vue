@@ -2,7 +2,7 @@
   <tr>
     <td class="menu-items-table__cell">
       <p class="menu-items-table__text">
-        {{ menuItem.id }}
+        {{ menuItem.id?.slice(-10) }}
       </p>
     </td>
     <td class="menu-items-table__cell">
@@ -95,7 +95,7 @@
     </td>
     <td class="menu-items-table__cell">
       <p class="menu-items-table__text">
-        {{ DateTime.fromISO(menuItem.created).toFormat("dd/MM/yy") }}
+        {{ DateTime.fromISO(menuItem.created).toFormat('dd/MM/yy') }}
       </p>
     </td>
     <td class="menu-items-table__cell">
@@ -126,34 +126,34 @@
   </tr>
 </template>
 <script setup lang="ts">
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon'
 const props = defineProps([
-  "isLastRow",
-  "menuItem",
-  "toggleMenuItemStatus",
-  "isStatusDropdownOpen",
-  "activeRowId",
-  "getActiveRowId",
-  "toggleStatusDropdown",
-  "getDeleteItemId",
-]);
+  'isLastRow',
+  'menuItem',
+  'toggleMenuItemStatus',
+  'isStatusDropdownOpen',
+  'activeRowId',
+  'getActiveRowId',
+  'toggleStatusDropdown',
+  'getDeleteItemId',
+])
 
 const handleToggleStatusDropdown = (menuItemId: number) => {
-  props.getActiveRowId(menuItemId);
-  props.toggleStatusDropdown();
-};
+  props.getActiveRowId(menuItemId)
+  props.toggleStatusDropdown()
+}
 
 const handleChangeMenuItemStatus = (menuItemId: number, status: string) => {
-  props.toggleMenuItemStatus(menuItemId, status);
-  props.toggleStatusDropdown();
-};
+  props.toggleMenuItemStatus(menuItemId, status)
+  props.toggleStatusDropdown()
+}
 
 const closeStatusDropdown = () => {
   if (props.isStatusDropdownOpen) {
-    props.toggleStatusDropdown();
+    props.toggleStatusDropdown()
   }
-};
-window.addEventListener("click", closeStatusDropdown);
+}
+window.addEventListener('click', closeStatusDropdown)
 </script>
 <style scoped>
 .menu-items-table__cell {

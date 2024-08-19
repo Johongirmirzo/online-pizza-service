@@ -48,7 +48,7 @@
           >
             <td class="categories-table__cell">
               <p class="categories-table__text">
-                {{ category.id }}
+                {{ category.id?.slice(-10) }}
               </p>
             </td>
             <td class="categories-table__cell">
@@ -93,74 +93,74 @@
   </section>
 </template>
 <script setup lang="ts">
-import { useLoading } from "~/composables/useLoading";
-import { ICategory } from "~/types/category";
-import { getAllCategories, deleteCategory } from "~/api/category";
+import { useLoading } from '~/composables/useLoading'
+import { ICategory } from '~/types/category'
+import { getAllCategories, deleteCategory } from '~/api/category'
 
-const { $toast } = useNuxtApp();
-const categories = ref<ICategory[]>([]);
-const searchData = ref("");
-const deleteModalData = ref({});
-const categoriesPdfTable = ref<HTMLElement | undefined>(undefined);
-const routeTo = ref("/category/add-category");
-const downloadCSVFilename = "all-categories.csv";
-const isDeletingData = ref(false);
+const { $toast } = useNuxtApp()
+const categories = ref<ICategory[]>([])
+const searchData = ref('')
+const deleteModalData = ref({})
+const categoriesPdfTable = ref<HTMLElement | undefined>(undefined)
+const routeTo = ref('/category/add-category')
+const downloadCSVFilename = 'all-categories.csv'
+const isDeletingData = ref(false)
 
 const { isModalOpen, currentActiveScreen, toggleModal, moveToNextScreen } =
-  useModal();
-const { isLoading, startLoading, stopLoading } = useLoading();
+  useModal()
+const { isLoading, startLoading, stopLoading } = useLoading()
 
 const fetchAllCategories = async () => {
-  startLoading();
-  categories.value = [];
-  const categoryResponse = await getAllCategories();
-  categories.value = [...categoryResponse.data.data];
-  stopLoading();
-};
-fetchAllCategories();
+  startLoading()
+  categories.value = []
+  const categoryResponse = await getAllCategories()
+  categories.value = [...categoryResponse.data.data]
+  stopLoading()
+}
+fetchAllCategories()
 
 const getFilteredUsers = (searchData: string) => {
   return categories.value.filter((user: ICategory) =>
     !searchData.length
       ? true
       : user.name.toLowerCase().includes(searchData.toLowerCase())
-  );
-};
+  )
+}
 
 const handleUpdateSearchData = (val: string) => {
-  searchData.value = val;
-};
+  searchData.value = val
+}
 
-const { csv, generateCSV, generatePDF, generateExcel } = useHeaderAction();
+const { csv, generateCSV, generatePDF, generateExcel } = useHeaderAction()
 
 const handleDownloadCSVClick = () => {
-  generateCSV<ICategory>(categories.value);
-};
+  generateCSV<ICategory>(categories.value)
+}
 
 const handleDownloadExcelClick = () => {
-  generateExcel(categoriesPdfTable.value, "categories", "categories");
-};
+  generateExcel(categoriesPdfTable.value, 'categories', 'categories')
+}
 const handleDownloadPdfClick = () => {
-  generatePDF("categories-table", categoriesPdfTable.value);
-};
+  generatePDF('categories-table', categoriesPdfTable.value)
+}
 
 const getCategory = (category: ICategory) => {
   deleteModalData.value = {
     id: category.id,
-    type: "Category",
+    type: 'Category',
     data: category.name,
-  };
-  toggleModal();
-};
+  }
+  toggleModal()
+}
 
 const handleDeleteCategoryClick = async (id: number) => {
-  isDeletingData.value = true;
-  await deleteCategory(id);
-  fetchAllCategories();
-  toggleModal();
-  $toast.success("Category is deleted successfully!");
-  isDeletingData.value = false;
-};
+  isDeletingData.value = true
+  await deleteCategory(id)
+  fetchAllCategories()
+  toggleModal()
+  $toast.success('Category is deleted successfully!')
+  isDeletingData.value = false
+}
 </script>
 <style scoped>
 .categories__header {
