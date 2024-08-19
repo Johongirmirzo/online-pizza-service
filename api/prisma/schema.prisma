@@ -6,15 +6,15 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id          Int        @id @default(autoincrement())
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   photo       String?
   photo_id    String?
-  name        String     @db.VarChar(50)
+  name        String
   phoneNumber String     @unique
   email       String     @unique
   password    String
@@ -25,7 +25,7 @@ model User {
 }
 
 model Customer {
-  id               Int              @id @default(autoincrement())
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
   name             String
   email            String           @unique
   status           CustomerStatus   @default(ACTIVE)
@@ -40,23 +40,27 @@ model Customer {
   orders           Order[]
 }
 
+
+
+
 model CustomerAdress {
-  id              Int      @id @default(autoincrement())
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
   streetName      String
   approach        String
   floor           String
   doorCode        String
   apartmentNumber String
-  comment         String   @db.VarChar(255)
-  isDefault       Boolean  @default(false)
-  customerId      Int
-  customer        Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  created         DateTime @default(now())
-  updated         DateTime @default(now())
+  comment         String
+  isDefault       Boolean    @default(false)
+  customerId      String     @db.ObjectId
+  customer        Customer   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  created         DateTime   @default(now())
+  updated         DateTime   @default(now())
 }
 
+
 model Order {
-  id                         Int           @id @default(autoincrement())
+  id                         String        @id @default(auto()) @map("_id") @db.ObjectId
   paymentMethod              PaymentMethod
   paymentStatus              PaymentStatus @default(PENDING)
   change                     String?
@@ -66,7 +70,7 @@ model Order {
   orderTotal                 Int
   orderType                  OrderType
   orderStatus                OrderStatus   @default(ORDER_NOT_CONFIRMED)
-  customerId                 Int
+  customerId                 String        @db.ObjectId
   customer                   Customer      @relation(fields: [customerId], references: [id])
   orderChosenTime            String
   orderReceivingTime         String
@@ -75,18 +79,18 @@ model Order {
 }
 
 model Application {
-  id                Int             @id @default(autoincrement())
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
   role              ApplicantRole
-  photoUrl          String          @db.Text()
+  photoUrl          String
   photoId           String
-  firstname         String          @db.VarChar(25)
-  lastname          String          @db.VarChar(25)
+  firstname         String
+  lastname          String
   email             String
-  phoneNumber       String          @db.VarChar(13)
+  phoneNumber       String
   gender            Gender
   birthDate         DateTime
   passportNumber    String
-  passportPhotoUrl  String          @db.Text()
+  passportPhotoUrl  String
   passportPhotoId   String
   noticePeriod      String
   dateOfJoining     DateTime
@@ -99,7 +103,7 @@ model Application {
   source            String
   hasBankAccount    Boolean         @default(false)
   bankAccountName   String?
-  resumeUrl         String          @db.Text()
+  resumeUrl         String
   resumeId          String
   drivers           Driver[]
   managers          Manager[]
@@ -107,41 +111,44 @@ model Application {
   created           DateTime        @default(now())
 }
 
+
 model Manager {
-  id              Int         @id @default(autoincrement())
-  panPhoto        String      @db.Text()
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  panPhoto        String
   panPhotoId      String
-  panNumber       String      @db.Text()
-  currentEmployer String      @db.Text()
-  currentRole     String      @db.Text()
-  currentLocation String      @db.Text()
-  currentCTC      String      @db.Text()
-  applicantId     Int
+  panNumber       String
+  currentEmployer String
+  currentRole     String
+  currentLocation String
+  currentCTC      String
+  applicantId     String      @db.ObjectId
   application     Application @relation(fields: [applicantId], references: [id], onDelete: Cascade)
 }
 
+
 model Driver {
-  id             Int            @id @default(autoincrement())
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
   drivingLicence DrivingLicense
-  licenseNumber  String         @db.Text()
+  licenseNumber  String
   employmentType EmploymentType
-  applicantId    Int
+  applicantId    String         @db.ObjectId
   application    Application    @relation(fields: [applicantId], references: [id], onDelete: Cascade)
 }
 
+
 model TeamMember {
-  id             Int            @id @default(autoincrement())
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
   employmentType EmploymentType
-  applicantId    Int
+  applicantId    String         @db.ObjectId
   application    Application    @relation(fields: [applicantId], references: [id], onDelete: Cascade)
 }
 
 model Employee {
-  id                Int            @id @default(autoincrement())
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
   firstname         String
   lastname          String
   email             String         @unique
-  phoneNumber       String         @unique @db.VarChar(13)
+  phoneNumber       String         @unique
   photo             String
   photo_id          String
   role              ApplicantRole
@@ -160,32 +167,33 @@ model Employee {
   leaveDays         Json[]
 }
 
+
 model Message {
-  id          Int      @id @default(autoincrement())
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   firstname   String
   lastname    String
-  phoneNumber String   @db.VarChar(12)
+  phoneNumber String
   email       String
   subject     String
   message     String
-  date        DateTime @default(now())
+  date        DateTime   @default(now())
 }
 
+
 model Review {
-  id            Int           @id @default(autoincrement())
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
   reviewSubject ReviewSubject
   message       String
   status        ReviewStatus  @default(PRIVATE)
   stars         Int
-  customerId    Int
+  customerId    String        @db.ObjectId
   customer      Customer      @relation(fields: [customerId], references: [id])
   date          DateTime      @default(now())
 }
-
 model Feedback {
-  id                Int                @id @default(autoincrement())
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
   type              FeedbackType
-  fullName          String             @db.VarChar(50)
+  fullName          String
   gender            Gender
   email             String
   mobileNumber      String
@@ -198,29 +206,32 @@ model Feedback {
   dineInFeedbacks   DineInFeedback[]
 }
 
+
+
 model DeliveryFeedback {
-  id               Int        @id @default(autoincrement())
+  id               String      @id @default(auto()) @map("_id") @db.ObjectId
   dateOfOrder      DateTime
   timeOfOrder      String
   feedbackOn       FeedbackOn
   feedbackOnChoice String
-  feedbackId       Int
-  feedback         Feedback   @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  feedbackId       String      @db.ObjectId
+  feedback         Feedback    @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
 }
 
+
 model DineInFeedback {
-  id          Int         @id @default(autoincrement())
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   dateOfVisit DateTime
   timeOfVisit String
   visitAmount VisitAmount
-  feedbackId  Int
+  feedbackId  String      @db.ObjectId
   feedback    Feedback    @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
 }
 
 model Category {
-  id          Int        @id @default(autoincrement())
-  name        String     @unique @db.VarChar(50)
-  description String     @db.VarChar(150)
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String     @unique
+  description String
   photo       String
   photo_id    String
   created     DateTime   @default(now())
@@ -230,9 +241,11 @@ model Category {
   menuItems   MenuItem[]
 }
 
+
+
 model Topping {
-  id           Int                 @id @default(autoincrement())
-  name         String              @db.VarChar(50)
+  id           String              @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
   type         ToppingCategoryType
   forPizzaSize ToppingForPizzaSize
   light        Int                 @default(0)
@@ -243,25 +256,27 @@ model Topping {
   updated      DateTime            @default(now())
 }
 
+
 model Pizza {
-  id         Int         @id @default(autoincrement())
-  name       String      @unique @db.VarChar(100)
-  vegan      Boolean     @default(false)
-  soldAmount Int         @default(0)
-  status     Status      @default(PENDING)
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  name       String     @unique
+  vegan      Boolean    @default(false)
+  soldAmount Int        @default(0)
+  status     Status     @default(PENDING)
   spiceLevel SpiceLevel
   pizzaSizes PizzaSize[]
-  created    DateTime    @default(now())
-  updated    DateTime    @default(now())
-  categoryId Int
-  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  created    DateTime   @default(now())
+  updated    DateTime   @default(now())
+  categoryId String     @db.ObjectId
+  category   Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
+
 model PizzaSize {
-  id               Int    @id @default(autoincrement())
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
   size             Size
   price            String
-  orderedAmount    Int    @default(0)
+  orderedAmount    Int        @default(0)
   photo            String
   photo_id         String
   circumfarance    String
@@ -272,15 +287,16 @@ model PizzaSize {
   edges            Json[]
   standardToppings Json[]
   extraToppings    Json[]
-  pizzaId          Int
-  pizza            Pizza  @relation(fields: [pizzaId], references: [id], onDelete: Cascade)
+  pizzaId          String     @db.ObjectId
+  pizza            Pizza      @relation(fields: [pizzaId], references: [id], onDelete: Cascade)
 }
 
+
 model MenuItem {
-  id            Int          @id @default(autoincrement())
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   type          MenuItemType
-  name          String       @unique @db.VarChar(70)
-  description   String       @db.VarChar(250)
+  name          String       @unique
+  description   String
   vegan         Boolean      @default(false)
   soldAmount    Int          @default(0)
   status        Status       @default(PENDING)
@@ -292,27 +308,28 @@ model MenuItem {
   pieces        Json[]
   created       DateTime     @default(now())
   updated       DateTime     @default(now())
-  categoryId    Int
+  categoryId    String       @db.ObjectId
   category      Category     @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model Dip {
-  id               Int      @id @default(autoincrement())
-  dataType         String   @default("DIP")
-  type             String   @unique @db.VarChar(50)
-  price            Int      @default(0)
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  dataType         String     @default("DIP")
+  type             String     @unique
+  price            Int        @default(0)
   photo            String
   photo_id         String
-  vegan            Boolean  @default(false)
-  soldAmount       Int      @default(0)
-  status           Status   @default(PENDING)
+  vegan            Boolean    @default(false)
+  soldAmount       Int        @default(0)
+  status           Status     @default(PENDING)
   weight           Float
   nutritionalValue Json
-  created          DateTime @default(now())
-  updated          DateTime @default(now())
-  categoryId       Int
-  category         Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  created          DateTime   @default(now())
+  updated          DateTime   @default(now())
+  categoryId       String     @db.ObjectId
+  category         Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
+
 
 enum Role {
   ADMIN
