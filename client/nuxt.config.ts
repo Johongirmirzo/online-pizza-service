@@ -1,9 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@sidebase/nuxt-auth", "@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt", "nuxt-icon"],
-  css: ["~/assets/styles/main.css"],
-  piniaPersistedstate: {       
-    storage: 'localStorage'
+  modules: [
+    '@sidebase/nuxt-auth',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+    'nuxt-icon',
+  ],
+  css: ['~/assets/styles/main.css'],
+  piniaPersistedstate: {
+    storage: 'localStorage',
   },
   auth: {
     // The module is enabled. Change this to disable the module
@@ -15,5 +20,5 @@ export default defineNuxtConfig({
     basePath: '/api/auth',
     // Whether to add a global authentication middleware that will protect all pages without exclusion
     enableGlobalAppMiddleware: true,
-    }
+  },
 })

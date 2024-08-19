@@ -1,7 +1,7 @@
 <template>
   <section class="home-page">
     <PizzaLoader v-if="isLoading" />
-    <section id="pizzas" class="pizzas">
+    <section v-if="pizzas[0]" id="pizzas" class="pizzas">
       <header class="home-page__header pizzas__header">
         <h2 class="home-page__title pizzas__title">Pizzas</h2>
       </header>
@@ -21,7 +21,7 @@
         />
       </div>
     </section>
-    <section id="snacks" class="snacks">
+    <section id="snacks" v-if="menuItems.snacks?.length" class="snacks">
       <header class="home-page__header snacks__header">
         <h2 class="home-page__title snacks__title">Snacks</h2>
       </header>
@@ -41,7 +41,7 @@
         />
       </div>
     </section>
-    <section id="desserts" class="desserts">
+    <section id="desserts" v-if="menuItems.desserts?.length" class="desserts">
       <header class="home-page__header desserts__header">
         <h2 class="home-page__title desserts__title">Desserts</h2>
       </header>
@@ -61,7 +61,7 @@
         />
       </div>
     </section>
-    <section id="salads" class="salads">
+    <section id="salads" v-if="menuItems.salads?.length" class="salads">
       <header class="home-page__header salads__header">
         <h2 class="home-page__title salads__title">Salads</h2>
       </header>
@@ -81,7 +81,7 @@
         />
       </div>
     </section>
-    <section id="drinks" class="drinks">
+    <section id="drinks" v-if="menuItems.drinks?.length" class="drinks">
       <header class="home-page__header drinks__header">
         <h2 class="home-page__title drinks__title">Drinks</h2>
       </header>
@@ -101,7 +101,7 @@
         />
       </div>
     </section>
-    <section id="dips" class="dips">
+    <section id="dips" v-if="dips?.length" class="dips">
       <header class="home-page__header dips__header">
         <h2 class="home-page__title dips__title">Dips</h2>
       </header>
@@ -125,134 +125,134 @@
   </section>
 </template>
 <script setup lang="ts">
-import { useCartStore } from "~/stores/useCartStore";
-import { useLoading } from "~/composables/useLoading";
+import { useCartStore } from '~/stores/useCartStore'
+import { useLoading } from '~/composables/useLoading'
 import {
   getAllPizzas,
   getAllMenuItems,
   getAllDips,
-} from "~/api/all-api-handlers";
+} from '~/api/all-api-handlers'
 
-const { cartItems } = useCartStore();
+const { cartItems } = useCartStore()
 
-const pizzas = ref([]);
-const dips = ref([]);
+const pizzas = ref([])
+const dips = ref([])
 const menuItems = ref({
   snacks: [],
   drinks: [],
   salads: [],
   desserts: [],
-});
-const pizza = ref({});
-const menuItem = ref({});
-const dip = ref({});
+})
+const pizza = ref({})
+const menuItem = ref({})
+const dip = ref({})
 
 const getPizza = (pizzaData: any) => {
-  pizza.value = pizzaData;
-};
+  pizza.value = pizzaData
+}
 const getMenuItem = (menuItemData: any) => {
-  menuItem.value = menuItemData;
-};
+  menuItem.value = menuItemData
+}
 const getDip = (dipData: any) => {
-  dip.value = dipData;
-};
+  dip.value = dipData
+}
 
-const { data, signOut } = useAuth();
+const { data, signOut } = useAuth()
 
-const { isLoading, startLoading, stopLoading } = useLoading();
+const { isLoading, startLoading, stopLoading } = useLoading()
 const {
   isModalOpen: isPizzaModalOpen,
   closeModal: closePizzaModal,
   openModal: openPizzaModal,
-} = useModal();
+} = useModal()
 const {
   isModalOpen: isSnackModalOpen,
   closeModal: closeSnackModal,
   openModal: openSnackModal,
-} = useModal();
+} = useModal()
 const {
   isModalOpen: isDessertModalOpen,
   closeModal: closeDessertModal,
   openModal: openDessertModal,
-} = useModal();
+} = useModal()
 const {
   isModalOpen: isSaladModalOpen,
   closeModal: closeSaladModal,
   openModal: openSaladModal,
-} = useModal();
+} = useModal()
 const {
   isModalOpen: isDrinkModalOpen,
   closeModal: closeDrinkModal,
   openModal: openDrinkModal,
-} = useModal();
+} = useModal()
 const {
   isModalOpen: isDipModalOpen,
   closeModal: closeDipModal,
   openModal: openDipModal,
-} = useModal();
+} = useModal()
 
 onMounted(async () => {
   try {
-    startLoading();
-    const pizzasResponse = await getAllPizzas();
-    const dipsResponse = await getAllDips();
-    const menuItemsResponses = await getAllMenuItems();
-    dips.value = dipsResponse.data.data;
+    startLoading()
+    const pizzasResponse = await getAllPizzas()
+    const dipsResponse = await getAllDips()
+    const menuItemsResponses = await getAllMenuItems()
+    dips.value = dipsResponse.data.data
     pizzas.value = {
       ...pizzasResponse.data.data.map((pizza: any) => {
         pizza.pizzaSizes.sort((left, right) => {
-          let leftPiece = left;
-          let rightPiece = right;
+          let leftPiece = left
+          let rightPiece = right
           if (
-            (leftPiece.size === "LARGE" && rightPiece.size === "MEDIUM") ||
-            (leftPiece.size === "LARGE" && rightPiece.size === "SMALL") ||
-            (leftPiece.size === "MEDIUM" && rightPiece.size === "SMALL")
+            (leftPiece.size === 'LARGE' && rightPiece.size === 'MEDIUM') ||
+            (leftPiece.size === 'LARGE' && rightPiece.size === 'SMALL') ||
+            (leftPiece.size === 'MEDIUM' && rightPiece.size === 'SMALL')
           ) {
-            return 1;
+            return 1
           } else {
-            return -1;
+            return -1
           }
-        });
-        return pizza;
+        })
+        return pizza
       }),
-    };
+    }
     menuItemsResponses.data.data.forEach((menuItem: any) => {
       switch (menuItem.type) {
-        case "SNACKS":
+        case 'SNACKS':
           menuItems.value.snacks.push({
             ...menuItem,
             pieces: JSON.parse(menuItem.pieces),
-          });
-          break;
-        case "DRINKS":
+          })
+          break
+        case 'DRINKS':
           menuItems.value.drinks.push({
             ...menuItem,
             pieces: JSON.parse(menuItem.pieces),
-          });
+          })
 
-          break;
-        case "SALADS":
+          break
+        case 'SALADS':
           menuItems.value.salads.push({
             ...menuItem,
             pieces: JSON.parse(menuItem.pieces),
-          });
+          })
 
-          break;
-        case "DESSERTS":
+          break
+        case 'DESSERTS':
           menuItems.value.desserts.push({
             ...menuItem,
             pieces: JSON.parse(menuItem.pieces),
-          });
+          })
 
-          break;
+          break
       }
-    });
-    stopLoading();
+    })
+    stopLoading()
   } catch (err) {
-    console.log(err);
-    stopLoading();
+    console.log(err)
+    stopLoading()
   }
-});
+})
 </script>
 <style scoped>
 .home-page {
