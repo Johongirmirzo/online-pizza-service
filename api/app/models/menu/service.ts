@@ -341,7 +341,6 @@ const MenuService = {
           : { ...obj, [el[0]]: el[1] },
       {}
     ) as IMenuItem
-
     const removePhoto = () => {
       if (menuItemPhotos.small) {
         fs.rmSync(
@@ -436,11 +435,16 @@ const MenuService = {
             options
           )
         }
-
+        const os = require('os')
         const removeImgFromDirectory = async (index: number) => {
           const imageSplit = menuItemParsedPieces[index].photo.split('/') as []
           const imgPath = imageSplit[imageSplit.length - 1] as string
+          const isImgExist = fs.existsSync(
+            path.join(__dirname, `../../assets/images/${imgPath}`)
+          )
+          if (!isImgExist) return
           fs.rmSync(path.join(__dirname, `../../assets/images/${imgPath}`))
+          console.log('removed imag')
           await cloudinary.v2.uploader.destroy(
             menuItemParsedPieces[index].photo_id
           )
