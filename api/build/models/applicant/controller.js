@@ -22,7 +22,7 @@ const ApplicantController = {
     },
     getApplicant(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { applicant, statusCode, error } = yield service_1.default.getApplicant(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -43,18 +43,22 @@ const ApplicantController = {
     },
     changeApplicantStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { status } = req.body;
             const { error, statusCode } = yield service_1.default.changeApplicantStatus(id, status);
             if (statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
-            return res.status(statusCode).json({ message: `Application status is changed to ${status} successfully!` });
+            return res
+                .status(statusCode)
+                .json({
+                message: `Application status is changed to ${status} successfully!`,
+            });
         });
     },
     deleteApplicant(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteApplicant(id);
             if (statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });

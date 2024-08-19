@@ -22,6 +22,7 @@ const UserController = {
             try {
                 const { email: userEmail, password } = req.body;
                 const { user, statusCode, error } = yield service_1.default.loginUser(userEmail, password);
+                console.log('Email', userEmail, password);
                 if (statusCode === 400 || statusCode === 404) {
                     return res.status(statusCode).json({ errors: error });
                 }
@@ -29,10 +30,12 @@ const UserController = {
                     if (user) {
                         const { id, name, email } = user;
                         console.log(user);
-                        const { ACCESS_TOKEN_PRIVATE_KEY, ACCESS_TOKEN_EXPIRATION_TIME, REFRESH_TOKEN_PRIVATE_KEY, REFRESH_TOKEN_EXPIRATION_TIME } = process.env;
+                        const { ACCESS_TOKEN_PRIVATE_KEY, ACCESS_TOKEN_EXPIRATION_TIME, REFRESH_TOKEN_PRIVATE_KEY, REFRESH_TOKEN_EXPIRATION_TIME, } = process.env;
                         const accessToken = (0, generateToken_1.generateToken)({ id, name, email, role: token_1.Role[user.role] }, `${ACCESS_TOKEN_PRIVATE_KEY}`, `${ACCESS_TOKEN_EXPIRATION_TIME}`);
                         const refreshToken = (0, generateToken_1.generateToken)({ id, name, email, role: token_1.Role[user.role] }, `${REFRESH_TOKEN_PRIVATE_KEY}`, `${REFRESH_TOKEN_EXPIRATION_TIME}`);
-                        res.status(statusCode).json({ data: { accessToken, refreshToken, user } });
+                        res
+                            .status(statusCode)
+                            .json({ data: { accessToken, refreshToken, user } });
                     }
                 }
             }
@@ -54,7 +57,7 @@ const UserController = {
     },
     getUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { user, statusCode, error } = yield service_1.default.getUser(id, req.user);
             if (statusCode === 404 || statusCode === 400 || statusCode === 403) {
                 return res.status(statusCode).json({ errors: error });
@@ -77,7 +80,7 @@ const UserController = {
     },
     editUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             console.log({ id });
             const { user, statusCode, error } = yield service_1.default.editUser(id, req.body, req.file);
             if (statusCode === 409 || statusCode === 400) {
@@ -90,7 +93,7 @@ const UserController = {
     },
     deleteUser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteUserService(id);
             if (statusCode === 400 || statusCode === 404 || statusCode === 403) {
                 return res.status(statusCode).json({ errors: error });
@@ -102,13 +105,15 @@ const UserController = {
     },
     changeUserStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.changeUserStatus(id, req.body.status);
             if (statusCode === 400 || statusCode === 404 || statusCode === 403) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "User status is updated successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'User status is updated successfully!' });
             }
         });
     },

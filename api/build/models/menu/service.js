@@ -42,7 +42,7 @@ const cloudinary_1 = __importStar(require("../../config/cloudinary"));
 const MenuService = {
     getAllDips() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.dip.findMany({ orderBy: [{ created: "desc" }] });
+            return yield prisma_1.prisma.dip.findMany({ orderBy: [{ created: 'desc' }] });
         });
     },
     getDip(id) {
@@ -50,14 +50,14 @@ const MenuService = {
             try {
                 const dip = yield prisma_1.prisma.dip.findUnique({ where: { id } });
                 if (!dip) {
-                    return { dip: null, statusCode: 404, error: "Dip has not been found" };
+                    return { dip: null, statusCode: 404, error: 'Dip has not been found' };
                 }
                 else {
-                    return { dip, statusCode: 200, error: "" };
+                    return { dip, statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { dip: null, statusCode: 400, error: "Bad Request!" };
+                return { dip: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -69,15 +69,19 @@ const MenuService = {
                     if (dipPhotoFile) {
                         fs_1.default.rm(path_1.default.join(__dirname, `../../assets/images/${dipPhotoFile.filename}`), () => { });
                     }
-                    return { newDip: null, statusCode: 409, error: `Current dip: [${dipData.type}] already exists!` };
+                    return {
+                        newDip: null,
+                        statusCode: 409,
+                        error: `Current dip: [${dipData.type}] already exists!`,
+                    };
                 }
                 else {
                     const nutritionalValue = JSON.parse(dipData.nutritionalValue);
                     const dipPhoto = yield cloudinary_1.default.v2.uploader.upload(dipPhotoFile.path, cloudinary_1.options);
                     const newDip = yield prisma_1.prisma.dip.create({
-                        data: Object.assign(Object.assign({}, dipData), { price: Number(dipData.price), vegan: Boolean(dipData.vegan), weight: Number(dipData.weight), categoryId: Number(dipData.categoryId), photo: dipPhoto.secure_url, photo_id: dipPhoto.public_id, nutritionalValue })
+                        data: Object.assign(Object.assign({}, dipData), { price: Number(dipData.price), vegan: Boolean(dipData.vegan), weight: Number(dipData.weight), categoryId: dipData.categoryId.toString(), photo: dipPhoto.secure_url, photo_id: dipPhoto.public_id, nutritionalValue }),
                     });
-                    return { newDip, statusCode: 201, error: "" };
+                    return { newDip, statusCode: 201, error: '' };
                 }
             }
             catch (err) {
@@ -85,7 +89,7 @@ const MenuService = {
                 if (dipPhotoFile) {
                     fs_1.default.rm(path_1.default.join(__dirname, `../../assets/images/${dipPhotoFile.filename}`), () => { });
                 }
-                return { newDip: null, statusCode: 400, error: "Bad Request!" };
+                return { newDip: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -93,7 +97,9 @@ const MenuService = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let dipData = {};
-                const dipWithGivenData = yield prisma_1.prisma.dip.findUnique({ where: { type: data.type } });
+                const dipWithGivenData = yield prisma_1.prisma.dip.findUnique({
+                    where: { type: data.type },
+                });
                 const dip = yield prisma_1.prisma.dip.findUnique({ where: { id } });
                 if (!dip) {
                     if (dipPhotoFile) {
@@ -105,14 +111,18 @@ const MenuService = {
                     if (dipWithGivenData) {
                         if (dipWithGivenData.id !== dip.id &&
                             dipWithGivenData.type === data.type) {
-                            return { statusCode: 409, error: `Dip type ${dip.type} is already exists!` };
+                            return {
+                                statusCode: 409,
+                                error: `Dip type ${dip.type} is already exists!`,
+                            };
                         }
                     }
                     dipData = Object.entries(data).reduce((obj, el) => {
-                        return el[0] === "type" ? Object.assign(Object.assign({}, obj), { [el[0]]: el[1] }) : Object.assign(Object.assign({}, obj), { [el[0]]: JSON.parse(el[1]) });
+                        return el[0] === 'type'
+                            ? Object.assign(Object.assign({}, obj), { [el[0]]: el[1] }) : Object.assign(Object.assign({}, obj), { [el[0]]: JSON.parse(el[1]) });
                     }, {});
                     if (dipPhotoFile) {
-                        const imageSplit = dip.photo.split("/");
+                        const imageSplit = dip.photo.split('/');
                         const imgPath = imageSplit[imageSplit.length - 1];
                         console.log(imgPath);
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imgPath}`));
@@ -120,16 +130,16 @@ const MenuService = {
                         const dipPhoto = yield cloudinary_1.default.v2.uploader.upload(dipPhotoFile.path, cloudinary_1.options);
                         yield prisma_1.prisma.dip.update({
                             where: { id },
-                            data: Object.assign(Object.assign({}, dipData), { photo: dipPhoto.secure_url, photo_id: dipPhoto.public_id, updated: new Date() })
+                            data: Object.assign(Object.assign({}, dipData), { photo: dipPhoto.secure_url, photo_id: dipPhoto.public_id, updated: new Date() }),
                         });
-                        return { statusCode: 200, error: "" };
+                        return { statusCode: 200, error: '' };
                     }
                     else {
                         yield prisma_1.prisma.dip.update({
                             where: { id },
-                            data: Object.assign(Object.assign({}, dipData), { updated: new Date() })
+                            data: Object.assign(Object.assign({}, dipData), { updated: new Date() }),
                         });
-                        return { statusCode: 200, error: "" };
+                        return { statusCode: 200, error: '' };
                     }
                 }
             }
@@ -138,7 +148,7 @@ const MenuService = {
                 if (dipPhotoFile) {
                     fs_1.default.rm(path_1.default.join(__dirname, `../../assets/images/${dipPhotoFile.filename}`), () => { });
                 }
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -147,21 +157,21 @@ const MenuService = {
             try {
                 const dip = yield prisma_1.prisma.dip.findUnique({ where: { id } });
                 if (!dip) {
-                    return { statusCode: 404, error: "Dip has not been found!" };
+                    return { statusCode: 404, error: 'Dip has not been found!' };
                 }
                 else {
                     yield prisma_1.prisma.dip.update({
                         where: { id },
                         data: {
                             status,
-                            updated: new Date()
-                        }
+                            updated: new Date(),
+                        },
                     });
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -170,43 +180,50 @@ const MenuService = {
             try {
                 const dip = yield prisma_1.prisma.dip.findUnique({ where: { id } });
                 if (!dip) {
-                    return { statusCode: 404, error: "Dip has not been found!" };
+                    return { statusCode: 404, error: 'Dip has not been found!' };
                 }
                 else {
-                    const imageSplit = dip.photo.split("/");
+                    const imageSplit = dip.photo.split('/');
                     const imgPath = imageSplit[imageSplit.length - 1];
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imgPath}`));
                     yield cloudinary_1.default.v2.uploader.destroy(dip.photo_id);
                     yield prisma_1.prisma.dip.delete({ where: { id } });
-                    return { statusCode: 204, error: "" };
+                    return { statusCode: 204, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     getAllMenuItems() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.menuItem.findMany({ orderBy: [{ created: "desc" }] });
+            return yield prisma_1.prisma.menuItem.findMany({ orderBy: [{ created: 'desc' }] });
         });
     },
     getMenuItem(menuItemId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const menuItem = yield prisma_1.prisma.menuItem.findUnique({ where: { id: menuItemId } });
-                return menuItem ? { menuItem, statusCode: 200, error: "" } : { menuItem: null, statusCode: 404, error: "Menu Item's not been found" };
+                const menuItem = yield prisma_1.prisma.menuItem.findUnique({
+                    where: { id: menuItemId },
+                });
+                return menuItem
+                    ? { menuItem, statusCode: 200, error: '' }
+                    : {
+                        menuItem: null,
+                        statusCode: 404,
+                        error: "Menu Item's not been found",
+                    };
             }
             catch (err) {
-                return { menuItem: null, statusCode: 400, error: "Bad Request!" };
+                return { menuItem: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     createMenuItem(data, menuItemPhotos) {
         return __awaiter(this, void 0, void 0, function* () {
-            const menuItemData = Object
-                .entries(data)
-                .reduce((obj, el) => /pieces/i.test(el[0]) ? (Object.assign(Object.assign({}, obj), { [el[0]]: JSON.parse(el[1]) })) : (Object.assign(Object.assign({}, obj), { [el[0]]: el[1] })), {});
+            const menuItemData = Object.entries(data).reduce((obj, el) => /pieces/i.test(el[0])
+                ? Object.assign(Object.assign({}, obj), { [el[0]]: JSON.parse(el[1]) }) : Object.assign(Object.assign({}, obj), { [el[0]]: el[1] }), {});
             const removePhoto = () => {
                 if (menuItemPhotos.small) {
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${menuItemPhotos.small[0].filename}`));
@@ -228,15 +245,25 @@ const MenuService = {
                 }
             };
             try {
-                const menuItem = yield prisma_1.prisma.menuItem.findFirst({ where: { name: data.name } });
+                const menuItem = yield prisma_1.prisma.menuItem.findFirst({
+                    where: { name: data.name },
+                });
                 if (menuItem) {
                     removePhoto();
-                    return { newMenuItem: null, statusCode: 409, error: `Current menu item ${menuItem.name} already in the menu!` };
+                    return {
+                        newMenuItem: null,
+                        statusCode: 409,
+                        error: `Current menu item ${menuItem.name} already in the menu!`,
+                    };
                 }
                 else {
                     if (isThereDuplicateMenuItemSize(menuItemData.pieces)) {
                         const menuItemSize = isThereDuplicateMenuItemSize(menuItemData.pieces);
-                        return { newPizza: null, statusCode: 400, error: `There can't be duplicate menu item sizes. Menu item size ${menuItemSize} is duplicated!` };
+                        return {
+                            newPizza: null,
+                            statusCode: 400,
+                            error: `There can't be duplicate menu item sizes. Menu item size ${menuItemSize} is duplicated!`,
+                        };
                     }
                     let smallPhoto, mediumPhoto, largePhoto;
                     if (menuItemPhotos.small) {
@@ -248,24 +275,23 @@ const MenuService = {
                     if (menuItemPhotos.large) {
                         largePhoto = yield cloudinary_1.default.v2.uploader.upload(menuItemPhotos.large[0].path, cloudinary_1.options);
                     }
-                    ;
                     const setPhoto = (index, cloudinaryPhoto) => {
                         menuItemData.pieces[index].photo = cloudinaryPhoto === null || cloudinaryPhoto === void 0 ? void 0 : cloudinaryPhoto.secure_url;
                         menuItemData.pieces[index].photo_id = cloudinaryPhoto === null || cloudinaryPhoto === void 0 ? void 0 : cloudinaryPhoto.public_id;
                     };
                     for (let i = 0; i < menuItemData.pieces.length; i++) {
                         switch (menuItemData.pieces[i].size.toLowerCase()) {
-                            case "small":
+                            case 'small':
                                 if (smallPhoto) {
                                     setPhoto(i, smallPhoto);
                                 }
                                 break;
-                            case "medium":
+                            case 'medium':
                                 if (mediumPhoto) {
                                     setPhoto(i, mediumPhoto);
                                 }
                                 break;
-                            case "large":
+                            case 'large':
                                 if (largePhoto) {
                                     setPhoto(i, largePhoto);
                                 }
@@ -274,24 +300,23 @@ const MenuService = {
                     }
                     console.log(menuItemData);
                     const newItem = yield prisma_1.prisma.menuItem.create({
-                        data: Object.assign(Object.assign({}, menuItemData), { vegan: JSON.parse(`${menuItemData.vegan}`), categoryId: Number(menuItemData.categoryId), pieces: JSON.stringify(menuItemData.pieces) })
+                        data: Object.assign(Object.assign({}, menuItemData), { vegan: JSON.parse(`${menuItemData.vegan}`), categoryId: menuItemData.categoryId, pieces: JSON.stringify(menuItemData.pieces) }),
                     });
-                    return { newMenuItem: newItem, statusCode: 201, error: "" };
+                    return { newMenuItem: newItem, statusCode: 201, error: '' };
                 }
             }
             catch (err) {
                 console.log(err);
                 removePhoto();
-                return { newMenuItem: null, statusCode: 400, error: "Bad Request!" };
+                return { newMenuItem: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     editMenuItem(menuItemId, data, menuItemPhotos) {
-        var _a, _b, _c, _d, _e;
         return __awaiter(this, void 0, void 0, function* () {
-            const menuItemData = Object
-                .entries(data)
-                .reduce((obj, el) => /pieces/i.test(el[0]) ? (Object.assign(Object.assign({}, obj), { [el[0]]: JSON.parse(el[1]) })) : (Object.assign(Object.assign({}, obj), { [el[0]]: el[1] })), {});
+            var _a, _b, _c, _d, _e;
+            const menuItemData = Object.entries(data).reduce((obj, el) => /pieces/i.test(el[0])
+                ? Object.assign(Object.assign({}, obj), { [el[0]]: JSON.parse(el[1]) }) : Object.assign(Object.assign({}, obj), { [el[0]]: el[1] }), {});
             const removePhoto = () => {
                 if (menuItemPhotos.small) {
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${menuItemPhotos.small[0].filename}`));
@@ -313,8 +338,12 @@ const MenuService = {
                 }
             };
             try {
-                const menuItemWithGivenData = yield prisma_1.prisma.menuItem.findUnique({ where: { name: data.name } });
-                const menuItem = yield prisma_1.prisma.menuItem.findUnique({ where: { id: menuItemId } });
+                const menuItemWithGivenData = yield prisma_1.prisma.menuItem.findUnique({
+                    where: { name: data.name },
+                });
+                const menuItem = yield prisma_1.prisma.menuItem.findUnique({
+                    where: { id: menuItemId },
+                });
                 if (!menuItem) {
                     removePhoto();
                     return { statusCode: 404, error: `Menu item has not been found!` };
@@ -326,13 +355,20 @@ const MenuService = {
                         if (menuItem.id !== menuItemWithGivenData.id &&
                             menuItemWithGivenData.name === menuItemData.name) {
                             removePhoto();
-                            return { statusCode: 409, error: `Current menu item ${menuItemData.name} already in the menu!` };
+                            return {
+                                statusCode: 409,
+                                error: `Current menu item ${menuItemData.name} already in the menu!`,
+                            };
                         }
                     }
                     if (isThereDuplicateMenuItemSize(menuItemData.pieces)) {
                         const menuItemSize = isThereDuplicateMenuItemSize(menuItemData.pieces);
                         removePhoto();
-                        return { newPizza: null, statusCode: 400, error: `There can't be duplicate menu item sizes. Menu item size ${menuItemSize} is duplicated!` };
+                        return {
+                            newPizza: null,
+                            statusCode: 400,
+                            error: `There can't be duplicate menu item sizes. Menu item size ${menuItemSize} is duplicated!`,
+                        };
                     }
                     let smallPhoto, mediumPhoto, largePhoto;
                     if (menuItemPhotos.small) {
@@ -344,9 +380,8 @@ const MenuService = {
                     if (menuItemPhotos.large) {
                         largePhoto = yield cloudinary_1.default.v2.uploader.upload(menuItemPhotos.large[0].path, cloudinary_1.options);
                     }
-                    ;
                     const removeImgFromDirectory = (index) => __awaiter(this, void 0, void 0, function* () {
-                        const imageSplit = menuItemParsedPieces[index].photo.split("/");
+                        const imageSplit = menuItemParsedPieces[index].photo.split('/');
                         const imgPath = imageSplit[imageSplit.length - 1];
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imgPath}`));
                         yield cloudinary_1.default.v2.uploader.destroy(menuItemParsedPieces[index].photo_id);
@@ -355,26 +390,28 @@ const MenuService = {
                         menuItemData.pieces[index].photo = cloudinaryPhoto === null || cloudinaryPhoto === void 0 ? void 0 : cloudinaryPhoto.secure_url;
                         menuItemData.pieces[index].photo_id = cloudinaryPhoto === null || cloudinaryPhoto === void 0 ? void 0 : cloudinaryPhoto.public_id;
                     };
-                    if ((menuItemParsedPieces.length > menuItemData.pieces.length) && menuItemData.pieces.length > 0) {
+                    if (menuItemParsedPieces.length > menuItemData.pieces.length &&
+                        menuItemData.pieces.length > 0) {
                         for (let i = 0; i < menuItemParsedPieces.length; i++) {
                             let isThereMatch = false;
                             for (let j = 0; j < menuItemData.pieces.length; j++) {
-                                if (menuItemParsedPieces[i].photo_id === ((_a = menuItemData.pieces[j]) === null || _a === void 0 ? void 0 : _a.photo_id)) {
+                                if (menuItemParsedPieces[i].photo_id ===
+                                    ((_a = menuItemData.pieces[j]) === null || _a === void 0 ? void 0 : _a.photo_id)) {
                                     isThereMatch = true;
                                     break;
                                 }
                                 switch (menuItemData.pieces[j].size.toLowerCase()) {
-                                    case "small":
+                                    case 'small':
                                         if (smallPhoto) {
                                             updateMenuItemPhoto(j, smallPhoto);
                                         }
                                         break;
-                                    case "medium":
+                                    case 'medium':
                                         if (mediumPhoto) {
                                             updateMenuItemPhoto(j, mediumPhoto);
                                         }
                                         break;
-                                    case "large":
+                                    case 'large':
                                         if (largePhoto) {
                                             updateMenuItemPhoto(j, largePhoto);
                                         }
@@ -390,7 +427,7 @@ const MenuService = {
                     else if (menuItemData.pieces.length) {
                         for (let i = 0; i < ((_b = menuItemData === null || menuItemData === void 0 ? void 0 : menuItemData.pieces) === null || _b === void 0 ? void 0 : _b.length); i++) {
                             switch (menuItemData.pieces[i].size.toLowerCase()) {
-                                case "small":
+                                case 'small':
                                     if (smallPhoto) {
                                         console.log((_c = menuItemParsedPieces[i]) === null || _c === void 0 ? void 0 : _c.size);
                                         if (menuItemParsedPieces[i]) {
@@ -399,7 +436,7 @@ const MenuService = {
                                         updateMenuItemPhoto(i, smallPhoto);
                                     }
                                     break;
-                                case "medium":
+                                case 'medium':
                                     if (mediumPhoto) {
                                         console.log((_d = menuItemParsedPieces[i]) === null || _d === void 0 ? void 0 : _d.size);
                                         if (menuItemParsedPieces[i]) {
@@ -408,7 +445,7 @@ const MenuService = {
                                         updateMenuItemPhoto(i, mediumPhoto);
                                     }
                                     break;
-                                case "large":
+                                case 'large':
                                     if (largePhoto) {
                                         console.log((_e = menuItemParsedPieces[i]) === null || _e === void 0 ? void 0 : _e.size);
                                         if (menuItemParsedPieces[i]) {
@@ -429,83 +466,101 @@ const MenuService = {
                     }
                     yield prisma_1.prisma.menuItem.update({
                         where: { id: menuItemId },
-                        data: Object.assign(Object.assign({}, menuItemData), { vegan: (menuItemData === null || menuItemData === void 0 ? void 0 : menuItemData.vegan) ? JSON.parse(`${menuItemData.vegan}`) : menuItem === null || menuItem === void 0 ? void 0 : menuItem.vegan, categoryId: (menuItemData === null || menuItemData === void 0 ? void 0 : menuItemData.categoryId) ? Number(menuItemData.categoryId) : menuItem === null || menuItem === void 0 ? void 0 : menuItem.categoryId, pieces: JSON.stringify(modifiedPieces), updated: new Date() })
+                        data: Object.assign(Object.assign({}, menuItemData), { vegan: (menuItemData === null || menuItemData === void 0 ? void 0 : menuItemData.vegan)
+                                ? JSON.parse(`${menuItemData.vegan}`)
+                                : menuItem === null || menuItem === void 0 ? void 0 : menuItem.vegan, categoryId: (menuItemData === null || menuItemData === void 0 ? void 0 : menuItemData.categoryId)
+                                ? menuItemData.categoryId
+                                : menuItem === null || menuItem === void 0 ? void 0 : menuItem.categoryId, pieces: JSON.stringify(modifiedPieces), updated: new Date() }),
                     });
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
                 console.log(err.message);
                 removePhoto();
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     changeMenuItemStatus(menuItemId, status) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const menuItem = yield prisma_1.prisma.menuItem.findUnique({ where: { id: menuItemId } });
+                const menuItem = yield prisma_1.prisma.menuItem.findUnique({
+                    where: { id: menuItemId },
+                });
                 if (!menuItem) {
-                    return { statusCode: 404, error: "Menu item has not been found" };
+                    return { statusCode: 404, error: 'Menu item has not been found' };
                 }
                 else {
                     yield prisma_1.prisma.menuItem.update({
                         where: { id: menuItemId },
                         data: {
-                            status
-                        }
+                            status,
+                        },
                     });
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     deleteMenuItem(menuItemId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const menuItem = yield prisma_1.prisma.menuItem.findUnique({ where: { id: menuItemId } });
+                const menuItem = yield prisma_1.prisma.menuItem.findUnique({
+                    where: { id: menuItemId },
+                });
                 if (!menuItem) {
-                    return { statusCode: 404, error: "Menu item has not been found" };
+                    return { statusCode: 404, error: 'Menu item has not been found' };
                 }
                 else {
                     const pieces = JSON.parse(menuItem.pieces[0]);
                     for (const piece of pieces) {
-                        const imageSplit = piece.photo.split("/");
+                        const imageSplit = piece.photo.split('/');
                         const imgPath = imageSplit[imageSplit.length - 1];
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imgPath}`));
                         yield cloudinary_1.default.v2.uploader.destroy(piece.photo_id);
                     }
                     yield prisma_1.prisma.menuItem.delete({ where: { id: menuItemId } });
-                    return { statusCode: 204, error: "" };
+                    return { statusCode: 204, error: '' };
                 }
             }
             catch (err) {
-                console.log("Delete Menu Item Errorr", err);
-                return { statusCode: 400, error: "Bad Request!" };
+                console.log('Delete Menu Item Errorr', err);
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     getAllPizzas() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.pizza.findMany({ include: { pizzaSizes: true }, orderBy: [{ created: "desc" }] });
+            return yield prisma_1.prisma.pizza.findMany({
+                include: { pizzaSizes: true },
+                orderBy: [{ created: 'desc' }],
+            });
         });
     },
     getPizza(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const pizza = yield prisma_1.prisma.pizza.findUnique({ where: { id }, include: { pizzaSizes: true } });
+                const pizza = yield prisma_1.prisma.pizza.findUnique({
+                    where: { id },
+                    include: { pizzaSizes: true },
+                });
                 if (!pizza) {
-                    return { pizza: null, statusCode: 404, error: "Pizza's not been found!" };
+                    return {
+                        pizza: null,
+                        statusCode: 404,
+                        error: "Pizza's not been found!",
+                    };
                 }
                 else {
-                    return { pizza, statusCode: 200, error: "" };
+                    return { pizza, statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { pizza: null, statusCode: 400, error: "Bad Request!" };
+                return { pizza: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -532,17 +587,26 @@ const MenuService = {
                 }
             };
             try {
-                const pizza = yield prisma_1.prisma.pizza.findUnique({ where: { name: pizzaData.name } });
+                const pizza = yield prisma_1.prisma.pizza.findUnique({
+                    where: { name: pizzaData.name },
+                });
                 if (pizza) {
                     removePhoto();
-                    return { newPizza: null, statusCode: 409, error: `Pizza with the given name: ${pizzaData.name} already exists!` };
+                    return {
+                        newPizza: null,
+                        statusCode: 409,
+                        error: `Pizza with the given name: ${pizzaData.name} already exists!`,
+                    };
                 }
                 else {
-                    const parsedPizzaSizes = JSON.parse(pizzaData.pizzaSizes)
-                        .map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: pizzaSize.price ? pizzaSize.price : "", weight: pizzaSize.weight ? pizzaSize.weight : "" })));
+                    const parsedPizzaSizes = JSON.parse(pizzaData.pizzaSizes).map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: pizzaSize.price ? pizzaSize.price : '', weight: pizzaSize.weight ? pizzaSize.weight : '' })));
                     if (isThereDuplicatePizzaSize(parsedPizzaSizes)) {
                         const pizzaSize = isThereDuplicatePizzaSize(parsedPizzaSizes);
-                        return { newPizza: null, statusCode: 400, error: `There can't be duplicate pizza sizes. Pizza size ${pizzaSize} is duplicated!` };
+                        return {
+                            newPizza: null,
+                            statusCode: 400,
+                            error: `There can't be duplicate pizza sizes. Pizza size ${pizzaSize} is duplicated!`,
+                        };
                     }
                     let smallPhoto, mediumPhoto, largePhoto;
                     if (pizzaPhotoFiles.small) {
@@ -554,24 +618,23 @@ const MenuService = {
                     if (pizzaPhotoFiles.large) {
                         largePhoto = yield cloudinary_1.default.v2.uploader.upload(pizzaPhotoFiles.large[0].path, cloudinary_1.options);
                     }
-                    ;
                     const setPhoto = (index, cloudinaryPhoto) => {
                         parsedPizzaSizes[index].photo = cloudinaryPhoto === null || cloudinaryPhoto === void 0 ? void 0 : cloudinaryPhoto.secure_url;
                         parsedPizzaSizes[index].photo_id = cloudinaryPhoto === null || cloudinaryPhoto === void 0 ? void 0 : cloudinaryPhoto.public_id;
                     };
                     for (let i = 0; i < parsedPizzaSizes.length; i++) {
                         switch (parsedPizzaSizes[i].size.toLowerCase()) {
-                            case "small":
+                            case 'small':
                                 if (smallPhoto) {
                                     setPhoto(i, smallPhoto);
                                 }
                                 break;
-                            case "medium":
+                            case 'medium':
                                 if (mediumPhoto) {
                                     setPhoto(i, mediumPhoto);
                                 }
                                 break;
-                            case "large":
+                            case 'large':
                                 if (largePhoto) {
                                     setPhoto(i, largePhoto);
                                 }
@@ -583,22 +646,22 @@ const MenuService = {
                         data: {
                             name: pizzaData.name,
                             spiceLevel: pizzaData.spiceLevel,
-                            categoryId: Number(pizzaData.categoryId),
+                            categoryId: pizzaData.categoryId,
                             vegan: JSON.parse(`${pizzaData.vegan}`),
                             pizzaSizes: {
                                 create: [
-                                    ...parsedPizzaSizes.map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: `${pizzaSize.price}`, weight: `${pizzaSize.weight}` })))
-                                ]
-                            }
-                        }
+                                    ...parsedPizzaSizes.map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: `${pizzaSize.price}`, weight: `${pizzaSize.weight}` }))),
+                                ],
+                            },
+                        },
                     });
-                    return { newPizza, statusCode: 200, error: "" };
+                    return { newPizza, statusCode: 200, error: '' };
                 }
             }
             catch (err) {
                 removePhoto();
                 console.log(err);
-                return { newPizza: null, statusCode: 400, error: "Bad Request!" };
+                return { newPizza: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -625,8 +688,13 @@ const MenuService = {
                 }
             };
             try {
-                const pizza = yield prisma_1.prisma.pizza.findUnique({ where: { id: pizzaId }, include: { pizzaSizes: true } });
-                const pizzaWithGivenData = yield prisma_1.prisma.pizza.findUnique({ where: { name: pizzaData.name } });
+                const pizza = yield prisma_1.prisma.pizza.findUnique({
+                    where: { id: pizzaId },
+                    include: { pizzaSizes: true },
+                });
+                const pizzaWithGivenData = yield prisma_1.prisma.pizza.findUnique({
+                    where: { name: pizzaData.name },
+                });
                 if (!pizza) {
                     removePhoto();
                     return { statusCode: 404, error: "Pizza's not been found!" };
@@ -636,14 +704,20 @@ const MenuService = {
                         console.log(pizzaWithGivenData.id, pizza.id);
                         if (pizzaWithGivenData.id !== pizza.id &&
                             pizzaWithGivenData.name === pizzaData.name) {
-                            return { statusCode: 409, error: `Pizza with the given name: ${pizzaData.name} already exists!` };
+                            return {
+                                statusCode: 409,
+                                error: `Pizza with the given name: ${pizzaData.name} already exists!`,
+                            };
                         }
                     }
-                    const parsedPizzaSizes = JSON.parse(pizzaData.pizzaSizes)
-                        .map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: pizzaSize.price ? pizzaSize.price : "", weight: pizzaSize.weight ? pizzaSize.weight : "" })));
+                    const parsedPizzaSizes = JSON.parse(pizzaData.pizzaSizes).map((pizzaSize) => (Object.assign(Object.assign({}, pizzaSize), { price: pizzaSize.price ? pizzaSize.price : '', weight: pizzaSize.weight ? pizzaSize.weight : '' })));
                     if (isThereDuplicatePizzaSize(parsedPizzaSizes)) {
                         const pizzaSize = isThereDuplicatePizzaSize(parsedPizzaSizes);
-                        return { newPizza: null, statusCode: 400, error: `There can't be duplicate pizza sizes. Pizza size ${pizzaSize} is duplicated!` };
+                        return {
+                            newPizza: null,
+                            statusCode: 400,
+                            error: `There can't be duplicate pizza sizes. Pizza size ${pizzaSize} is duplicated!`,
+                        };
                     }
                     let smallPhoto, mediumPhoto, largePhoto;
                     if (pizzaPhotoFiles.small) {
@@ -655,9 +729,8 @@ const MenuService = {
                     if (pizzaPhotoFiles.large) {
                         largePhoto = yield cloudinary_1.default.v2.uploader.upload(pizzaPhotoFiles.large[0].path, cloudinary_1.options);
                     }
-                    ;
                     const removeImgFromDirectory = (index) => __awaiter(this, void 0, void 0, function* () {
-                        const imageSplit = pizza.pizzaSizes[index].photo.split("/");
+                        const imageSplit = pizza.pizzaSizes[index].photo.split('/');
                         const imgPath = imageSplit[imageSplit.length - 1];
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imgPath}`));
                         yield cloudinary_1.default.v2.uploader.destroy(pizza.pizzaSizes[index].photo_id);
@@ -668,19 +741,19 @@ const MenuService = {
                     };
                     for (let i = 0; i < parsedPizzaSizes.length; i++) {
                         switch (parsedPizzaSizes[i].size.toLowerCase()) {
-                            case "small":
+                            case 'small':
                                 if (smallPhoto) {
                                     yield removeImgFromDirectory(i);
                                     setPhoto(i, smallPhoto);
                                 }
                                 break;
-                            case "medium":
+                            case 'medium':
                                 if (mediumPhoto) {
                                     yield removeImgFromDirectory(i);
                                     setPhoto(i, mediumPhoto);
                                 }
                                 break;
-                            case "large":
+                            case 'large':
                                 if (largePhoto) {
                                     yield removeImgFromDirectory(i);
                                     setPhoto(i, largePhoto);
@@ -693,23 +766,23 @@ const MenuService = {
                         data: {
                             name: pizzaData.name,
                             spiceLevel: pizzaData.spiceLevel,
-                            categoryId: Number(pizzaData.categoryId),
-                            vegan: JSON.parse(`${pizzaData.vegan}`)
-                        }
+                            categoryId: pizzaData.categoryId,
+                            vegan: JSON.parse(`${pizzaData.vegan}`),
+                        },
                     });
                     for (const pizzaSize of parsedPizzaSizes) {
                         yield prisma_1.prisma.pizzaSize.update({
                             where: { id: pizzaSize.id },
-                            data: Object.assign({}, pizzaSize)
+                            data: Object.assign({}, pizzaSize),
                         });
                     }
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
                 removePhoto();
                 console.log(err);
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -718,47 +791,50 @@ const MenuService = {
             try {
                 const pizza = yield prisma_1.prisma.pizza.findUnique({ where: { id } });
                 if (!pizza) {
-                    return { statusCode: 404, error: "Pizza has not been found!" };
+                    return { statusCode: 404, error: 'Pizza has not been found!' };
                 }
                 else {
                     yield prisma_1.prisma.pizza.update({
                         where: { id },
                         data: {
                             status,
-                            updated: new Date()
-                        }
+                            updated: new Date(),
+                        },
                     });
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     deletePizza(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const pizza = yield prisma_1.prisma.pizza.findUnique({ where: { id }, include: { pizzaSizes: true } });
+                const pizza = yield prisma_1.prisma.pizza.findUnique({
+                    where: { id },
+                    include: { pizzaSizes: true },
+                });
                 if (!pizza) {
-                    return { statusCode: 404, error: "Pizza has not been found!" };
+                    return { statusCode: 404, error: 'Pizza has not been found!' };
                 }
                 else {
                     const pizzaSizes = pizza.pizzaSizes;
                     for (const pizzaSize of pizzaSizes) {
-                        const imageSplit = pizzaSize.photo.split("/");
+                        const imageSplit = pizzaSize.photo.split('/');
                         const imgPath = imageSplit[imageSplit.length - 1];
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imgPath}`));
                         yield cloudinary_1.default.v2.uploader.destroy(pizzaSize.photo_id);
                     }
                     yield prisma_1.prisma.pizza.delete({
-                        where: { id }
+                        where: { id },
                     });
-                    return { statusCode: 204, error: "" };
+                    return { statusCode: 204, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },

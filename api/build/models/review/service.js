@@ -27,21 +27,21 @@ const ReviewService = {
             try {
                 const review = yield prisma_1.prisma.review.findUnique({ where: { id: reviewId } });
                 if (!review) {
-                    return { statusCode: 404, erorr: "Review has not been found" };
+                    return { statusCode: 404, erorr: 'Review has not been found' };
                 }
                 else {
                     yield prisma_1.prisma.review.update({
                         where: { id: reviewId },
                         data: {
-                            status: review_1.ReviewStatus[status]
-                        }
+                            status: review_1.ReviewStatus[status],
+                        },
                     });
-                    return { statusCode: 200, erorr: "" };
+                    return { statusCode: 200, erorr: '' };
                 }
             }
             catch (err) {
                 console.log(err);
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -50,19 +50,19 @@ const ReviewService = {
             try {
                 const review = yield prisma_1.prisma.review.findUnique({ where: { id: reviewId } });
                 if (!review) {
-                    return { statusCode: 404, erorr: "Review has not been found" };
+                    return { statusCode: 404, erorr: 'Review has not been found' };
                 }
                 else {
                     yield prisma_1.prisma.review.delete({
-                        where: { id: reviewId }
+                        where: { id: reviewId },
                     });
-                    return { statusCode: 204, erorr: "" };
+                    return { statusCode: 204, erorr: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
-    }
+    },
 };
 exports.default = ReviewService;

@@ -24,7 +24,7 @@ const CustomerController = {
     },
     getCustomer(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { customer, statusCode, error } = yield service_1.default.getCustomer(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -44,7 +44,7 @@ const CustomerController = {
                 else {
                     if (customer) {
                         const { id, phone, status } = customer;
-                        const { ACCESS_TOKEN_PRIVATE_KEY, ACCESS_TOKEN_EXPIRATION_TIME, REFRESH_TOKEN_PRIVATE_KEY, REFRESH_TOKEN_EXPIRATION_TIME } = process.env;
+                        const { ACCESS_TOKEN_PRIVATE_KEY, ACCESS_TOKEN_EXPIRATION_TIME, REFRESH_TOKEN_PRIVATE_KEY, REFRESH_TOKEN_EXPIRATION_TIME, } = process.env;
                         const accessToken = (0, generateToken_1.generateToken)({ id, phone, status: customer_1.CustomerStatus[status] }, `${ACCESS_TOKEN_PRIVATE_KEY}`, `${ACCESS_TOKEN_EXPIRATION_TIME}`);
                         const refreshToken = (0, generateToken_1.generateToken)({ id, phone, status: customer_1.CustomerStatus[status] }, `${REFRESH_TOKEN_PRIVATE_KEY}`, `${REFRESH_TOKEN_EXPIRATION_TIME}`);
                         res.json({ data: { accessToken, refreshToken, customer } });
@@ -69,7 +69,7 @@ const CustomerController = {
     },
     updateCustomer(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.updateCustomer(id, req.body);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(400).json({ errors: error });
@@ -81,23 +81,20 @@ const CustomerController = {
     },
     changeCustomerStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { status } = req.body;
             const { statusCode, error } = yield service_1.default.changeCustomerStatus(id, status);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.json({ message: "Customer status changed successfully!" });
+                return res.json({ message: 'Customer status changed successfully!' });
             }
         });
     },
     deleteCustomer(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
-            if (isNaN(id)) {
-                return res.status(400).json({ errors: "Please provide only integer for id" });
-            }
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteCustomer(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -109,14 +106,14 @@ const CustomerController = {
     },
     getAllCustomerAddresses(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const customerAddresses = yield service_1.default.getAllCustomerAddresses(id);
             return res.json({ data: customerAddresses });
         });
     },
     createCustomerAddress(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { newAddress, statusCode, error } = yield service_1.default.createCustomerAddress(id, req.body);
             if (statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
@@ -128,33 +125,37 @@ const CustomerController = {
     },
     updateCustomerAddress(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const addressId = Number(req.params.addressId);
-            const customerId = Number(req.params.customerId);
+            const addressId = req.params.addressId;
+            const customerId = req.params.customerId;
             const { statusCode, error } = yield service_1.default.updateCustomerAddress(addressId, customerId, req.body);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Customer address is updated successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Customer address is updated successfully!' });
             }
         });
     },
     setDefaultCustomerAddress(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const addressId = Number(req.params.addressId);
-            const customerId = Number(req.params.customerId);
+            const addressId = req.params.addressId;
+            const customerId = req.params.customerId;
             const { statusCode, error } = yield service_1.default.setDefaultCustomerAddress(addressId, customerId);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Default customer address is set successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Default customer address is set successfully!' });
             }
         });
     },
     deleteCustomerAddress(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteCustomerAddress(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });

@@ -14,17 +14,25 @@ const feedback_1 = require("../../types/feedback");
 const FeedbackService = {
     getAllFeedbacks() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.feedback.findMany({ include: { dineInFeedbacks: true, deliveryFeedbacks: true }, orderBy: [{ created: "desc" }] });
+            return yield prisma_1.prisma.feedback.findMany({
+                include: { dineInFeedbacks: true, deliveryFeedbacks: true },
+                orderBy: [{ created: 'desc' }],
+            });
         });
     },
     getFeedback(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const feedback = yield prisma_1.prisma.feedback.findUnique({ where: { id }, include: { dineInFeedbacks: true, deliveryFeedbacks: true } });
-                return feedback ? { feedback, statusCode: 200, error: "" } : { feedback: null, statusCode: 404, error: "Feedback not found!" };
+                const feedback = yield prisma_1.prisma.feedback.findUnique({
+                    where: { id },
+                    include: { dineInFeedbacks: true, deliveryFeedbacks: true },
+                });
+                return feedback
+                    ? { feedback, statusCode: 200, error: '' }
+                    : { feedback: null, statusCode: 404, error: 'Feedback not found!' };
             }
             catch (err) {
-                return { feedback: null, statusCode: 400, error: "Bad Request!" };
+                return { feedback: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -39,14 +47,14 @@ const FeedbackService = {
                     yield prisma_1.prisma.feedback.update({
                         where: { id },
                         data: {
-                            status: feedback_1.FeedbackStatus[status]
-                        }
+                            status: feedback_1.FeedbackStatus[status],
+                        },
                     });
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -59,11 +67,11 @@ const FeedbackService = {
                 }
                 else {
                     yield prisma_1.prisma.feedback.delete({ where: { id } });
-                    return { statusCode: 204, error: "" };
+                    return { statusCode: 204, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },

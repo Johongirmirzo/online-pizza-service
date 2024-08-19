@@ -5,12 +5,10 @@ var ToppingCategoryType;
 (function (ToppingCategoryType) {
     ToppingCategoryType["STANDARD"] = "STANDARD";
     ToppingCategoryType["EXTRA"] = "EXTRA";
-})(ToppingCategoryType || (ToppingCategoryType = {}));
-exports.ToppingCategoryType = ToppingCategoryType;
+})(ToppingCategoryType || (exports.ToppingCategoryType = ToppingCategoryType = {}));
 var ToppingForPizzaSize;
 (function (ToppingForPizzaSize) {
     ToppingForPizzaSize["SMALL"] = "SMALL";
     ToppingForPizzaSize["MEDIUM"] = "MEDIUM";
     ToppingForPizzaSize["LARGE"] = "LARGE";
-})(ToppingForPizzaSize || (ToppingForPizzaSize = {}));
-exports.ToppingForPizzaSize = ToppingForPizzaSize;
+})(ToppingForPizzaSize || (exports.ToppingForPizzaSize = ToppingForPizzaSize = {}));

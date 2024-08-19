@@ -13,7 +13,7 @@ const prisma_1 = require("../../config/prisma");
 const ToppingService = {
     getAllToppings() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.topping.findMany({ orderBy: [{ created: "desc" }] });
+            return yield prisma_1.prisma.topping.findMany({ orderBy: [{ created: 'desc' }] });
         });
     },
     getTopping(id) {
@@ -21,14 +21,18 @@ const ToppingService = {
             try {
                 const topping = yield prisma_1.prisma.topping.findUnique({ where: { id } });
                 if (!topping) {
-                    return { topping: null, statusCode: 404, error: "Topping has not been found!" };
+                    return {
+                        topping: null,
+                        statusCode: 404,
+                        error: 'Topping has not been found!',
+                    };
                 }
                 else {
-                    return { topping, statusCode: 200, error: "" };
+                    return { topping, statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { topping: null, statusCode: 400, error: "Bad Request!" };
+                return { topping: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -41,19 +45,23 @@ const ToppingService = {
                             { type: toppingData.type },
                             { forPizzaSize: toppingData.forPizzaSize },
                             { name: toppingData.name },
-                        ]
-                    }
+                        ],
+                    },
                 });
                 if (toppingExistWithGivenData) {
-                    return { newTopping: null, statusCode: 409, error: `Topping with name: [${toppingExistWithGivenData.name}] and type [${toppingExistWithGivenData.type}] and pizza size [${toppingExistWithGivenData.forPizzaSize}] already exists!` };
+                    return {
+                        newTopping: null,
+                        statusCode: 409,
+                        error: `Topping with name: [${toppingExistWithGivenData.name}] and type [${toppingExistWithGivenData.type}] and pizza size [${toppingExistWithGivenData.forPizzaSize}] already exists!`,
+                    };
                 }
                 const newTopping = yield prisma_1.prisma.topping.create({
-                    data: Object.assign({}, toppingData)
+                    data: Object.assign({}, toppingData),
                 });
-                return { newTopping, statusCode: 201, error: "" };
+                return { newTopping, statusCode: 201, error: '' };
             }
             catch (err) {
-                return { newTopping: null, statusCode: 400, error: "Bad Request" };
+                return { newTopping: null, statusCode: 400, error: 'Bad Request' };
             }
         });
     },
@@ -66,28 +74,32 @@ const ToppingService = {
                             { type: toppingData === null || toppingData === void 0 ? void 0 : toppingData.type },
                             { forPizzaSize: toppingData === null || toppingData === void 0 ? void 0 : toppingData.forPizzaSize },
                             { name: toppingData === null || toppingData === void 0 ? void 0 : toppingData.name },
-                        ]
-                    }
+                        ],
+                    },
                 });
                 const topping = yield prisma_1.prisma.topping.findUnique({ where: { id } });
-                console.log("TOpping with given data", toppingExistWithGivenData);
+                console.log('TOpping with given data', toppingExistWithGivenData);
                 if (!topping) {
                     return { statusCode: 404, error: "Topping's not been found" };
                 }
                 else {
-                    if (toppingExistWithGivenData && topping.id !== toppingExistWithGivenData.id) {
-                        return { statusCode: 409, error: `Topping with name: [${toppingExistWithGivenData.name}] and type [${toppingExistWithGivenData.type}] and pizza size [${toppingExistWithGivenData.forPizzaSize}] already exists!` };
+                    if (toppingExistWithGivenData &&
+                        topping.id !== toppingExistWithGivenData.id) {
+                        return {
+                            statusCode: 409,
+                            error: `Topping with name: [${toppingExistWithGivenData.name}] and type [${toppingExistWithGivenData.type}] and pizza size [${toppingExistWithGivenData.forPizzaSize}] already exists!`,
+                        };
                     }
                     yield prisma_1.prisma.topping.update({
                         where: { id },
-                        data: Object.assign(Object.assign({}, toppingData), { updated: new Date() })
+                        data: Object.assign(Object.assign({}, toppingData), { updated: new Date() }),
                     });
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
                 console.log(err.message);
-                return { statusCode: 400, error: "Bad Request" };
+                return { statusCode: 400, error: 'Bad Request' };
             }
         });
     },
@@ -96,15 +108,15 @@ const ToppingService = {
             try {
                 const topping = yield prisma_1.prisma.topping.findUnique({ where: { id } });
                 if (!topping) {
-                    return { statusCode: 404, error: "Current topping does not exist!" };
+                    return { statusCode: 404, error: 'Current topping does not exist!' };
                 }
                 else {
                     yield prisma_1.prisma.topping.delete({ where: { id } });
-                    return { statusCode: 204, error: "" };
+                    return { statusCode: 204, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request" };
+                return { statusCode: 400, error: 'Bad Request' };
             }
         });
     },

@@ -22,7 +22,7 @@ const EmployeeController = {
     },
     getEmployee(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { error, statusCode, employee } = yield service_1.default.getEmployee(id);
             if (statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -45,19 +45,21 @@ const EmployeeController = {
     },
     editEmployee(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { error, statusCode } = yield service_1.default.editEmployee(id, req.body, req.file);
             if (statusCode === 404 || statusCode === 400 || statusCode === 409) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Employee is edited successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Employee is edited successfully!' });
             }
         });
     },
     deleteEmployee(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { error, statusCode } = yield service_1.default.deleteEmployee(id);
             if (statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -69,7 +71,7 @@ const EmployeeController = {
     },
     getAllEmergencyContacts(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { emergencyContacts, statusCode, error } = yield service_1.default.getAllEmergencyContacts(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -81,7 +83,7 @@ const EmployeeController = {
     },
     createEmergencyContact(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { newEmergencyContact, statusCode, error } = yield service_1.default.createEmergencyContact(id, req.body);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -94,19 +96,21 @@ const EmployeeController = {
     editEmergencyContact(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id, emergencyContactId } = req.params;
-            const { statusCode, error } = yield service_1.default.editEmergencyContact(Number(id), emergencyContactId, req.body);
+            const { statusCode, error } = yield service_1.default.editEmergencyContact(id, emergencyContactId, req.body);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Emergency contact is updated successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Emergency contact is updated successfully!' });
             }
         });
     },
     deleteEmergencyContact(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id, emergencyContactId } = req.params;
-            const { statusCode, error } = yield service_1.default.deleteEmergencyContact(Number(id), emergencyContactId);
+            const { statusCode, error } = yield service_1.default.deleteEmergencyContact(id, emergencyContactId);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
@@ -123,7 +127,7 @@ const EmployeeController = {
     },
     getEmployeeNote(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { employeeNote, statusCode, error } = yield service_1.default.getEmployeeNote(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -135,7 +139,7 @@ const EmployeeController = {
     },
     createEmployeeNote(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { newEmployeeNote, statusCode, error } = yield service_1.default.createEmployeeNote(id, req.body);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -148,19 +152,21 @@ const EmployeeController = {
     editEmployeeNote(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { noteId, employeeId } = req.params;
-            const { statusCode, error } = yield service_1.default.editEmployeeNote(noteId, Number(employeeId), req.body);
+            const { statusCode, error } = yield service_1.default.editEmployeeNote(noteId, employeeId, req.body);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Emergency contact is updated successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Emergency contact is updated successfully!' });
             }
         });
     },
     deleteEmployeeNote(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { noteId, employeeId } = req.params;
-            const { statusCode, error } = yield service_1.default.deleteEmployeeNote(noteId, Number(employeeId));
+            const { statusCode, error } = yield service_1.default.deleteEmployeeNote(noteId, employeeId);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
@@ -178,7 +184,7 @@ const EmployeeController = {
     getEmployeeLeaveDay(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { leaveDayId, employeeId } = req.params;
-            const { employeeLeaveDays, statusCode, error } = yield service_1.default.getEmployeeLeaveDay(leaveDayId, Number(employeeId));
+            const { employeeLeaveDays, statusCode, error } = yield service_1.default.getEmployeeLeaveDay(leaveDayId, employeeId);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
@@ -189,7 +195,7 @@ const EmployeeController = {
     },
     createEmployeeLeaveDay(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { newEmployeeLeaveDay, statusCode, error } = yield service_1.default.createEmployeeLeaveDay(id, req.body);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -202,12 +208,14 @@ const EmployeeController = {
     changeEmployeeLeaveDayStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { leaveDayId, employeeId } = req.params;
-            const { statusCode, error } = yield service_1.default.changeEmployeeLeaveDayStatus(leaveDayId, Number(employeeId), req.body.status);
+            const { statusCode, error } = yield service_1.default.changeEmployeeLeaveDayStatus(leaveDayId, employeeId, req.body.status);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ data: { message: "Employee status is changed successfully!" } });
+                return res
+                    .status(statusCode)
+                    .json({ data: { message: 'Employee status is changed successfully!' } });
             }
         });
     },
@@ -215,12 +223,14 @@ const EmployeeController = {
         return __awaiter(this, void 0, void 0, function* () {
             const { leaveDayId, employeeId } = req.params;
             console.log({ leaveDayId, employeeId });
-            const { statusCode, error } = yield service_1.default.editEmployeeLeaveDay(leaveDayId, Number(employeeId), req.body);
+            const { statusCode, error } = yield service_1.default.editEmployeeLeaveDay(leaveDayId, employeeId, req.body);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Employee leave day is updated successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Employee leave day is updated successfully!' });
             }
         });
     },
@@ -228,7 +238,7 @@ const EmployeeController = {
         return __awaiter(this, void 0, void 0, function* () {
             const { leaveDayId, employeeId } = req.params;
             console.log({ leaveDayId, employeeId });
-            const { statusCode, error } = yield service_1.default.deleteEmployeeLeaveDay(leaveDayId, Number(employeeId));
+            const { statusCode, error } = yield service_1.default.deleteEmployeeLeaveDay(leaveDayId, employeeId);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }

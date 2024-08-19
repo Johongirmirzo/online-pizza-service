@@ -6,4 +6,4 @@ var UserStatus;
     UserStatus["PENDING"] = "PENDING";
     UserStatus["ACTIVE"] = "ACTIVE";
     UserStatus["BLOCKED"] = "BLOCKED";
-})(UserStatus = exports.UserStatus || (exports.UserStatus = {}));
+})(UserStatus || (exports.UserStatus = UserStatus = {}));

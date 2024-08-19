@@ -13,41 +13,49 @@ const prisma_1 = require("../../config/prisma");
 const MessageService = {
     getAllMessages() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.message.findMany({ orderBy: [{ date: "desc" }] });
+            return yield prisma_1.prisma.message.findMany({ orderBy: [{ date: 'desc' }] });
         });
     },
     getMessage(messageId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const message = yield prisma_1.prisma.message.findUnique({ where: { id: messageId } });
+                const message = yield prisma_1.prisma.message.findUnique({
+                    where: { id: messageId },
+                });
                 if (!message) {
-                    return { message: null, statusCode: 404, error: "Message has not been found!" };
+                    return {
+                        message: null,
+                        statusCode: 404,
+                        error: 'Message has not been found!',
+                    };
                 }
                 else {
-                    return { message, statusCode: 200, error: "" };
+                    return { message, statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { message: null, statusCode: 400, error: "Bad Request!" };
+                return { message: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     deleteMessage(messageId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const message = yield prisma_1.prisma.message.findUnique({ where: { id: messageId } });
+                const message = yield prisma_1.prisma.message.findUnique({
+                    where: { id: messageId },
+                });
                 if (!message) {
-                    return { statusCode: 404, error: "Message has not been found!" };
+                    return { statusCode: 404, error: 'Message has not been found!' };
                 }
                 else {
                     yield prisma_1.prisma.message.delete({ where: { id: messageId } });
-                    return { statusCode: 204, error: "" };
+                    return { statusCode: 204, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
-    }
+    },
 };
 exports.default = MessageService;

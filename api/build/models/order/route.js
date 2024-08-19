@@ -18,95 +18,99 @@ const prisma_1 = require("../../config/prisma");
 const validateReqParamForId_1 = require("../../middleware/validateReqParamForId");
 const controller_1 = __importDefault(require("./controller"));
 const orderHandler = (io, socket) => {
-    socket.on("create-order", (orderData) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log("Server order received", orderData);
+    socket.on('create-order', (orderData) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log('Server order received', orderData);
         try {
             const orderItems = JSON.parse(orderData.orderItems);
             const updateItemType = (id, itemAmount, itemType) => __awaiter(void 0, void 0, void 0, function* () {
                 let item;
                 switch (itemType) {
-                    case "pizza":
+                    case 'pizza':
                         item = yield prisma_1.prisma.pizza.findUnique({ where: { id } });
                         if (item) {
                             yield prisma_1.prisma.pizza.update({
                                 where: { id },
                                 data: {
-                                    soldAmount: item.soldAmount + itemAmount
-                                }
+                                    soldAmount: item.soldAmount + itemAmount,
+                                },
                             });
                         }
                         break;
-                    case "menuItem":
+                    case 'menuItem':
                         item = yield prisma_1.prisma.menuItem.findUnique({ where: { id } });
                         if (item) {
                             yield prisma_1.prisma.menuItem.update({
                                 where: { id },
                                 data: {
-                                    soldAmount: item.soldAmount + itemAmount
-                                }
+                                    soldAmount: item.soldAmount + itemAmount,
+                                },
                             });
                         }
                         break;
-                    case "dip":
+                    case 'dip':
                         item = yield prisma_1.prisma.dip.findUnique({ where: { id } });
                         if (item) {
                             yield prisma_1.prisma.dip.update({
                                 where: { id },
                                 data: {
-                                    soldAmount: item.soldAmount + itemAmount
-                                }
+                                    soldAmount: item.soldAmount + itemAmount,
+                                },
                             });
                         }
                         break;
                 }
             });
             orderItems.forEach((orderItem) => __awaiter(void 0, void 0, void 0, function* () {
-                const currentItem = orderItem.itemType === "Dip" ? "dip" : orderItem.itemType === "Pizza" ? "pizza" : "menuItem";
+                const currentItem = orderItem.itemType === 'Dip'
+                    ? 'dip'
+                    : orderItem.itemType === 'Pizza'
+                        ? 'pizza'
+                        : 'menuItem';
                 yield updateItemType(orderItem.id, orderItem.amount, currentItem);
             }));
             const newOrder = yield prisma_1.prisma.order.create({
-                data: Object.assign({}, orderData)
+                data: Object.assign({}, orderData),
             });
-            console.log("New Order is created and sent to client", newOrder);
-            io.emit("new-order", newOrder);
+            console.log('New Order is created and sent to client', newOrder);
+            io.emit('new-order', newOrder);
         }
         catch (err) {
-            console.log("Create order error ", err);
-            socket.emit("create-order-error", "Something Went Wrong!");
+            console.log('Create order error ', err);
+            socket.emit('create-order-error', 'Something Went Wrong!');
         }
     }));
-    socket.on("change-order-status", (orderData) => __awaiter(void 0, void 0, void 0, function* () {
+    socket.on('change-order-status', (orderData) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             yield prisma_1.prisma.order.update({
                 where: { id: orderData.orderId },
                 data: {
-                    orderStatus: orderData.status
-                }
+                    orderStatus: orderData.status,
+                },
             });
-            io.emit("new-order-status", orderData);
+            io.emit('new-order-status', orderData);
         }
         catch (err) {
-            socket.emit("change-order-status-error", "Something Went Wrong!");
+            socket.emit('change-order-status-error', 'Something Went Wrong!');
         }
     }));
-    socket.on("change-payment-status", (orderData) => __awaiter(void 0, void 0, void 0, function* () {
+    socket.on('change-payment-status', (orderData) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             yield prisma_1.prisma.order.update({
                 where: { id: orderData.orderId },
                 data: {
-                    paymentStatus: orderData.status
-                }
+                    paymentStatus: orderData.status,
+                },
             });
-            io.emit("new-payment-status", orderData);
+            io.emit('new-payment-status', orderData);
         }
         catch (err) {
-            socket.emit("change-payment-status-error", "Something Went Wrong!");
+            socket.emit('change-payment-status-error', 'Something Went Wrong!');
         }
     }));
 };
 exports.orderHandler = orderHandler;
 const router = (0, express_1.Router)();
-router.get("/get-all-orders", controller_1.default.getAllOrders);
-router.get("/get-all-customer-orders/:id", validateReqParamForId_1.validateReqParamForId, controller_1.default.getAllCustomerOrders);
-router.get("/get-order/:id", validateReqParamForId_1.validateReqParamForId, controller_1.default.getOrder);
+router.get('/get-all-orders', controller_1.default.getAllOrders);
+router.get('/get-all-customer-orders/:id', validateReqParamForId_1.validateReqParamForId, controller_1.default.getAllCustomerOrders);
+router.get('/get-order/:id', validateReqParamForId_1.validateReqParamForId, controller_1.default.getOrder);
 exports.default = router;

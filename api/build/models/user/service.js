@@ -48,25 +48,29 @@ const UserService = {
             try {
                 const user = yield prisma_1.prisma.user.findUnique({ where: { email } });
                 if (!user) {
-                    return { user: null, statusCode: 404, error: "Email does not exist" };
+                    return { user: null, statusCode: 404, error: 'Email does not exist' };
                 }
                 else {
                     if (!(yield bcrypt_1.default.compare(password, user.password))) {
-                        return { user: null, statusCode: 400, error: "Password did not match" };
+                        return {
+                            user: null,
+                            statusCode: 400,
+                            error: 'Password did not match',
+                        };
                     }
                     else {
-                        return { user, statusCode: 200, error: "" };
+                        return { user, statusCode: 200, error: '' };
                     }
                 }
             }
             catch (err) {
-                return { user: null, statusCode: 400, error: "Bad Request" };
+                return { user: null, statusCode: 400, error: 'Bad Request' };
             }
         });
     },
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            return (yield prisma_1.prisma.user.findMany({ orderBy: [{ created: "desc" }] })).filter(user => token_1.Role[user.role] != token_1.Role.ADMIN);
+            return (yield prisma_1.prisma.user.findMany({ orderBy: [{ created: 'desc' }] })).filter((user) => token_1.Role[user.role] != token_1.Role.ADMIN);
         });
     },
     getUser(id, reqObject) {
@@ -74,31 +78,46 @@ const UserService = {
             try {
                 const user = yield prisma_1.prisma.user.findUnique({ where: { id } });
                 if (!user) {
-                    return { user: null, statusCode: 404, error: "User has not been found" };
+                    return { user: null, statusCode: 404, error: 'User has not been found' };
                 }
                 else {
-                    if (user.role === "ADMIN" && reqObject.role !== "ADMIN") {
-                        return { user: null, statusCode: 403, error: "ADMIN can't be retrieved" };
+                    if (user.role === 'ADMIN' && reqObject.role !== 'ADMIN') {
+                        return {
+                            user: null,
+                            statusCode: 403,
+                            error: "ADMIN can't be retrieved",
+                        };
                     }
                     else {
-                        return { user, statusCode: 200, error: "" };
+                        return { user, statusCode: 200, error: '' };
                     }
                 }
             }
             catch (err) {
-                return { user: null, statusCode: 400, error: "Bad Request!" };
+                return { user: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     createNewUser(userData, userPhotoFile) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield prisma_1.prisma.user.findFirst({ where: { OR: [{ email: userData.email }, { phoneNumber: userData.phoneNumber }] } });
+                const user = yield prisma_1.prisma.user.findFirst({
+                    where: {
+                        OR: [
+                            { email: userData.email },
+                            { phoneNumber: userData.phoneNumber },
+                        ],
+                    },
+                });
                 if (user) {
                     if (userPhotoFile) {
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${userPhotoFile.filename}`));
                     }
-                    return { newUser: null, statusCode: 409, error: `User with this ${userData.email ? userData.email : ""} or ${userData.phoneNumber ? userData.phoneNumber : ""} already exists!` };
+                    return {
+                        newUser: null,
+                        statusCode: 409,
+                        error: `User with this ${userData.email ? userData.email : ''} or ${userData.phoneNumber ? userData.phoneNumber : ''} already exists!`,
+                    };
                 }
                 else {
                     let userPhoto;
@@ -107,23 +126,30 @@ const UserService = {
                     }
                     const hashedPassword = yield bcrypt_1.default.hash(userData.password, 10);
                     const newUser = yield prisma_1.prisma.user.create({
-                        data: Object.assign(Object.assign({}, userData), { password: hashedPassword, photo: (userPhoto === null || userPhoto === void 0 ? void 0 : userPhoto.secure_url) || "", photo_id: (userPhoto === null || userPhoto === void 0 ? void 0 : userPhoto.public_id) || "" })
+                        data: Object.assign(Object.assign({}, userData), { password: hashedPassword, photo: (userPhoto === null || userPhoto === void 0 ? void 0 : userPhoto.secure_url) || '', photo_id: (userPhoto === null || userPhoto === void 0 ? void 0 : userPhoto.public_id) || '' }),
                     });
-                    return { newUser, statusCode: 201, error: "" };
+                    return { newUser, statusCode: 201, error: '' };
                 }
             }
             catch (err) {
                 if (userPhotoFile) {
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${userPhotoFile.filename}`));
                 }
-                return { newUser: null, statusCode: 400, error: "Bad Request!" };
+                return { newUser: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
     editUser(id, userData, userPhotoFile) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const userWithGivenData = yield prisma_1.prisma.user.findFirst({ where: { OR: [{ email: userData.email }, { phoneNumber: userData.phoneNumber }] } });
+                const userWithGivenData = yield prisma_1.prisma.user.findFirst({
+                    where: {
+                        OR: [
+                            { email: userData.email },
+                            { phoneNumber: userData.phoneNumber },
+                        ],
+                    },
+                });
                 const user = yield prisma_1.prisma.user.findUnique({ where: { id } });
                 if (!user) {
                     if (userPhotoFile) {
@@ -135,32 +161,50 @@ const UserService = {
                     let userPhoto;
                     let hashedPassword;
                     if (userWithGivenData) {
-                        if (userWithGivenData.id !== user.id && (userWithGivenData.email == userData.email || userWithGivenData.phoneNumber !== userData.phoneNumber)) {
-                            return { user: null, statusCode: 409, error: `User with this ${userData.email ? userData.email : ""} ${userData.phoneNumber ? userData.phoneNumber : ""} already exists!` };
+                        if (userWithGivenData.id !== user.id &&
+                            (userWithGivenData.email == userData.email ||
+                                userWithGivenData.phoneNumber !== userData.phoneNumber)) {
+                            return {
+                                user: null,
+                                statusCode: 409,
+                                error: `User with this ${userData.email ? userData.email : ''} ${userData.phoneNumber ? userData.phoneNumber : ''} already exists!`,
+                            };
                         }
                     }
                     if (userData.password) {
                         if (!(yield bcrypt_1.default.compare(userData.password, user.password))) {
-                            return { user: null, statusCode: 400, error: "Password is incorrect!" };
+                            return {
+                                user: null,
+                                statusCode: 400,
+                                error: 'Password is incorrect!',
+                            };
                         }
                         else {
-                            if (userData.newPassword && !userData.newConfirmPassword ||
-                                !userData.newPassword && userData.newConfirmPassword) {
-                                return { user: null, statusCode: 400, error: "You've to provide both new and new confirm password to change your password!" };
+                            if ((userData.newPassword && !userData.newConfirmPassword) ||
+                                (!userData.newPassword && userData.newConfirmPassword)) {
+                                return {
+                                    user: null,
+                                    statusCode: 400,
+                                    error: "You've to provide both new and new confirm password to change your password!",
+                                };
                             }
                             if (userData.newPassword === userData.newConfirmPassword) {
                                 hashedPassword = yield bcrypt_1.default.hash(userData.newPassword, 10);
                             }
                             else {
-                                return { user: null, statusCode: 400, error: "Password did not match!" };
+                                return {
+                                    user: null,
+                                    statusCode: 400,
+                                    error: 'Password did not match!',
+                                };
                             }
                         }
                     }
-                    const filteredUserData = Object
-                        .entries(userData).filter(user => !/newPassword|newConfirmPassword/i.test(user[0]))
+                    const filteredUserData = Object.entries(userData)
+                        .filter((user) => !/newPassword|newConfirmPassword/i.test(user[0]))
                         .reduce((obj, currEl) => (Object.assign(Object.assign({}, obj), { [currEl[0]]: currEl[1] })), {});
                     if (userPhotoFile && user.photo) {
-                        const imageSplit = user.photo.split("/");
+                        const imageSplit = user.photo.split('/');
                         const imagePath = imageSplit[imageSplit.length - 1];
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imagePath}`));
                         userPhoto = yield cloudinary_1.default.v2.uploader.upload(userPhotoFile.path, cloudinary_1.options);
@@ -171,9 +215,9 @@ const UserService = {
                     console.log(filteredUserData);
                     const updatedUser = yield prisma_1.prisma.user.update({
                         where: { id },
-                        data: Object.assign(Object.assign({}, filteredUserData), { photo: (userPhoto === null || userPhoto === void 0 ? void 0 : userPhoto.secure_url) || user.photo, photo_id: (userPhoto === null || userPhoto === void 0 ? void 0 : userPhoto.public_id) || user.photo_id, password: hashedPassword || user.password, updated: new Date() })
+                        data: Object.assign(Object.assign({}, filteredUserData), { photo: (userPhoto === null || userPhoto === void 0 ? void 0 : userPhoto.secure_url) || user.photo, photo_id: (userPhoto === null || userPhoto === void 0 ? void 0 : userPhoto.public_id) || user.photo_id, password: hashedPassword || user.password, updated: new Date() }),
                     });
-                    return { user: updatedUser, statusCode: 200, error: "" };
+                    return { user: updatedUser, statusCode: 200, error: '' };
                 }
             }
             catch (err) {
@@ -181,7 +225,7 @@ const UserService = {
                 if (userPhotoFile) {
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${userPhotoFile.filename}`));
                 }
-                return { user: null, statusCode: 400, error: "Bad Request!" };
+                return { user: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -189,25 +233,25 @@ const UserService = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield prisma_1.prisma.user.findUnique({ where: { id } });
-                if ((user === null || user === void 0 ? void 0 : user.role) === "ADMIN") {
+                if ((user === null || user === void 0 ? void 0 : user.role) === 'ADMIN') {
                     return { statusCode: 403, error: "ADMIN can't be deleted!" };
                 }
                 else if (!user) {
-                    return { statusCode: 404, error: "User has not been found" };
+                    return { statusCode: 404, error: 'User has not been found' };
                 }
                 else {
                     if (user.photo && user.photo_id) {
-                        const imageSplit = user.photo.split("/");
+                        const imageSplit = user.photo.split('/');
                         const imagePath = imageSplit[imageSplit.length - 1];
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imagePath}`));
                         yield cloudinary_1.default.v2.uploader.destroy(user.photo_id);
                     }
                     yield prisma_1.prisma.user.delete({ where: { id } });
-                    return { statusCode: 204, error: "" };
+                    return { statusCode: 204, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -215,29 +259,29 @@ const UserService = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const user = yield prisma_1.prisma.user.findUnique({ where: { id } });
-                if ((user === null || user === void 0 ? void 0 : user.role) === "ADMIN") {
+                if ((user === null || user === void 0 ? void 0 : user.role) === 'ADMIN') {
                     return { statusCode: 403, error: "ADMIN status can't be changed" };
                 }
                 else if (!user) {
-                    return { statusCode: 404, error: "User has not been found" };
+                    return { statusCode: 404, error: 'User has not been found' };
                 }
                 else {
                     yield prisma_1.prisma.user.update({
                         where: {
-                            id
+                            id,
                         },
                         data: {
                             status: user_1.UserStatus[status],
-                            updated: new Date()
-                        }
+                            updated: new Date(),
+                        },
                     });
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad Request!" };
+                return { statusCode: 400, error: 'Bad Request!' };
             }
         });
-    }
+    },
 };
 exports.default = UserService;

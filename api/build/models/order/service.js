@@ -13,12 +13,15 @@ const prisma_1 = require("../../config/prisma");
 const OrderService = {
     getAllOrders() {
         return __awaiter(this, void 0, void 0, function* () {
-            return prisma_1.prisma.order.findMany({ orderBy: [{ created: "desc" }] });
+            return prisma_1.prisma.order.findMany({ orderBy: [{ created: 'desc' }] });
         });
     },
     getAllCustomerOrders(customerId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.order.findMany({ where: { customerId }, orderBy: [{ created: "desc" }] });
+            return yield prisma_1.prisma.order.findMany({
+                where: { customerId },
+                orderBy: [{ created: 'desc' }],
+            });
         });
     },
     getOrder(id) {

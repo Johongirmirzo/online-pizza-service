@@ -5,21 +5,18 @@ var PaymentMethod;
 (function (PaymentMethod) {
     PaymentMethod["CASH"] = "CASH";
     PaymentMethod["CARD"] = "CARD";
-})(PaymentMethod || (PaymentMethod = {}));
-exports.PaymentMethod = PaymentMethod;
+})(PaymentMethod || (exports.PaymentMethod = PaymentMethod = {}));
 var PaymentStatus;
 (function (PaymentStatus) {
     PaymentStatus["PENDING"] = "PENDING";
     PaymentStatus["APPROVED"] = "APPROVED";
     PaymentStatus["DECLINED"] = "DECLINED";
-})(PaymentStatus || (PaymentStatus = {}));
-exports.PaymentStatus = PaymentStatus;
+})(PaymentStatus || (exports.PaymentStatus = PaymentStatus = {}));
 var OrderType;
 (function (OrderType) {
     OrderType["DELIVERY"] = "DELIVERY";
     OrderType["PICKUP"] = "PICKUP";
-})(OrderType || (OrderType = {}));
-exports.OrderType = OrderType;
+})(OrderType || (exports.OrderType = OrderType = {}));
 var OrderStatus;
 (function (OrderStatus) {
     OrderStatus["ORDER_NOT_CONFIRMED"] = "ORDER_NOT_CONFIRMED";
@@ -29,5 +26,4 @@ var OrderStatus;
     OrderStatus["ORDER_BOXED"] = "ORDER_BOXED";
     OrderStatus["ORDER_DELIVERED"] = "ORDER_DELIVERED";
     OrderStatus["ORDER_PICKED_UP"] = "ORDER_PICKED_UP";
-})(OrderStatus || (OrderStatus = {}));
-exports.OrderStatus = OrderStatus;
+})(OrderStatus || (exports.OrderStatus = OrderStatus = {}));

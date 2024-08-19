@@ -22,7 +22,7 @@ const ToppingController = {
     },
     getTopping(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { topping, statusCode, error } = yield service_1.default.getTopping(id);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
@@ -45,19 +45,21 @@ const ToppingController = {
     },
     editTopping(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.editTopping(id, req.body);
             if (statusCode === 400 || statusCode === 404 || statusCode === 409) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Topping is edited successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Topping is edited successfully!' });
             }
         });
     },
     deleteTopping(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteTopping(id);
             if (statusCode === 400 || statusCode === 404 || statusCode === 409) {
                 return res.status(statusCode).json({ errors: error });

@@ -43,7 +43,9 @@ const cloudinary_1 = __importStar(require("../../config/cloudinary"));
 const ApplicantService = {
     getAllApplicants() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.application.findMany({ include: { teamMembers: true, drivers: true, managers: true } });
+            return yield prisma_1.prisma.application.findMany({
+                include: { teamMembers: true, drivers: true, managers: true },
+            });
         });
     },
     getApplicant(id) {
@@ -51,14 +53,18 @@ const ApplicantService = {
             try {
                 const applicant = yield prisma_1.prisma.application.findUnique({ where: { id } });
                 if (!applicant) {
-                    return { applicant: null, statusCode: 404, error: "Applicant's not been found!" };
+                    return {
+                        applicant: null,
+                        statusCode: 404,
+                        error: "Applicant's not been found!",
+                    };
                 }
                 else {
-                    return { applicant, statusCode: 200, error: "" };
+                    return { applicant, statusCode: 200, error: '' };
                 }
             }
             catch (err) {
-                return { applicant: null, statusCode: 400, error: "Bad Request!" };
+                return { applicant: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -66,7 +72,9 @@ const ApplicantService = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let applicantData;
-                const applicationData = Object.entries(data).filter(d => d[0] !== "applicant").reduce((obj, el) => {
+                const applicationData = Object.entries(data)
+                    .filter((d) => d[0] !== 'applicant')
+                    .reduce((obj, el) => {
                     const encodedData = el[1];
                     if (/experiences|languages|computerSkills/i.test(el[0])) {
                         console.log(el[1], encodedData);
@@ -74,40 +82,40 @@ const ApplicantService = {
                         const key = el[0];
                         return Object.assign(Object.assign({}, obj), { [key]: parsedData });
                     }
-                    return Object.assign(Object.assign({}, obj), { [el[0]]: el[0] == "hasBankAccount" ? JSON.parse(encodedData) : el[1] });
+                    return Object.assign(Object.assign({}, obj), { [el[0]]: el[0] == 'hasBankAccount' ? JSON.parse(encodedData) : el[1] });
                 }, {});
                 const applicantPhoto = yield cloudinary_1.default.v2.uploader.upload(files.applicantPhoto[0].path, cloudinary_1.options);
                 const passportPhoto = yield cloudinary_1.default.v2.uploader.upload(files.passportPhoto[0].path, cloudinary_1.options);
                 const resume = yield cloudinary_1.default.v2.uploader.upload(files.resume[0].path, cloudinary_1.options);
                 switch (data.role) {
-                    case "TEAM_MEMBER":
+                    case 'TEAM_MEMBER':
                         applicantData = JSON.parse(data.applicant);
                         const newTeamMember = yield prisma_1.prisma.application.create({
                             data: Object.assign(Object.assign({}, applicationData), { birthDate: new Date(applicationData.birthDate), dateOfJoining: new Date(applicationData.dateOfJoining), photoUrl: applicantPhoto.secure_url, photoId: applicantPhoto.public_id, passportPhotoUrl: passportPhoto.secure_url, passportPhotoId: applicantPhoto.public_id, resumeUrl: resume.secure_url, resumeId: applicantPhoto.public_id, role: applicant_1.ApplicantRole[applicationData.role], teamMembers: {
-                                    create: Object.assign(Object.assign({}, applicantData), { employmentType: applicant_1.EmploymentType[applicantData.employmentType] })
-                                } })
+                                    create: Object.assign(Object.assign({}, applicantData), { employmentType: applicant_1.EmploymentType[applicantData.employmentType] }),
+                                } }),
                         });
-                        return { newApplicant: newTeamMember, statusCode: 201, error: "" };
-                    case "DRIVER":
+                        return { newApplicant: newTeamMember, statusCode: 201, error: '' };
+                    case 'DRIVER':
                         applicantData = JSON.parse(data.applicant);
                         const newDriver = yield prisma_1.prisma.application.create({
                             data: Object.assign(Object.assign({}, applicationData), { birthDate: new Date(applicationData.birthDate), dateOfJoining: new Date(applicationData.dateOfJoining), photoUrl: applicantPhoto.secure_url, photoId: applicantPhoto.public_id, passportPhotoUrl: passportPhoto.secure_url, passportPhotoId: applicantPhoto.public_id, resumeUrl: resume.secure_url, resumeId: applicantPhoto.public_id, role: applicant_1.ApplicantRole[applicationData.role], drivers: {
-                                    create: Object.assign(Object.assign({}, applicantData), { drivingLicence: applicant_1.DrivingLicense[applicantData.drivingLicence], employmentType: applicant_1.EmploymentType[applicantData.employmentType] })
-                                } })
+                                    create: Object.assign(Object.assign({}, applicantData), { drivingLicence: applicant_1.DrivingLicense[applicantData.drivingLicence], employmentType: applicant_1.EmploymentType[applicantData.employmentType] }),
+                                } }),
                         });
-                        return { newApplicant: newDriver, statusCode: 201, error: "" };
-                    case "MANAGER":
-                    case "AREA_COACH":
+                        return { newApplicant: newDriver, statusCode: 201, error: '' };
+                    case 'MANAGER':
+                    case 'AREA_COACH':
                         const panPhoto = yield cloudinary_1.default.v2.uploader.upload(files.panPhoto[0].path, cloudinary_1.options);
                         applicantData = JSON.parse(data.applicant);
                         const newManager = yield prisma_1.prisma.application.create({
                             data: Object.assign(Object.assign({}, applicationData), { birthDate: new Date(applicationData.birthDate), dateOfJoining: new Date(applicationData.dateOfJoining), photoUrl: applicantPhoto.secure_url, photoId: applicantPhoto.public_id, passportPhotoUrl: passportPhoto.secure_url, passportPhotoId: applicantPhoto.public_id, resumeUrl: resume.secure_url, resumeId: applicantPhoto.public_id, role: applicant_1.ApplicantRole[applicationData.role], managers: {
-                                    create: Object.assign(Object.assign({}, applicantData), { panPhoto: panPhoto.secure_url, panPhotoId: panPhoto.public_id })
-                                } })
+                                    create: Object.assign(Object.assign({}, applicantData), { panPhoto: panPhoto.secure_url, panPhotoId: panPhoto.public_id }),
+                                } }),
                         });
-                        return { newApplicant: newManager, statusCode: 201, error: "" };
+                        return { newApplicant: newManager, statusCode: 201, error: '' };
                     default:
-                        return { newApplicant: null, statusCode: 400, error: "Bad Request" };
+                        return { newApplicant: null, statusCode: 400, error: 'Bad Request' };
                 }
             }
             catch (err) {
@@ -115,7 +123,7 @@ const ApplicantService = {
                 fs_1.default.rm(path_1.default.join(__dirname, `../../assets/images/${files.applicantPhoto[0].path}`), () => { });
                 fs_1.default.rm(path_1.default.join(__dirname, `../../assets/images/${files.passportPhoto[0].path}`), () => { });
                 fs_1.default.rm(path_1.default.join(__dirname, `../../assets/images/${files.resume[0].path}`), () => { });
-                return { newApplicant: null, statusCode: 400, error: "Bad Request" };
+                return { newApplicant: null, statusCode: 400, error: 'Bad Request' };
             }
         });
     },
@@ -123,16 +131,16 @@ const ApplicantService = {
         return __awaiter(this, void 0, void 0, function* () {
             const applicant = yield prisma_1.prisma.application.findUnique({ where: { id: id } });
             if (!applicant) {
-                return { error: "Applicant has not been found!", statusCode: 404 };
+                return { error: 'Applicant has not been found!', statusCode: 404 };
             }
             else {
                 yield prisma_1.prisma.application.update({
                     where: { id },
                     data: {
-                        applicationStatus: applicant_1.ApplicantStatus[status]
-                    }
+                        applicationStatus: applicant_1.ApplicantStatus[status],
+                    },
                 });
-                return { error: "", statusCode: 200 };
+                return { error: '', statusCode: 200 };
             }
         });
     },
@@ -140,11 +148,13 @@ const ApplicantService = {
         return __awaiter(this, void 0, void 0, function* () {
             const applicant = yield prisma_1.prisma.application.findUnique({ where: { id } });
             if (!applicant) {
-                return { error: "User has not been found!", statusCode: 404 };
+                return { error: 'User has not been found!', statusCode: 404 };
             }
             else {
                 if (/manager|area_coach/i.test(applicant.role)) {
-                    const manager = yield prisma_1.prisma.manager.findFirst({ where: { applicantId: applicant.id } });
+                    const manager = yield prisma_1.prisma.manager.findFirst({
+                        where: { applicantId: applicant.id },
+                    });
                     if (manager) {
                         yield cloudinary_1.default.v2.uploader.destroy(manager.panPhotoId);
                     }
@@ -153,7 +163,7 @@ const ApplicantService = {
                 yield cloudinary_1.default.v2.uploader.destroy(applicant.passportPhotoId);
                 yield cloudinary_1.default.v2.uploader.destroy(applicant.resumeId);
                 yield prisma_1.prisma.application.delete({ where: { id } });
-                return { error: "", statusCode: 204 };
+                return { error: '', statusCode: 204 };
             }
         });
     },

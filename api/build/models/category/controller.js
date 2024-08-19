@@ -22,13 +22,17 @@ const CategoryController = {
     },
     getCategory(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
-            if (isNaN(id)) {
-                return res.status(400).json({ errors: "Invalid id, please provide only integers!" });
+            const id = req.params.id;
+            if (isNaN(Number(id))) {
+                return res
+                    .status(400)
+                    .json({ errors: 'Invalid id, please provide only integers!' });
             }
             const category = yield service_1.default.getCategory(id);
             if (!category) {
-                return res.status(404).json({ errors: "Category with the given id does not exist" });
+                return res
+                    .status(404)
+                    .json({ errors: 'Category with the given id does not exist' });
             }
             return res.json({ data: category });
         });
@@ -46,19 +50,21 @@ const CategoryController = {
     },
     editCategory(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.editCategory(id, req.body, req.file);
             if (statusCode === 400 || statusCode === 404 || statusCode === 409) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ data: { message: "Category is edited successfully" } });
+                return res
+                    .status(statusCode)
+                    .json({ data: { message: 'Category is edited successfully' } });
             }
         });
     },
     deleteCategory(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteCategory(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -67,6 +73,6 @@ const CategoryController = {
                 return res.status(statusCode).end();
             }
         });
-    }
+    },
 };
 exports.default = CategoryController;

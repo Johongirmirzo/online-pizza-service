@@ -9,9 +9,9 @@ var ReviewSubject;
     ReviewSubject["RESTAURANT"] = "RESTAURANT";
     ReviewSubject["FOOD"] = "FOOD";
     ReviewSubject["OTHER"] = "OTHER";
-})(ReviewSubject = exports.ReviewSubject || (exports.ReviewSubject = {}));
+})(ReviewSubject || (exports.ReviewSubject = ReviewSubject = {}));
 var ReviewStatus;
 (function (ReviewStatus) {
     ReviewStatus["PUBLIC"] = "PUBLIC";
     ReviewStatus["PRIVATE"] = "PRIVATE";
-})(ReviewStatus = exports.ReviewStatus || (exports.ReviewStatus = {}));
+})(ReviewStatus || (exports.ReviewStatus = ReviewStatus = {}));

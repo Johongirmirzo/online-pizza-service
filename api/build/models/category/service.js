@@ -42,36 +42,50 @@ const cloudinary_1 = __importStar(require("../../config/cloudinary"));
 const CategoryService = {
     getAllCategories() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.category.findMany({ include: { pizzas: true, dips: true, menuItems: true }, orderBy: [{ created: "desc" }] });
+            return yield prisma_1.prisma.category.findMany({
+                include: { pizzas: true, dips: true, menuItems: true },
+                orderBy: [{ created: 'desc' }],
+            });
         });
     },
     getCategory(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma_1.prisma.category.findUnique({ where: { id }, include: { pizzas: true, dips: true, menuItems: true } });
+            return yield prisma_1.prisma.category.findUnique({
+                where: { id },
+                include: { pizzas: true, dips: true, menuItems: true },
+            });
         });
     },
     createCategory(categoryData, categoryPhotoFiles) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const category = yield prisma_1.prisma.category.findUnique({ where: { name: categoryData.name } });
+                const category = yield prisma_1.prisma.category.findUnique({
+                    where: { name: categoryData.name },
+                });
                 if (category) {
                     if (categoryPhotoFiles) {
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${categoryPhotoFiles.filename}`));
                     }
-                    return { newCategory: null, statusCode: 409, error: "Category with the given name already exists!" };
+                    return {
+                        newCategory: null,
+                        statusCode: 409,
+                        error: 'Category with the given name already exists!',
+                    };
                 }
                 else {
                     console.log(categoryPhotoFiles);
                     const categoryPhoto = yield cloudinary_1.default.v2.uploader.upload(categoryPhotoFiles.path, cloudinary_1.options);
-                    const newCategory = yield prisma_1.prisma.category.create({ data: Object.assign(Object.assign({}, categoryData), { photo: categoryPhoto.secure_url, photo_id: categoryPhoto.public_id }) });
-                    return { newCategory, statusCode: 201, error: "" };
+                    const newCategory = yield prisma_1.prisma.category.create({
+                        data: Object.assign(Object.assign({}, categoryData), { photo: categoryPhoto.secure_url, photo_id: categoryPhoto.public_id }),
+                    });
+                    return { newCategory, statusCode: 201, error: '' };
                 }
             }
             catch (err) {
                 if (categoryPhotoFiles) {
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${categoryPhotoFiles.filename}`));
                 }
-                return { newCategory: null, statusCode: 400, error: "Bad Request!" };
+                return { newCategory: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -79,7 +93,9 @@ const CategoryService = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const category = yield prisma_1.prisma.category.findUnique({ where: { id } });
-                const categoryWithGivenName = yield prisma_1.prisma.category.findUnique({ where: { name: categoryData === null || categoryData === void 0 ? void 0 : categoryData.name } });
+                const categoryWithGivenName = yield prisma_1.prisma.category.findUnique({
+                    where: { name: categoryData === null || categoryData === void 0 ? void 0 : categoryData.name },
+                });
                 if (!category) {
                     if (categoryPhotoFiles) {
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${categoryPhotoFiles.filename}`));
@@ -92,12 +108,15 @@ const CategoryService = {
                             if (categoryPhotoFiles) {
                                 fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${categoryPhotoFiles.filename}`));
                             }
-                            return { statusCode: 409, error: "Category with the given name already exists!" };
+                            return {
+                                statusCode: 409,
+                                error: 'Category with the given name already exists!',
+                            };
                         }
                     }
                     let categoryPhoto;
                     if (categoryPhotoFiles) {
-                        const imageSplit = category.photo.split("/");
+                        const imageSplit = category.photo.split('/');
                         const imagePath = imageSplit[imageSplit.length - 1];
                         fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imagePath}`));
                         yield cloudinary_1.default.v2.uploader.destroy(category.photo_id);
@@ -105,16 +124,16 @@ const CategoryService = {
                     }
                     yield prisma_1.prisma.category.update({
                         where: { id },
-                        data: Object.assign(Object.assign({}, categoryData), { photo: (categoryPhoto === null || categoryPhoto === void 0 ? void 0 : categoryPhoto.secure_url) || category.photo, photo_id: (categoryPhoto === null || categoryPhoto === void 0 ? void 0 : categoryPhoto.public_id) || category.photo_id, updated: new Date() })
+                        data: Object.assign(Object.assign({}, categoryData), { photo: (categoryPhoto === null || categoryPhoto === void 0 ? void 0 : categoryPhoto.secure_url) || category.photo, photo_id: (categoryPhoto === null || categoryPhoto === void 0 ? void 0 : categoryPhoto.public_id) || category.photo_id, updated: new Date() }),
                     });
-                    return { statusCode: 200, error: "" };
+                    return { statusCode: 200, error: '' };
                 }
             }
             catch (err) {
                 if (categoryPhotoFiles) {
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${categoryPhotoFiles.filename}`));
                 }
-                return { newCategory: null, statusCode: 400, error: "Bad Request!" };
+                return { newCategory: null, statusCode: 400, error: 'Bad Request!' };
             }
         });
     },
@@ -126,18 +145,18 @@ const CategoryService = {
                     return { statusCode: 404, error: "Category's not been found!" };
                 }
                 else {
-                    const imageSplit = category.photo.split("/");
+                    const imageSplit = category.photo.split('/');
                     const imagePath = imageSplit[imageSplit.length - 1];
                     fs_1.default.rmSync(path_1.default.join(__dirname, `../../assets/images/${imagePath}`));
                     yield cloudinary_1.default.v2.uploader.destroy(category.photo_id);
                     yield prisma_1.prisma.category.delete({ where: { id } });
-                    return { statusCode: 204, error: "" };
+                    return { statusCode: 204, error: '' };
                 }
             }
             catch (err) {
-                return { statusCode: 400, error: "Bad request!" };
+                return { statusCode: 400, error: 'Bad request!' };
             }
         });
-    }
+    },
 };
 exports.default = CategoryService;

@@ -6,13 +6,11 @@ var Status;
     Status["PENDING"] = "PENDING";
     Status["ACTIVE"] = "ACTIVE";
     Status["INACTIVE"] = "INACTIVE";
-})(Status || (Status = {}));
-exports.Status = Status;
+})(Status || (exports.Status = Status = {}));
 var MenuItemType;
 (function (MenuItemType) {
     MenuItemType["DRINKS"] = "DRINKS";
     MenuItemType["SNACKS"] = "SNACKS";
     MenuItemType["DESSERTS"] = "DESSERTS";
     MenuItemType["SALADS"] = "SALADS";
-})(MenuItemType || (MenuItemType = {}));
-exports.MenuItemType = MenuItemType;
+})(MenuItemType || (exports.MenuItemType = MenuItemType = {}));

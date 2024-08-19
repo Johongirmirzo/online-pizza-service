@@ -22,7 +22,7 @@ const MessageController = {
     },
     getMessage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { message, statusCode, error } = yield service_1.default.getMessage(id);
             if (statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -34,7 +34,7 @@ const MessageController = {
     },
     deleteMessage(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteMessage(id);
             if (statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -43,6 +43,6 @@ const MessageController = {
                 return res.status(statusCode).end();
             }
         });
-    }
+    },
 };
 exports.default = MessageController;

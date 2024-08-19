@@ -5,11 +5,9 @@ var Gender;
 (function (Gender) {
     Gender["MALE"] = "MALE";
     Gender["FEMALE"] = "FEMALE";
-})(Gender || (Gender = {}));
-exports.Gender = Gender;
+})(Gender || (exports.Gender = Gender = {}));
 var CustomerStatus;
 (function (CustomerStatus) {
     CustomerStatus["ACTIVE"] = "ACTIVE";
     CustomerStatus["BLOCKED"] = "BLOCKED";
-})(CustomerStatus || (CustomerStatus = {}));
-exports.CustomerStatus = CustomerStatus;
+})(CustomerStatus || (exports.CustomerStatus = CustomerStatus = {}));

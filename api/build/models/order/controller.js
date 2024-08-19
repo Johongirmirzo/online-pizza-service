@@ -22,14 +22,14 @@ const OrderController = {
     },
     getAllCustomerOrders(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const customerOrders = yield service_1.default.getAllCustomerOrders(id);
             return res.json({ data: customerOrders });
         });
     },
     getOrder(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const order = yield service_1.default.getOrder(id);
             return res.json({ data: order });
         });

@@ -22,7 +22,7 @@ const FeedbackController = {
     },
     getFeedback(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { feedback, statusCode, error } = yield service_1.default.getFeedback(id);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
@@ -34,20 +34,22 @@ const FeedbackController = {
     },
     changeFeedbackStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const status = req.body.status;
             const { statusCode, error } = yield service_1.default.changeFeedbackStatus(id, status);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Feedback status is changed successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Feedback status is changed successfully!' });
             }
         });
     },
     deleteFeedback(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteFeedback(id);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });

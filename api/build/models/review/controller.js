@@ -22,26 +22,28 @@ const ReviewController = {
     },
     getReview(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const review = yield service_1.default.getReview(id);
             return res.json({ data: review });
         });
     },
     changeReviewStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.changeReviewStatus(id, req.body.status);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Review status is changed successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Review status is changed successfully!' });
             }
         });
     },
     deleteReview(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteReview(id);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
@@ -50,6 +52,6 @@ const ReviewController = {
                 return res.status(statusCode).end();
             }
         });
-    }
+    },
 };
 exports.default = ReviewController;

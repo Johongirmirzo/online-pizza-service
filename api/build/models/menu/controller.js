@@ -22,7 +22,7 @@ const MenuController = {
     },
     getDip(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { dip, statusCode, error } = yield service_1.default.getDip(id);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
@@ -45,31 +45,35 @@ const MenuController = {
     },
     editDip(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.editDip(id, req.body, req.file);
             if (statusCode === 404 || statusCode === 400 || statusCode === 409) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Dip is edited successfully" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Dip is edited successfully' });
             }
         });
     },
     changeDipStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.changeDipStatus(id, req.body.status);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Dip status is changed successfully" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Dip status is changed successfully' });
             }
         });
     },
     deleteDip(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deleteDip(id);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
@@ -87,7 +91,7 @@ const MenuController = {
     },
     getMenuItem(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { menuItem, statusCode, error } = yield service_1.default.getMenuItem(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -110,31 +114,35 @@ const MenuController = {
     },
     editMenuItem(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.editMenuItem(id, req.body, req.files);
             if (statusCode === 400 || statusCode === 404 || statusCode === 409) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Menu item status is edited successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Menu item status is edited successfully!' });
             }
         });
     },
     changeMenuItemStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.changeMenuItemStatus(id, req.body.status);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ message: "Menu item status is changed successfully!" });
+                return res
+                    .status(statusCode)
+                    .json({ message: 'Menu item status is changed successfully!' });
             }
         });
     },
     deleteMenuItem(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { error, statusCode } = yield service_1.default.deleteMenuItem(id);
             if (statusCode === 400 || statusCode === 404) {
                 return res.status(statusCode).json({ errors: error });
@@ -152,7 +160,7 @@ const MenuController = {
     },
     getPizza(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { pizza, statusCode, error } = yield service_1.default.getPizza(id);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
@@ -175,31 +183,35 @@ const MenuController = {
     },
     editPizza(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.editPizza(id, req.body, req.files);
             if (statusCode === 404 || statusCode === 400 || statusCode === 409) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ data: { message: "Pizza is updated successfully!" } });
+                return res
+                    .status(statusCode)
+                    .json({ data: { message: 'Pizza is updated successfully!' } });
             }
         });
     },
     changePizzaStatus(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.changePizzaStatus(id, req.body.status);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
             }
             else {
-                return res.status(statusCode).json({ data: { message: "Pizza status is changed successfully!" } });
+                return res
+                    .status(statusCode)
+                    .json({ data: { message: 'Pizza status is changed successfully!' } });
             }
         });
     },
     deletePizza(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const id = Number(req.params.id);
+            const id = req.params.id;
             const { statusCode, error } = yield service_1.default.deletePizza(id);
             if (statusCode === 404 || statusCode === 400) {
                 return res.status(statusCode).json({ errors: error });
